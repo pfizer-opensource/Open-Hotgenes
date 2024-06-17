@@ -1,0 +1,5 @@
+# version 0.0.25:
+    - Cleaned up readme and converted to .Rmd format
+    - Added pkgdown website
+    - ran usethis::use_apl2_license()
+

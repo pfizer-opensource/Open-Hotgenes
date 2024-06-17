@@ -1,0 +1,73 @@
+Package: Hotgenes
+Type: Package
+Title: Tools to simplify Omics DE analysis
+Version: 0.0.25
+Author: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
+Maintainer: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
+Description: Converts outputs from DESeq2, limma, or a method of your
+    choice into a Hotgenes object to simplify downstream analysis. 
+    Recall all results, specific genes, or identify genes of interest with 
+    hierarchical clustering on principal components.
+License: Apache License (>= 2)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.1
+Imports: 
+    BiocParallel,
+    BiocGenerics,
+    factoextra,
+    FactoMineR,
+    fgsea (>= 1.16.0),
+    forcats,
+    DT,
+    DESeq2,
+    dplyr,
+    ggplot2 (>= 3.4.1),
+    ggvenn,
+    glue (>= 1.6.1),
+    ggrepel,
+    grDevices,
+    grid,
+    GSVA (>= 1.50.0),
+    janitor,
+    knitr,
+    limma,
+    magrittr,
+    methods,
+    msigdbr (>= 7.5.1),
+    openxlsx,
+    pheatmap,
+    plotly,
+    plyr,
+    purrr (>= 1.0.2),
+    RColorBrewer,
+    readr,
+    rlang,
+    rclipboard,
+    shiny,
+    shinycssloaders,
+    shinybusy (>= 0.3.0),
+    shinyjs,
+    shinyWidgets,
+    SummarizedExperiment,
+    stats,
+    stringr (>= 1.4.0),
+    tibble,
+    tidyr,
+    utils
+StagedInstall: yes
+Suggests: 
+    apeglm,
+    edgeR,
+    roxygen2,
+    shinythemes,
+    testthat,
+    ggsignif,
+    httr,
+    org.Hs.eg.db,
+    DelayedArray (>= 0.24.0),
+    DBI,
+    tidyverse,
+    rmarkdown
+VignetteBuilder: knitr
+Depends: R (>= 4.3.0)

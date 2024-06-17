@@ -1,0 +1,648 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, eval=TRUE, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = FALSE,
+ # comment = "#>",
+ #comment = '',
+  fig.path = "man/figures/README-",
+  #out.width = "100%"
+    fig.height=4, fig.width=6
+
+)
+options(tibble.print_min = 5, tibble.print_max = 5)
+```
+
+
+# Welcome to the Hotgenes R package repository!
+
+## License information
+
+The contents of this repository are provided under the Apache v2.0 license as laid out in the [LICENSE.md](LICENSE.md) file.
+
+## Background
+
+Hotgenes is an R package built to remove bottlenecks from omics collaborations.
+It contains a modular shiny application with a wide range of flexible tools (PCA, GSEA, GSVA, and more!)
+designed for brainstorming omics data interpretations among collaborators. 
+The functions supporting these tools are accessible outside of the shiny application,
+which can be used for adhoc queries or for 
+building custom pipelines. 
+
+## Why are Pfizer sharing this?
+
+Science will win! Simplified omics data analysis means more winning. 
+
+## What is the benefit of this work?
+
+Omics analysis with fewer bottlenecks.
+
+## How should I submit questions, queries and enhancements?
+
+You should fork this repository and submit a pull-request.
+
+## Developers
+
+Richard Virgen-Slane
+
+## How does Hotgenes work?
+
+### For any kind of differential expression analysis, you'll have: 
+
+1) Sample metadata 
+
+2) Normalized expression data 
+
+3) Feature-aliases
+
+4) Feature-associated statistics
+
+5) Auxiliary assays
+
+### These can be imported into a Hotgenes object 
+
+Omics data and be directly imported from DESeq2 (via HotgenesDEseq2()) or limma (via Hotgeneslimma()). 
+
+For others platforms, check out the HotgenesUniversal() function.
+
+
+## Convert DESeq2 analysis into a Hotgenes Object
+
+```{r}
+ require(Hotgenes)
+
+  # incase you wanted to include aliases for your genes
+  # requires a "Feature" column that contains gene names in expression matrix
+  dbCon <- org.Hs.eg.db::org.Hs.eg_dbconn()
+  sqlQuery <- "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
+
+  ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
+  dplyr::select(c("Feature" = "symbol", "ensembl_id"))
+
+
+  # HotgenesDEseq2 ----------------------------------------------------------
+  require(DESeq2)
+  
+  # loading example data
+  dds_con_dir <- system.file("extdata",
+    "dds_con.Rdata",
+    package = "Hotgenes",
+    mustWork = TRUE
+  )
+  load(dds_con_dir)
+
+  # Example Expression data and coldata
+  cts <- DESeq2::counts(dds_con) %>% as.data.frame()
+  Design <- SummarizedExperiment::colData(dds_con) %>%
+    base::as.data.frame() %>%
+    dplyr::select_if(is.factor) %>%
+    dplyr::mutate(Time = as.numeric(levels(.data$Hrs))[.data$Hrs])
+
+  # set up DESeq2
+  model_DESeq <- eval(~ sh * Hrs)
+
+  dds <- DESeq2::DESeqDataSetFromMatrix(
+    countData = cts,
+    colData = Design,
+    design = model_DESeq
+  )
+
+  dds <- DESeq2::DESeq(dds)
+
+  # Convert to Hotgenes Object
+
+  dds_Hotgenes <- HotgenesDEseq2(
+    DEseq2_object = dds,
+    lfcShrink_type = "apeglm",
+    contrasts = "sh_EWS_vs_Ctrl", 
+    ExpressionData = "vsd", 
+    Mapper = ensembl_Symbol
+  )
+
+  
+
+```
+
+## Convert limma DE analysis into Hotgenes Object
+
+
+```{r}
+ require(Hotgenes)
+  
+  # incase you wanted to include aliases for your genes
+  # requires a "Feature" column that contains gene names in expression matrix
+  dbCon <- org.Hs.eg.db::org.Hs.eg_dbconn()
+  sqlQuery <-
+    "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
+  
+  ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
+  dplyr::select(c("Feature" = "symbol", "ensembl_id"))
+  
+  
+  
+  # Hotgeneslimma -----------------------------------------------------------
+  require(DESeq2)
+
+  dds_con_dir <- system.file("extdata",
+                             "dds_con.Rdata",
+                             package = "Hotgenes",
+                             mustWork = TRUE)
+  load(dds_con_dir)
+  
+  # Example Expression data and coldata
+  cts <- counts(dds_con) %>% as.data.frame()
+  Design <- colData(dds_con) %>%
+    base::as.data.frame() %>%
+    dplyr::select_if(is.factor) %>%
+    dplyr::mutate(Time = as.numeric(levels(.data$Hrs))[.data$Hrs])
+  
+  # Create DGEList object
+  # and calculate normalization factors
+  d0 <- edgeR::DGEList(cts)
+  d0 <- edgeR::calcNormFactors(d0)
+  
+  # Filter low-expressed genes
+  # disabled in this example
+  if (FALSE) {
+    cutoff <- 1
+    drop <- which(apply(cpm(d0), 1, max) < cutoff)
+    d <- d0[-drop,]
+    dim(d) # number of genes lef
+  }
+  
+  d <- d0
+  
+  # make a model.matrix
+  model_Matrix <- model.matrix( ~ sh * Hrs,
+                                data = Design)
+  # voom
+  vm_exp <- limma::voom(d, model_Matrix)
+  
+  # make fit
+  fit <- limma::lmFit(vm_exp, model_Matrix)
+  fit <- limma::eBayes(fit)
+  
+  # Get alternative exps
+  alt_Exp <- list(counts = data.matrix(d0))
+  
+  # Convert to Hotgenes Object
+  fit_Hotgenes <- Hotgeneslimma(
+    limmafit = fit,
+    coldata = Design,
+    Expression = vm_exp,
+    Expression_name = "logCPM",
+    Exps_list = alt_Exp,
+    Mapper = ensembl_Symbol
+  )
+  
+```
+
+
+
+## For other platforms you can generate a hotgenes object using HotgenesUniversal().
+
+```{r converting}
+
+library(Hotgenes)
+  
+  
+  # load example data -------------------------------------------------------
+  
+  dds_Hotgenes_dir <- system.file("extdata",
+                                  paste0("dds_Hotgenes", ".RDS"),
+                                  package = "Hotgenes",
+                                  mustWork = TRUE
+  )
+  
+  htgs <- readRDS(dds_Hotgenes_dir)
+  
+  # preparing data -----------------------------------------------------------
+  
+  # Getting example named list of DE statistics
+  NewDE <- Output_DE_(htgs, as_list = TRUE, padj_cut = 1)
+  
+  # Getting example named list of normalized data
+  NormlData <- Normalized_Data_(htgs)
+   
+  # Getting example coldata
+  ExpColdata <- coldata_(htgs)
+
+  # Getting example original data object used for DE analysis
+  # This example was generated from DESeq2
+  OrigDEObj <- O_(htgs)
+  OrigDEObj %>% class()
+  
+  # Getting example design matrix
+  DE_design <- designMatrix_(htgs)
+  
+  # Getting example mapper
+  MapperDF <- Mapper_(htgs)
+  
+  
+  # Converting example objects to hotgenes
+  Hotgenes_Object <- HotgenesUniversal(
+    Output_DE = NewDE,
+    Normalized_Expression = NormlData,
+    coldata = ExpColdata,
+    Original_Object = OrigDEObj,
+    designMatrix = DE_design,
+    Mapper = MapperDF
+  )
+  
+  
+
+```
+
+
+## What can you do with a Hotgenes object?
+
+```{r setup, eval=TRUE, include=FALSE}
+
+library(Hotgenes)
+
+fit_Hotgenes_dir <- system.file("extdata",
+  paste0("fit_Hotgenes", ".RDS"),
+  package = "Hotgenes",
+  mustWork = TRUE
+)
+
+# from limma
+fit_Hotgenes <- readRDS(fit_Hotgenes_dir)
+
+# create example assays
+set.seed(12)
+
+max_len <- length(SampleIDs_(fit_Hotgenes))
+
+AssayData  <- auxiliary_assays_default(fit_Hotgenes)  %>% 
+  dplyr::mutate(assay1 = rnorm(max_len),
+                assay2 = rnorm(max_len))
+
+auxiliary_assays_(fit_Hotgenes) <- AssayData
+
+
+```
+
+
+calling a Hotgenes object returns a summary table 
+```{r object_details}
+
+library(Hotgenes)
+
+fit_Hotgenes
+
+```
+
+Sample metadata 
+```{r inspect_1}
+coldata_(fit_Hotgenes)
+
+```
+
+Normalized expression data 
+```{r inspect_2}
+ExpressionData_(fit_Hotgenes)[c(1:3), c(1:3)]
+
+```
+
+Available aliases
+```{r inspect_3}
+
+Mapper_(fit_Hotgenes) %>% head()
+
+```
+
+Available auxiliary_assays
+```{r inspect_4}
+
+auxiliary_assays_(fit_Hotgenes)
+
+```
+
+
+## Easy access to features of interest
+
+### Feature-associated statistics.
+```{r inspect_5}
+
+DE(fit_Hotgenes, Topn = 3)
+
+
+```
+
+### Summary plot of contrasts
+
+all comparisons
+```{r DEP_1}
+
+DEPlot(fit_Hotgenes, .log2FoldChange = 0, padj_cut = 0.1)
+
+```
+
+Check for a feature of interest
+```{r DEP_2}
+# Check a feature across comparisons
+DEPlot(fit_Hotgenes, hotList = "CSF1", .log2FoldChange = 0, padj_cut = 0.1)
+
+```
+
+### Volcano plots
+
+```{r VPlot_1}
+VPlot(fit_Hotgenes, 
+      .log2FoldChange = 1, padj_cut = 0.1,
+      contrasts = "sh_EWS_vs_Ctrl")
+
+```
+
+
+### Identify overlapping features across comparisons with Venn_Report()
+
+```{r Venn_Report_1, fig.height=8, fig.width=8}
+# Venn Diagram plot
+fit_Hotgenes %>% 
+   DE(
+      Report = "Features",
+      contrasts = c("sh_EWS_vs_Ctrl", "Hrs_2_vs_0", "Hrs_6_vs_0"),
+      .log2FoldChange = 0, padj_cut = 0.1
+    ) %>%
+    Venn_Report()
+
+
+```
+
+
+### Identify key features using PCA and clustering
+
+```{r PCA_1, echo = TRUE, results = 'hide'}
+# run PCA
+# set contrast of choice and metadata variables
+FactoOutput <- FactoWrapper(fit_Hotgenes,
+  contrasts = "Hrs_6_vs_0",
+  coldata_ids = c("Hrs", "sh"),
+  biplot = FALSE
+)
+
+```
+
+
+```{r PCA_2, message=FALSE, warning=FALSE}
+# plot
+FactoOutput$res_PPI_pa_1
+
+
+```
+
+
+```{r PCA_3, echo = TRUE}
+
+# getting HCPC details
+FactoOutput$TopTibble # Feature
+FactoOutput$TopGroups # TopGroups
+```
+
+
+### Streamlined expression plots 
+
+```{r exps_plot_1}
+# Having metadata embedded with expression data means easier plotting
+yvar <- c("CSF2", "IL6")
+xvar <- "Hrs"
+
+ExpsPlot(fit_Hotgenes,
+  xVar = xvar,
+  yVar = yvar,
+  fill = "Hrs",
+  boxplot = TRUE
+)
+
+
+```
+
+
+
+```{r exps_plot_2}
+
+# Subset data on the fly
+ExpsPlot(fit_Hotgenes,
+  xVar = xvar,
+  yVar = yvar,
+  filter_eval = Hrs != 2,
+  fill = "Hrs",
+  boxplot = TRUE
+
+)
+
+
+```
+
+
+
+```{r exps_plot_3}
+
+# Reorder data on the fly
+ExpsPlot(fit_Hotgenes,
+  xVar = xvar,
+  yVar = yvar,
+  boxplot = TRUE,
+  fill = "Hrs",
+  named_levels  = list(Feature = "IL6",
+                       Hrs = c("6", "2", "0"))
+)
+
+
+```
+
+
+### Visualize high magnitude changes ('Hotgenes') with a heatmap
+
+```{r heatmap_1, fig.height=8, fig.width=8}
+DEphe(fit_Hotgenes,
+      contrasts = "sh_EWS_vs_Ctrl", 
+      Topn = 5,
+      cellheight = 10,
+      cellwidth = 8,
+      annotation_colors = coldata_palettes(fit_Hotgenes),
+      annotations = c("Hrs", "sh"))
+
+```
+
+
+```{r heatmap_2, fig.height=8, fig.width=8}
+# change labels to ensembl_id
+DEphe(fit_Hotgenes,
+      contrasts = "sh_EWS_vs_Ctrl",
+      label_by = "ensembl_id",
+      Topn = 5,
+      cellheight = 10,
+      cellwidth = 8,
+      annotation_colors = coldata_palettes(fit_Hotgenes),
+      annotations = c("Hrs", "sh"))
+
+```
+
+
+### Run GSEA using msigdbr genesets
+
+```{r GSEA_1}
+# get geneset
+H_paths <- msigdbr_wrapper(
+    species = "human",
+    set = "CP:KEGG",
+    gene_col = "gene_symbol"
+  )
+
+# Get ranks
+  InputRanks <- fit_Hotgenes %>%
+    DE(
+      Report = "Ranks",
+      contrasts = "Hrs_2_vs_0",
+      Rank_name = "Feature",
+      padj_cut = 0.1
+    )
+  
+  
+  # fgsea wrapper --------
+  Out_GSEA <- fgsea_(
+    Ranks = InputRanks,
+    pathways = H_paths,
+    nproc = 1,
+    minSize = 5,
+    maxSize = Inf
+  )
+  
+  # Get details for all
+  Out_GSEA %>%
+    fgsea_Results(
+      contrasts = "Hrs_2_vs_0",
+      padj_cut = 0.2,
+      mode = "D"
+    )
+  
+  # Or for one
+  Out_GSEA %>%
+    fgsea_Results(
+      contrasts = "Hrs_2_vs_0",
+      padj_cut = 0.2,
+      mode = "leadingEdge"
+    )
+  
+  # Generate a summary plot
+  Out_GSEA %>%
+    GSEA_Plots(
+      contrasts = "Hrs_2_vs_0",
+      padj_cut = 0.2,
+      width = 30,
+      Topn = 2
+    )
+  
+  # plotEnrichment_
+  plotEnrichment_(
+    Out_GSEA, "Hrs_2_vs_0",
+    "kegg_nod_like_receptor_signaling_pathway"
+  )
+  
+```
+
+### Or use the HotgeneSets() function for gsva
+
+```{r hotgeneSets}
+
+choice_set <- "CP:KEGG"
+choice_id <- "gene_symbol"
+  
+gsList <- msigdbr_wrapper(
+    species = "human",
+    set = choice_set,
+    gene_col = choice_id
+  )
+
+# HotgeneSets -------------------------------------------------------------
+  
+  HotgeneSets_out <- HotgeneSets(
+    Hotgenes = fit_Hotgenes,
+    geneSets = gsList,
+    kcdf = "Gaussian",
+    method = "ssgsea",
+    minSize = 2,
+    maxSize = Inf
+  )
+  
+  
+  HotgeneSets_out
+
+# store your Hotgenes objects in a named list
+# The Shiny_Hotgenes() will let you toggle between objects
+  
+ 
+if(FALSE){
+  
+  List_Hotgenes <- list(HotgeneSets_out = HotgeneSets_out,
+                        fit_Hotgenes = fit_Hotgenes)
+  
+   Shiny_Hotgenes(List_Hotgenes)
+}
+
+```
+
+
+## All functionality is available in a shiny app!
+
+See manual for details!
+
+```{r shinyApp_1}
+
+if(FALSE){
+  
+  Shiny_Hotgenes(dds_Hotgenes)
+}
+
+```
+
+
+# Pre-requisites, installation
+
+## Install required packages. 
+
+```{r install_reqs, eval=FALSE, include=TRUE}
+
+# Install required packages. ----------------------------------------------
+install.packages(c("devtools", "BiocManager"), dependencies = TRUE)
+
+```
+
+
+### The following code with help you to install the package
+
+```{r installation, eval=FALSE, include=TRUE}
+
+# install Hotgenes -------------------------------------------------------
+
+# set repos
+options(repos = c(
+  CRAN = "https://cran.rstudio.com/",
+  BiocManager::repositories()[1:4]
+))
+
+devtools::install_github("pfizer-opensource/Hotgenes",
+                         dependencies = TRUE)
+
+
+```
+
+## Explore functions
+
+```{r help_section, eval=FALSE, include=TRUE}
+
+library(Hotgenes)
+help(package="Hotgenes")
+
+```
+
+## Code of Conduct
+  
+  Please note that the Hotgenes project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
