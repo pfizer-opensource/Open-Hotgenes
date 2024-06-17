@@ -3,6 +3,11 @@
 
 # Welcome to the Hotgenes R package repository! <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
+
+
+
+
+
 ## License information
 
 The contents of this repository are provided under the Apache v2.0
