@@ -18,7 +18,7 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 ```
 
 
-# Welcome to the Hotgenes R package repository!
+# Welcome to the Hotgenes R package repository! <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 ## License information
 
@@ -611,7 +611,7 @@ if(FALSE){
 ```{r install_reqs, eval=FALSE, include=TRUE}
 
 # Install required packages. ----------------------------------------------
-install.packages(c("devtools", "BiocManager"), dependencies = TRUE)
+install.packages(c("devtools", "BiocManager", "apeglm"), dependencies = TRUE)
 
 ```
 
