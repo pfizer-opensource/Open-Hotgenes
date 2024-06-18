@@ -5,6 +5,25 @@
 
 <br>
 
+## Installation requires R (\>= 4.3.0)
+
+``` r
+# Install required packages. ----------------------------------------------
+install.packages(c("devtools", "BiocManager"), dependencies = TRUE)
+
+BiocManager::install("apeglm")
+
+# install Hotgenes -------------------------------------------------------
+# set repos
+options(repos = c(
+  CRAN = "https://cran.rstudio.com/",
+  BiocManager::repositories(version = "3.18")[1:4]
+))
+
+devtools::install_github("pfizer-opensource/Hotgenes",
+                         dependencies = TRUE)
+```
+
 ## License information
 
 The contents of this repository are provided under the Apache v2.0
@@ -893,30 +912,6 @@ if(FALSE){
   
   Shiny_Hotgenes(dds_Hotgenes)
 }
-```
-
-# Pre-requisites, installation
-
-## Install required packages.
-
-``` r
-# Install required packages. ----------------------------------------------
-install.packages(c("devtools", "BiocManager", "apeglm"), dependencies = TRUE)
-```
-
-### The following code with help you to install the package
-
-``` r
-# install Hotgenes -------------------------------------------------------
-
-# set repos
-options(repos = c(
-  CRAN = "https://cran.rstudio.com/",
-  BiocManager::repositories()[1:4]
-))
-
-devtools::install_github("pfizer-opensource/Hotgenes",
-                         dependencies = TRUE)
 ```
 
 ## Explore functions

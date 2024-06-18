@@ -21,6 +21,28 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 # Hotgenes R package! <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 <br>
+
+## Installation requires R (>= 4.3.0)
+
+```{r install_reqs, eval=FALSE, include=TRUE}
+
+# Install required packages. ----------------------------------------------
+install.packages(c("devtools", "BiocManager"), dependencies = TRUE)
+
+BiocManager::install("apeglm")
+
+# install Hotgenes -------------------------------------------------------
+# set repos
+options(repos = c(
+  CRAN = "https://cran.rstudio.com/",
+  BiocManager::repositories(version = "3.18")[1:4]
+))
+
+devtools::install_github("pfizer-opensource/Hotgenes",
+                         dependencies = TRUE)
+
+```
+
  
 ## License information
 
@@ -605,36 +627,6 @@ if(FALSE){
 
 ```
 
-
-# Pre-requisites, installation
-
-## Install required packages. 
-
-```{r install_reqs, eval=FALSE, include=TRUE}
-
-# Install required packages. ----------------------------------------------
-install.packages(c("devtools", "BiocManager", "apeglm"), dependencies = TRUE)
-
-```
-
-
-### The following code with help you to install the package
-
-```{r installation, eval=FALSE, include=TRUE}
-
-# install Hotgenes -------------------------------------------------------
-
-# set repos
-options(repos = c(
-  CRAN = "https://cran.rstudio.com/",
-  BiocManager::repositories()[1:4]
-))
-
-devtools::install_github("pfizer-opensource/Hotgenes",
-                         dependencies = TRUE)
-
-
-```
 
 ## Explore functions
 
