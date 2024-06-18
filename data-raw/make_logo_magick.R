@@ -12,10 +12,10 @@ p<- sticker(img,
   
 #h_fill = "#A9A9A9",
 # h_color = "#919191",
-h_fill = "white",
-h_color = "white",
+h_fill = "black",
+h_color = "black",
   
-h_size = 4,
+h_size = 0,
   p_y = 1, p_x = 1,
   asp = 1,
   s_x = 1, s_y = 1.24,
@@ -26,6 +26,7 @@ h_size = 4,
 
 
 print(p)
+
 #?usethis::use_logo()
 usethis::use_logo(hexSticker_out, geometry = "240x278", retina = TRUE)
 

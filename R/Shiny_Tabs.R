@@ -3021,17 +3021,10 @@ shiny::tagList(
 # conditionalPanel start
   shiny::conditionalPanel(
 condition = TabCondition(tabsetPanel_id = tabsetPanel_id, id = id),
-shiny::tags$div(
 
-glue::glue(
-"{environmentName(environment(BoxPlot_UI_inputs_support))}
-{shiny::tags$br()} 
-v {utils::packageVersion(environmentName(
-environment(BoxPlot_UI_inputs_support)))}"
-) %>% 
-shiny::HTML() %>% 
-shiny::h4(),
-align = "center"),
+embed_Hotgenes_logo(),
+
+
 shiny::tags$hr(style = "border-color: black;"),
 shiny::radioButtons(
 inputId = "NormSlot" %>% ns(),
