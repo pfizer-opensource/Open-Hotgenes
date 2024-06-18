@@ -30,7 +30,7 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 
 ## License information
 
-The contents of this repository are provided under the Apache v2.0 license as laid out in the [LICENSE.md](LICENSE.md) file.
+The contents of this repository are provided under the Apache v2.0 license as laid out in the [LICENSE](LICENSE) file.
 
 ## Background
 

@@ -6,7 +6,7 @@
 ## License information
 
 The contents of this repository are provided under the Apache v2.0
-license as laid out in the [LICENSE.md](LICENSE.md) file.
+license as laid out in the [LICENSE](LICENSE) file.
 
 ## Background
 
