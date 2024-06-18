@@ -38,7 +38,7 @@ options(repos = c(
   BiocManager::repositories(version = "3.18")[1:4]
 ))
 
-devtools::install_github("pfizer-opensource/Hotgenes",
+devtools::install_github("pfizer-opensource/Open-Hotgenes",
                          dependencies = TRUE)
 
 ```
