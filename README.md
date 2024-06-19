@@ -1,25 +1,28 @@
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # Hotgenes R package! <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 <br>
 
-## Installation requires R (&gt;= 4.3.0)
+## Installation requires R (\>= 4.3.0)
 
-    # Install required packages. ----------------------------------------------
-    install.packages(c("devtools", "BiocManager"), dependencies = TRUE)
+``` r
+# Install required packages. ----------------------------------------------
+install.packages(c("devtools", "BiocManager"), dependencies = TRUE)
 
-    BiocManager::install("apeglm")
+BiocManager::install("apeglm")
 
-    # install Hotgenes -------------------------------------------------------
-    # set repos
-    options(repos = c(
-      CRAN = "https://cran.rstudio.com/",
-      BiocManager::repositories(version = "3.18")[1:4]
-    ))
+# install Hotgenes -------------------------------------------------------
+# set repos
+options(repos = c(
+  CRAN = "https://cran.rstudio.com/",
+  BiocManager::repositories(version = "3.18")[1:4]
+))
 
-    devtools::install_github("pfizer-opensource/Open-Hotgenes",
-                             dependencies = TRUE)
+devtools::install_github("pfizer-opensource/Open-Hotgenes",
+                         dependencies = TRUE)
+```
 
 ## License information
 
@@ -56,15 +59,15 @@ Richard Virgen-Slane
 
 ### For any kind of differential expression analysis, you’ll have:
 
-1.  Sample metadata
+1)  Sample metadata
 
-2.  Normalized expression data
+2)  Normalized expression data
 
-3.  Feature-aliases
+3)  Feature-aliases
 
-4.  Feature-associated statistics
+4)  Feature-associated statistics
 
-5.  Auxiliary assays
+5)  Auxiliary assays
 
 ### These can be imported into a Hotgenes object
 
@@ -75,48 +78,149 @@ For others platforms, check out the HotgenesUniversal() function.
 
 ## Convert DESeq2 analysis into a Hotgenes Object
 
-     require(Hotgenes)
+``` r
+ require(Hotgenes)
+```
 
-      # incase you wanted to include aliases for your genes
-      # requires a "Feature" column that contains gene names in expression matrix
-      dbCon <- org.Hs.eg.db::org.Hs.eg_dbconn()
+    ## Loading required package: Hotgenes
+
+``` r
+  # incase you wanted to include aliases for your genes
+  # requires a "Feature" column that contains gene names in expression matrix
+  dbCon <- org.Hs.eg.db::org.Hs.eg_dbconn()
+```
 
     ## 
 
-      sqlQuery <- "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
+``` r
+  sqlQuery <- "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
 
-      ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
-      dplyr::select(c("Feature" = "symbol", "ensembl_id"))
+  ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
+  dplyr::select(c("Feature" = "symbol", "ensembl_id"))
 
 
-      # HotgenesDEseq2 ----------------------------------------------------------
-      require(DESeq2)
-      
-      # loading example data
-      dds_con_dir <- system.file("extdata",
-        "dds_con.Rdata",
-        package = "Hotgenes",
-        mustWork = TRUE
-      )
-      load(dds_con_dir)
+  # HotgenesDEseq2 ----------------------------------------------------------
+  require(DESeq2)
+```
 
-      # Example Expression data and coldata
-      cts <- DESeq2::counts(dds_con) %>% as.data.frame()
-      Design <- SummarizedExperiment::colData(dds_con) %>%
-        base::as.data.frame() %>%
-        dplyr::select_if(is.factor) %>%
-        dplyr::mutate(Time = as.numeric(levels(.data$Hrs))[.data$Hrs])
+    ## Loading required package: DESeq2
 
-      # set up DESeq2
-      model_DESeq <- eval(~ sh * Hrs)
+    ## Warning: package 'DESeq2' was built under R version 4.3.3
 
-      dds <- DESeq2::DESeqDataSetFromMatrix(
-        countData = cts,
-        colData = Design,
-        design = model_DESeq
-      )
+    ## Loading required package: S4Vectors
 
-      dds <- DESeq2::DESeq(dds)
+    ## Loading required package: stats4
+
+    ## Loading required package: BiocGenerics
+
+    ## 
+    ## Attaching package: 'BiocGenerics'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     IQR, mad, sd, var, xtabs
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    ##     colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    ##     get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
+    ##     match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+    ##     Position, rank, rbind, Reduce, rownames, sapply, setdiff, sort,
+    ##     table, tapply, union, unique, unsplit, which.max, which.min
+
+    ## 
+    ## Attaching package: 'S4Vectors'
+
+    ## The following object is masked from 'package:utils':
+    ## 
+    ##     findMatches
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     expand.grid, I, unname
+
+    ## Loading required package: IRanges
+
+    ## Loading required package: GenomicRanges
+
+    ## Loading required package: GenomeInfoDb
+
+    ## Warning: package 'GenomeInfoDb' was built under R version 4.3.3
+
+    ## Loading required package: SummarizedExperiment
+
+    ## Loading required package: MatrixGenerics
+
+    ## Loading required package: matrixStats
+
+    ## 
+    ## Attaching package: 'MatrixGenerics'
+
+    ## The following objects are masked from 'package:matrixStats':
+    ## 
+    ##     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    ##     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    ##     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    ##     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    ##     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    ##     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    ##     colWeightedMeans, colWeightedMedians, colWeightedSds,
+    ##     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    ##     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    ##     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    ##     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    ##     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    ##     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    ##     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    ##     rowWeightedSds, rowWeightedVars
+
+    ## Loading required package: Biobase
+
+    ## Welcome to Bioconductor
+    ## 
+    ##     Vignettes contain introductory material; view with
+    ##     'browseVignettes()'. To cite Bioconductor, see
+    ##     'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+    ## 
+    ## Attaching package: 'Biobase'
+
+    ## The following object is masked from 'package:MatrixGenerics':
+    ## 
+    ##     rowMedians
+
+    ## The following objects are masked from 'package:matrixStats':
+    ## 
+    ##     anyMissing, rowMedians
+
+``` r
+  # loading example data
+  dds_con_dir <- system.file("extdata",
+    "dds_con.Rdata",
+    package = "Hotgenes",
+    mustWork = TRUE
+  )
+  load(dds_con_dir)
+
+  # Example Expression data and coldata
+  cts <- DESeq2::counts(dds_con) %>% as.data.frame()
+  Design <- SummarizedExperiment::colData(dds_con) %>%
+    base::as.data.frame() %>%
+    dplyr::select_if(is.factor) %>%
+    dplyr::mutate(Time = as.numeric(levels(.data$Hrs))[.data$Hrs])
+
+  # set up DESeq2
+  model_DESeq <- eval(~ sh * Hrs)
+
+  dds <- DESeq2::DESeqDataSetFromMatrix(
+    countData = cts,
+    colData = Design,
+    design = model_DESeq
+  )
+
+  dds <- DESeq2::DESeq(dds)
+```
 
     ## estimating size factors
 
@@ -130,15 +234,17 @@ For others platforms, check out the HotgenesUniversal() function.
 
     ## fitting model and testing
 
-      # Convert to Hotgenes Object
+``` r
+  # Convert to Hotgenes Object
 
-      dds_Hotgenes <- HotgenesDEseq2(
-        DEseq2_object = dds,
-        lfcShrink_type = "apeglm",
-        contrasts = "sh_EWS_vs_Ctrl", 
-        ExpressionData = "vsd", 
-        Mapper = ensembl_Symbol
-      )
+  dds_Hotgenes <- HotgenesDEseq2(
+    DEseq2_object = dds,
+    lfcShrink_type = "apeglm",
+    contrasts = "sh_EWS_vs_Ctrl", 
+    ExpressionData = "vsd", 
+    Mapper = ensembl_Symbol
+  )
+```
 
     ## using 'apeglm' for LFC shrinkage. If used in published research, please cite:
     ##     Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
@@ -147,133 +253,141 @@ For others platforms, check out the HotgenesUniversal() function.
 
 ## Convert limma DE analysis into Hotgenes Object
 
-     require(Hotgenes)
-      
-      # incase you wanted to include aliases for your genes
-      # requires a "Feature" column that contains gene names in expression matrix
-      dbCon <- org.Hs.eg.db::org.Hs.eg_dbconn()
-      sqlQuery <-
-        "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
-      
-      ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
-      dplyr::select(c("Feature" = "symbol", "ensembl_id"))
-      
-      
-      
-      # Hotgeneslimma -----------------------------------------------------------
-      require(DESeq2)
+``` r
+ require(Hotgenes)
+  
+  # incase you wanted to include aliases for your genes
+  # requires a "Feature" column that contains gene names in expression matrix
+  dbCon <- org.Hs.eg.db::org.Hs.eg_dbconn()
+  sqlQuery <-
+    "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
+  
+  ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
+  dplyr::select(c("Feature" = "symbol", "ensembl_id"))
+  
+  
+  
+  # Hotgeneslimma -----------------------------------------------------------
+  require(DESeq2)
 
-      dds_con_dir <- system.file("extdata",
-                                 "dds_con.Rdata",
-                                 package = "Hotgenes",
-                                 mustWork = TRUE)
-      load(dds_con_dir)
-      
-      # Example Expression data and coldata
-      cts <- counts(dds_con) %>% as.data.frame()
-      Design <- colData(dds_con) %>%
-        base::as.data.frame() %>%
-        dplyr::select_if(is.factor) %>%
-        dplyr::mutate(Time = as.numeric(levels(.data$Hrs))[.data$Hrs])
-      
-      # Create DGEList object
-      # and calculate normalization factors
-      d0 <- edgeR::DGEList(cts)
-      d0 <- edgeR::calcNormFactors(d0)
-      
-      # Filter low-expressed genes
-      # disabled in this example
-      if (FALSE) {
-        cutoff <- 1
-        drop <- which(apply(cpm(d0), 1, max) < cutoff)
-        d <- d0[-drop,]
-        dim(d) # number of genes lef
-      }
-      
-      d <- d0
-      
-      # make a model.matrix
-      model_Matrix <- model.matrix( ~ sh * Hrs,
-                                    data = Design)
-      # voom
-      vm_exp <- limma::voom(d, model_Matrix)
-      
-      # make fit
-      fit <- limma::lmFit(vm_exp, model_Matrix)
-      fit <- limma::eBayes(fit)
-      
-      # Get alternative exps
-      alt_Exp <- list(counts = data.matrix(d0))
-      
-      # Convert to Hotgenes Object
-      fit_Hotgenes <- Hotgeneslimma(
-        limmafit = fit,
-        coldata = Design,
-        Expression = vm_exp,
-        Expression_name = "logCPM",
-        Exps_list = alt_Exp,
-        Mapper = ensembl_Symbol
-      )
+  dds_con_dir <- system.file("extdata",
+                             "dds_con.Rdata",
+                             package = "Hotgenes",
+                             mustWork = TRUE)
+  load(dds_con_dir)
+  
+  # Example Expression data and coldata
+  cts <- counts(dds_con) %>% as.data.frame()
+  Design <- colData(dds_con) %>%
+    base::as.data.frame() %>%
+    dplyr::select_if(is.factor) %>%
+    dplyr::mutate(Time = as.numeric(levels(.data$Hrs))[.data$Hrs])
+  
+  # Create DGEList object
+  # and calculate normalization factors
+  d0 <- edgeR::DGEList(cts)
+  d0 <- edgeR::calcNormFactors(d0)
+  
+  # Filter low-expressed genes
+  # disabled in this example
+  if (FALSE) {
+    cutoff <- 1
+    drop <- which(apply(cpm(d0), 1, max) < cutoff)
+    d <- d0[-drop,]
+    dim(d) # number of genes lef
+  }
+  
+  d <- d0
+  
+  # make a model.matrix
+  model_Matrix <- model.matrix( ~ sh * Hrs,
+                                data = Design)
+  # voom
+  vm_exp <- limma::voom(d, model_Matrix)
+  
+  # make fit
+  fit <- limma::lmFit(vm_exp, model_Matrix)
+  fit <- limma::eBayes(fit)
+  
+  # Get alternative exps
+  alt_Exp <- list(counts = data.matrix(d0))
+  
+  # Convert to Hotgenes Object
+  fit_Hotgenes <- Hotgeneslimma(
+    limmafit = fit,
+    coldata = Design,
+    Expression = vm_exp,
+    Expression_name = "logCPM",
+    Exps_list = alt_Exp,
+    Mapper = ensembl_Symbol
+  )
+```
 
 ## For other platforms you can generate a hotgenes object using HotgenesUniversal().
 
-    library(Hotgenes)
-      
-      
-      # load example data -------------------------------------------------------
-      
-      dds_Hotgenes_dir <- system.file("extdata",
-                                      paste0("dds_Hotgenes", ".RDS"),
-                                      package = "Hotgenes",
-                                      mustWork = TRUE
-      )
-      
-      htgs <- readRDS(dds_Hotgenes_dir)
-      
-      # preparing data -----------------------------------------------------------
-      
-      # Getting example named list of DE statistics
-      NewDE <- Output_DE_(htgs, as_list = TRUE, padj_cut = 1)
-      
-      # Getting example named list of normalized data
-      NormlData <- Normalized_Data_(htgs)
-       
-      # Getting example coldata
-      ExpColdata <- coldata_(htgs)
+``` r
+library(Hotgenes)
+  
+  
+  # load example data -------------------------------------------------------
+  
+  dds_Hotgenes_dir <- system.file("extdata",
+                                  paste0("dds_Hotgenes", ".RDS"),
+                                  package = "Hotgenes",
+                                  mustWork = TRUE
+  )
+  
+  htgs <- readRDS(dds_Hotgenes_dir)
+  
+  # preparing data -----------------------------------------------------------
+  
+  # Getting example named list of DE statistics
+  NewDE <- Output_DE_(htgs, as_list = TRUE, padj_cut = 1)
+  
+  # Getting example named list of normalized data
+  NormlData <- Normalized_Data_(htgs)
+   
+  # Getting example coldata
+  ExpColdata <- coldata_(htgs)
 
-      # Getting example original data object used for DE analysis
-      # This example was generated from DESeq2
-      OrigDEObj <- O_(htgs)
-      OrigDEObj %>% class()
+  # Getting example original data object used for DE analysis
+  # This example was generated from DESeq2
+  OrigDEObj <- O_(htgs)
+  OrigDEObj %>% class()
+```
 
     ## [1] "DESeqDataSet"
     ## attr(,"package")
     ## [1] "DESeq2"
 
-      # Getting example design matrix
-      DE_design <- designMatrix_(htgs)
-      
-      # Getting example mapper
-      MapperDF <- Mapper_(htgs)
-      
-      
-      # Converting example objects to hotgenes
-      Hotgenes_Object <- HotgenesUniversal(
-        Output_DE = NewDE,
-        Normalized_Expression = NormlData,
-        coldata = ExpColdata,
-        Original_Object = OrigDEObj,
-        designMatrix = DE_design,
-        Mapper = MapperDF
-      )
+``` r
+  # Getting example design matrix
+  DE_design <- designMatrix_(htgs)
+  
+  # Getting example mapper
+  MapperDF <- Mapper_(htgs)
+  
+  
+  # Converting example objects to hotgenes
+  Hotgenes_Object <- HotgenesUniversal(
+    Output_DE = NewDE,
+    Normalized_Expression = NormlData,
+    coldata = ExpColdata,
+    Original_Object = OrigDEObj,
+    designMatrix = DE_design,
+    Mapper = MapperDF
+  )
+```
 
 ## What can you do with a Hotgenes object?
 
 calling a Hotgenes object returns a summary table
 
-    library(Hotgenes)
+``` r
+library(Hotgenes)
 
-    fit_Hotgenes
+fit_Hotgenes
+```
 
     ## class: Hotgenes 
     ## Original class/package:  EList/limma
@@ -294,7 +408,9 @@ calling a Hotgenes object returns a summary table
 
 Sample metadata
 
-    coldata_(fit_Hotgenes)
+``` r
+coldata_(fit_Hotgenes)
+```
 
     ##                sh Bio_Rep Hrs Time
     ## shCON_0hrs_1 Ctrl       1   0    0
@@ -312,7 +428,9 @@ Sample metadata
 
 Normalized expression data
 
-    ExpressionData_(fit_Hotgenes)[c(1:3), c(1:3)]
+``` r
+ExpressionData_(fit_Hotgenes)[c(1:3), c(1:3)]
+```
 
     ##        shCON_0hrs_1 shCON_0hrs_2 shCON_2hrs_1
     ## AGER       5.699205     6.356261     6.030818
@@ -321,7 +439,9 @@ Normalized expression data
 
 Available aliases
 
-    Mapper_(fit_Hotgenes) %>% head()
+``` r
+Mapper_(fit_Hotgenes) %>% head()
+```
 
     ## # A tibble: 6 × 2
     ##   Feature ensembl_id     
@@ -333,9 +453,11 @@ Available aliases
     ## 5 AGER    ENSG00000237405
     ## # ℹ 1 more row
 
-Available auxiliary\_assays
+Available auxiliary_assays
 
-    auxiliary_assays_(fit_Hotgenes)
+``` r
+auxiliary_assays_(fit_Hotgenes)
+```
 
     ##                  assay1      assay2
     ## shCON_0hrs_1 -1.4805676 -0.77956651
@@ -355,85 +477,101 @@ Available auxiliary\_assays
 
 ### Feature-associated statistics.
 
-    DE(fit_Hotgenes, Topn = 3)
+``` r
+DE(fit_Hotgenes, Topn = 3)
+```
 
     ## $Hrs_2_vs_0
     ## # A tibble: 3 × 11
-    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj     t     B ensembl_id     
-    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <dbl> <chr>          
-    ## 1 IL6     Hrs_2_vs_0_up     10.6           2.52  5.72  31.1 4.06e-24 1.04e-21  31.1  45.1 ENSG00000136244
-    ## 2 CXCL8   Hrs_2_vs_0_up     10.9           3.51 11.4   26.0 6.99e-22 8.92e-20  26.0  40.0 ENSG00000169429
-    ## 3 TNFAIP3 Hrs_2_vs_0_up     10.5           2.14  4.42  24.9 2.21e-21 1.88e-19  24.9  38.8 ENSG00000118503
+    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj
+    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl>
+    ## 1 IL6     Hrs_2_vs_0_up     10.6           2.52  5.72  31.1 4.06e-24 1.04e-21
+    ## 2 CXCL8   Hrs_2_vs_0_up     10.9           3.51 11.4   26.0 6.99e-22 8.92e-20
+    ## 3 TNFAIP3 Hrs_2_vs_0_up     10.5           2.14  4.42  24.9 2.21e-21 1.88e-19
+    ## # ℹ 3 more variables: t <dbl>, B <dbl>, ensembl_id <chr>
     ## 
     ## $Hrs_6_vs_0
     ## # A tibble: 3 × 11
-    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj     t     B ensembl_id     
-    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <dbl> <chr>          
-    ## 1 CXCL8   Hrs_6_vs_0_up     10.9           3.56 11.8   26.4 4.21e-22 1.07e-19  26.4  40.5 ENSG00000169429
-    ## 2 CXCL1   Hrs_6_vs_0_up     11.3           2.35  5.09  24.5 3.71e-21 4.73e-19  24.5  38.2 ENSG00000163739
-    ## 3 CCL2    Hrs_6_vs_0_up     12.5           1.25  2.37  23.0 2.14e-20 1.56e-18  23.0  36.3 ENSG00000108691
+    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj
+    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl>
+    ## 1 CXCL8   Hrs_6_vs_0_up     10.9           3.56 11.8   26.4 4.21e-22 1.07e-19
+    ## 2 CXCL1   Hrs_6_vs_0_up     11.3           2.35  5.09  24.5 3.71e-21 4.73e-19
+    ## 3 CCL2    Hrs_6_vs_0_up     12.5           1.25  2.37  23.0 2.14e-20 1.56e-18
+    ## # ℹ 3 more variables: t <dbl>, B <dbl>, ensembl_id <chr>
     ## 
     ## $sh_EWS_vs_Ctrl
     ## # A tibble: 3 × 11
-    ##   Feature contrast_dir        baseMean log2FoldChange    FC  stat   pvalue     padj     t     B ensembl_id     
-    ##   <chr>   <chr>                  <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <dbl> <chr>          
-    ## 1 C1R     sh_EWS_vs_Ctrl_down     13.5         -0.856 0.553 -16.7 1.33e-16 3.39e-14 -16.7  27.7 ENSG00000159403
-    ## 2 C1R     sh_EWS_vs_Ctrl_down     13.5         -0.856 0.553 -16.7 1.33e-16 3.39e-14 -16.7  27.7 ENSG00000288512
-    ## 3 CCL2    sh_EWS_vs_Ctrl_down     12.5         -1.00  0.500 -15.8 5.92e-16 7.55e-14 -15.8  26.4 ENSG00000108691
+    ##   Feature contrast_dir     baseMean log2FoldChange    FC  stat   pvalue     padj
+    ##   <chr>   <chr>               <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl>
+    ## 1 C1R     sh_EWS_vs_Ctrl_…     13.5         -0.856 0.553 -16.7 1.33e-16 3.39e-14
+    ## 2 C1R     sh_EWS_vs_Ctrl_…     13.5         -0.856 0.553 -16.7 1.33e-16 3.39e-14
+    ## 3 CCL2    sh_EWS_vs_Ctrl_…     12.5         -1.00  0.500 -15.8 5.92e-16 7.55e-14
+    ## # ℹ 3 more variables: t <dbl>, B <dbl>, ensembl_id <chr>
     ## 
     ## $shEWS.Hrs2
     ## # A tibble: 3 × 11
-    ##   Feature contrast_dir    baseMean log2FoldChange    FC  stat    pvalue   padj     t       B ensembl_id     
-    ##   <chr>   <chr>              <dbl>          <dbl> <dbl> <dbl>     <dbl>  <dbl> <dbl>   <dbl> <chr>          
-    ## 1 TNFAIP3 shEWS.Hrs2_down    10.5          -0.565 0.676 -4.69 0.0000584 0.0149 -4.69  1.77   ENSG00000118503
-    ## 2 CXCL3   shEWS.Hrs2_down     7.90         -1.05  0.482 -3.94 0.000457  0.0233 -3.94 -0.0744 ENSG00000163734
-    ## 3 FOS     shEWS.Hrs2_up       8.98          0.645 1.56   4.14 0.000267  0.0233  4.14  0.398  ENSG00000170345
+    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat  pvalue   padj     t
+    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>   <dbl>  <dbl> <dbl>
+    ## 1 TNFAIP3 shEWS.Hrs2_d…    10.5          -0.565 0.676 -4.69 5.84e-5 0.0149 -4.69
+    ## 2 CXCL3   shEWS.Hrs2_d…     7.90         -1.05  0.482 -3.94 4.57e-4 0.0233 -3.94
+    ## 3 FOS     shEWS.Hrs2_up     8.98          0.645 1.56   4.14 2.67e-4 0.0233  4.14
+    ## # ℹ 2 more variables: B <dbl>, ensembl_id <chr>
     ## 
     ## $shEWS.Hrs6
     ## # A tibble: 1 × 11
-    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat    pvalue   padj     t     B ensembl_id     
-    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>     <dbl>  <dbl> <dbl> <dbl> <chr>          
-    ## 1 FOS     shEWS.Hrs6_up     8.98          0.826  1.77  4.53 0.0000892 0.0227  4.53  1.12 ENSG00000170345
+    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat  pvalue   padj     t
+    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>   <dbl>  <dbl> <dbl>
+    ## 1 FOS     shEWS.Hrs6_up     8.98          0.826  1.77  4.53 8.92e-5 0.0227  4.53
+    ## # ℹ 2 more variables: B <dbl>, ensembl_id <chr>
 
 ### Summary plot of contrasts
 
 all comparisons
 
-    DEPlot(fit_Hotgenes, .log2FoldChange = 0, padj_cut = 0.1)
+``` r
+DEPlot(fit_Hotgenes, .log2FoldChange = 0, padj_cut = 0.1)
+```
 
-![](man/figures/README-DEP_1-1.png)
+![](man/figures/README-DEP_1-1.png)<!-- -->
 
 Check for a feature of interest
 
-    # Check a feature across comparisons
-    DEPlot(fit_Hotgenes, hotList = "CSF1", .log2FoldChange = 0, padj_cut = 0.1)
+``` r
+# Check a feature across comparisons
+DEPlot(fit_Hotgenes, hotList = "CSF1", .log2FoldChange = 0, padj_cut = 0.1)
+```
 
-![](man/figures/README-DEP_2-1.png)
+![](man/figures/README-DEP_2-1.png)<!-- -->
 
 ### Volcano plots
 
-    VPlot(fit_Hotgenes, 
-          .log2FoldChange = 1, padj_cut = 0.1,
-          contrasts = "sh_EWS_vs_Ctrl")
+``` r
+VPlot(fit_Hotgenes, 
+      .log2FoldChange = 1, padj_cut = 0.1,
+      contrasts = "sh_EWS_vs_Ctrl")
+```
 
-![](man/figures/README-VPlot_1-1.png)
+![](man/figures/README-VPlot_1-1.png)<!-- -->
 
-### Identify overlapping features across comparisons with Venn\_Report()
+### Identify overlapping features across comparisons with Venn_Report()
 
-    # Venn Diagram plot
-    fit_Hotgenes %>% 
-       DE(
-          Report = "Features",
-          contrasts = c("sh_EWS_vs_Ctrl", "Hrs_2_vs_0", "Hrs_6_vs_0"),
-          .log2FoldChange = 0, padj_cut = 0.1
-        ) %>%
-        Venn_Report()
+``` r
+# Venn Diagram plot
+fit_Hotgenes %>% 
+   DE(
+      Report = "Features",
+      contrasts = c("sh_EWS_vs_Ctrl", "Hrs_2_vs_0", "Hrs_6_vs_0"),
+      .log2FoldChange = 0, padj_cut = 0.1
+    ) %>%
+    Venn_Report()
+```
 
-    ## Coordinate system already present. Adding new coordinate system, which will replace the existing one.
+    ## Coordinate system already present. Adding new coordinate system, which will
+    ## replace the existing one.
 
     ## $vennD
 
-![](man/figures/README-Venn_Report_1-1.png)
+![](man/figures/README-Venn_Report_1-1.png)<!-- -->
 
     ## 
     ## $Intsect
@@ -441,189 +579,227 @@ Check for a feature of interest
     ## [1] "NFE2L2" "KEAP1"  "PDGFA"  "HDAC4"  "OXER1"  "GAPDH"  "MEF2C" 
     ## 
     ## $Intsect$Hrs_6_vs_0
-    ##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"   "BCL6"   "TLR3"   "GRB2"   "IL6R"   "IL15"  
-    ## [16] "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2"  "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
+    ##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1" 
+    ##  [9] "MAP2K6" "IL1B"   "BCL6"   "TLR3"   "GRB2"   "IL6R"   "IL15"   "CREB1" 
+    ## [17] "IL1RN"  "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2"  "IL1A"   "CCL20" 
+    ## [25] "PGK1"   "MAPK3" 
     ## 
     ## $Intsect$sh_EWS_vs_Ctrl
-    ##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"    "HMGN1"  "CLTC"   "GNAQ"   "LY96"   "CD40"  
-    ## [16] "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"   "LTB4R2"
+    ##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3"
+    ##  [9] "ROCK2"  "MX2"    "HMGN1"  "CLTC"   "GNAQ"   "LY96"   "CD40"   "CFD"   
+    ## [17] "HRAS"   "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"   "LTB4R2"
     ## 
     ## $Intsect$`Hrs_2_vs_0:Hrs_6_vs_0`
-    ##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"    "CXCR4"   "MAFK"    "PTGFR"   "FOS"    
-    ## [14] "MYC"     "RIPK2"   "IL2"     "MAFG"    "CSF2"    "TWIST2"  "IFIT1"   "FLT1"   
+    ##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"  
+    ##  [8] "TGFBR1"  "MAFF"    "CXCR4"   "MAFK"    "PTGFR"   "FOS"     "MYC"    
+    ## [15] "RIPK2"   "IL2"     "MAFG"    "CSF2"    "TWIST2"  "IFIT1"   "FLT1"   
     ## 
     ## $Intsect$`sh_EWS_vs_Ctrl:Hrs_2_vs_0`
     ## [1] "HMGB2"  "MAP3K9" "CEBPB"  "IRF1"  
     ## 
     ## $Intsect$`sh_EWS_vs_Ctrl:Hrs_6_vs_0`
-    ##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2" "IFI44" "CCL7" 
+    ##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2"
+    ## [10] "IFI44" "CCL7" 
     ## 
     ## $Intsect$`sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0`
-    ##  [1] "CCL2"     "IL1R1"    "MEF2D"    "JUN"      "BIRC2"    "CXCL3"    "MEF2A"    "CXCL2"    "IL6"      "NFKB1"    "SMAD7"    "MAPKAPK2"
+    ##  [1] "CCL2"     "IL1R1"    "MEF2D"    "JUN"      "BIRC2"    "CXCL3"   
+    ##  [7] "MEF2A"    "CXCL2"    "IL6"      "NFKB1"    "SMAD7"    "MAPKAPK2"
     ## [13] "RELB"    
     ## 
     ## 
     ## $Names
-    ## [1] "Hrs_2_vs_0:Hrs_6_vs_0"                "sh_EWS_vs_Ctrl:Hrs_2_vs_0"            "sh_EWS_vs_Ctrl:Hrs_6_vs_0"           
+    ## [1] "Hrs_2_vs_0:Hrs_6_vs_0"               
+    ## [2] "sh_EWS_vs_Ctrl:Hrs_2_vs_0"           
+    ## [3] "sh_EWS_vs_Ctrl:Hrs_6_vs_0"           
     ## [4] "sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0"
 
 ### Identify key features using PCA and clustering
 
-    # run PCA
-    # set contrast of choice and metadata variables
-    FactoOutput <- FactoWrapper(fit_Hotgenes,
-      contrasts = "Hrs_6_vs_0",
-      coldata_ids = c("Hrs", "sh"),
-      biplot = FALSE
-    )
+``` r
+# run PCA
+# set contrast of choice and metadata variables
+FactoOutput <- FactoWrapper(fit_Hotgenes,
+  contrasts = "Hrs_6_vs_0",
+  coldata_ids = c("Hrs", "sh"),
+  biplot = FALSE
+)
+```
 
-    # plot
-    FactoOutput$res_PPI_pa_1
+``` r
+# plot
+FactoOutput$res_PPI_pa_1
+```
 
-![](man/figures/README-PCA_2-1.png)
+![](man/figures/README-PCA_2-1.png)<!-- -->
 
-    # getting HCPC details
-    FactoOutput$TopTibble # Feature
+``` r
+# getting HCPC details
+FactoOutput$TopTibble # Feature
+```
 
     ## # A tibble: 88 × 9
-    ##   Cluster Interpretation       Feature v.test `Mean in category` `Overall mean` `sd in category` `Overall sd` p.value
-    ##   <fct>   <fct>                <chr>    <dbl>              <dbl>          <dbl>            <dbl>        <dbl>   <dbl>
-    ## 1 1       Cluster has elevated IFIT2     2.91               10.3           9.89           0.100        0.339  0.00362
-    ## 2 1       Cluster has elevated DDIT3     2.75               10.4          10.1            0.0402       0.231  0.00593
-    ## 3 1       Cluster has elevated MAP3K1    2.72               10.0           9.75           0.0537       0.216  0.00660
-    ## 4 1       Cluster has elevated PTGFR     2.65               10.4          10.1            0.0489       0.285  0.00797
-    ## 5 1       Cluster has elevated PGK1      2.63               15.3          15.2            0.0224       0.0484 0.00851
+    ##   Cluster Interpretation       Feature v.test `Mean in category` `Overall mean`
+    ##   <fct>   <fct>                <chr>    <dbl>              <dbl>          <dbl>
+    ## 1 1       Cluster has elevated IFIT2     2.91               10.3           9.89
+    ## 2 1       Cluster has elevated DDIT3     2.75               10.4          10.1 
+    ## 3 1       Cluster has elevated MAP3K1    2.72               10.0           9.75
+    ## 4 1       Cluster has elevated PTGFR     2.65               10.4          10.1 
+    ## 5 1       Cluster has elevated PGK1      2.63               15.3          15.2 
     ## # ℹ 83 more rows
+    ## # ℹ 3 more variables: `sd in category` <dbl>, `Overall sd` <dbl>, p.value <dbl>
 
-    FactoOutput$TopGroups # TopGroups
+``` r
+FactoOutput$TopGroups # TopGroups
+```
 
     ## # A tibble: 1 × 8
-    ##   Cluster Interpretation       Category  `Cla/Mod` `Mod/Cla` Global p.value v.test
-    ##   <fct>   <fct>                <chr>         <dbl>     <dbl>  <dbl>   <dbl>  <dbl>
-    ## 1 1       Cluster has elevated Hrs=Hrs_0       100       100   33.3 0.00202   3.09
+    ##   Cluster Interpretation      Category `Cla/Mod` `Mod/Cla` Global p.value v.test
+    ##   <fct>   <fct>               <chr>        <dbl>     <dbl>  <dbl>   <dbl>  <dbl>
+    ## 1 1       Cluster has elevat… Hrs=Hrs…       100       100   33.3 0.00202   3.09
 
 ### Streamlined expression plots
 
-    # Having metadata embedded with expression data means easier plotting
-    yvar <- c("CSF2", "IL6")
-    xvar <- "Hrs"
+``` r
+# Having metadata embedded with expression data means easier plotting
+yvar <- c("CSF2", "IL6")
+xvar <- "Hrs"
 
-    ExpsPlot(fit_Hotgenes,
-      xVar = xvar,
-      yVar = yvar,
-      fill = "Hrs",
-      boxplot = TRUE
-    )
+ExpsPlot(fit_Hotgenes,
+  xVar = xvar,
+  yVar = yvar,
+  fill = "Hrs",
+  boxplot = TRUE
+)
+```
 
-![](man/figures/README-exps_plot_1-1.png)
+![](man/figures/README-exps_plot_1-1.png)<!-- -->
 
-    # Subset data on the fly
-    ExpsPlot(fit_Hotgenes,
-      xVar = xvar,
-      yVar = yvar,
-      filter_eval = Hrs != 2,
-      fill = "Hrs",
-      boxplot = TRUE
+``` r
+# Subset data on the fly
+ExpsPlot(fit_Hotgenes,
+  xVar = xvar,
+  yVar = yvar,
+  filter_eval = Hrs != 2,
+  fill = "Hrs",
+  boxplot = TRUE
 
-    )
+)
+```
 
-![](man/figures/README-exps_plot_2-1.png)
+![](man/figures/README-exps_plot_2-1.png)<!-- -->
 
-    # Reorder data on the fly
-    ExpsPlot(fit_Hotgenes,
-      xVar = xvar,
-      yVar = yvar,
-      boxplot = TRUE,
-      fill = "Hrs",
-      named_levels  = list(Feature = "IL6",
-                           Hrs = c("6", "2", "0"))
-    )
+``` r
+# Reorder data on the fly
+ExpsPlot(fit_Hotgenes,
+  xVar = xvar,
+  yVar = yvar,
+  boxplot = TRUE,
+  fill = "Hrs",
+  named_levels  = list(Feature = "IL6",
+                       Hrs = c("6", "2", "0"))
+)
+```
 
-![](man/figures/README-exps_plot_3-1.png)
+![](man/figures/README-exps_plot_3-1.png)<!-- -->
 
 ### Visualize high magnitude changes (‘Hotgenes’) with a heatmap
 
-    DEphe(fit_Hotgenes,
-          contrasts = "sh_EWS_vs_Ctrl", 
-          Topn = 5,
-          cellheight = 10,
-          cellwidth = 8,
-          annotation_colors = coldata_palettes(fit_Hotgenes),
-          annotations = c("Hrs", "sh"))
+``` r
+DEphe(fit_Hotgenes,
+      contrasts = "sh_EWS_vs_Ctrl", 
+      Topn = 5,
+      cellheight = 10,
+      cellwidth = 8,
+      annotation_colors = coldata_palettes(fit_Hotgenes),
+      annotations = c("Hrs", "sh"))
+```
 
-    # change labels to ensembl_id
-    DEphe(fit_Hotgenes,
-          contrasts = "sh_EWS_vs_Ctrl",
-          label_by = "ensembl_id",
-          Topn = 5,
-          cellheight = 10,
-          cellwidth = 8,
-          annotation_colors = coldata_palettes(fit_Hotgenes),
-          annotations = c("Hrs", "sh"))
+![](man/figures/README-heatmap_1-1.png)<!-- -->
+
+``` r
+# change labels to ensembl_id
+DEphe(fit_Hotgenes,
+      contrasts = "sh_EWS_vs_Ctrl",
+      label_by = "ensembl_id",
+      Topn = 5,
+      cellheight = 10,
+      cellwidth = 8,
+      annotation_colors = coldata_palettes(fit_Hotgenes),
+      annotations = c("Hrs", "sh"))
+```
+
+![](man/figures/README-heatmap_2-1.png)<!-- -->
 
 ### Run GSEA using msigdbr genesets
 
-    # get geneset
-    H_paths <- msigdbr_wrapper(
-        species = "human",
-        set = "CP:KEGG",
-        gene_col = "gene_symbol"
-      )
+``` r
+# get geneset
+H_paths <- msigdbr_wrapper(
+    species = "human",
+    set = "CP:KEGG",
+    gene_col = "gene_symbol"
+  )
 
-    # Get ranks
-      InputRanks <- fit_Hotgenes %>%
-        DE(
-          Report = "Ranks",
-          contrasts = "Hrs_2_vs_0",
-          Rank_name = "Feature",
-          padj_cut = 0.1
-        )
-      
-      
-      # fgsea wrapper --------
-      Out_GSEA <- fgsea_(
-        Ranks = InputRanks,
-        pathways = H_paths,
-        nproc = 1,
-        minSize = 5,
-        maxSize = Inf
-      )
+# Get ranks
+  InputRanks <- fit_Hotgenes %>%
+    DE(
+      Report = "Ranks",
+      contrasts = "Hrs_2_vs_0",
+      Rank_name = "Feature",
+      padj_cut = 0.1
+    )
+  
+  
+  # fgsea wrapper --------
+  Out_GSEA <- fgsea_(
+    Ranks = InputRanks,
+    pathways = H_paths,
+    nproc = 1,
+    minSize = 5,
+    maxSize = Inf
+  )
+```
 
     ## [1] "Hrs_2_vs_0"
-    ##   |                                                                                                                                         |                                                                                                                                 |   0%  |                                                                                                                                         |================================================================                                                                 |  50%  |                                                                                                                                         |=================================================================================================================================| 100%
+    ##   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%
 
-      # Get details for all
-      Out_GSEA %>%
-        fgsea_Results(
-          contrasts = "Hrs_2_vs_0",
-          padj_cut = 0.2,
-          mode = "D"
-        )
+``` r
+  # Get details for all
+  Out_GSEA %>%
+    fgsea_Results(
+      contrasts = "Hrs_2_vs_0",
+      padj_cut = 0.2,
+      mode = "D"
+    )
+```
 
     ## $Hrs_2_vs_0
     ## # A tibble: 5 × 9
-    ##   pathway                                        pval   padj log2err    ES   NES  size leadingEdge sign_NES
-    ##   <chr>                                         <dbl>  <dbl>   <dbl> <dbl> <dbl> <int> <list>         <dbl>
-    ## 1 kegg_nod_like_receptor_signaling_pathway    0.00969 0.0737   0.381 0.770  1.58     9 <chr [6]>          1
-    ## 2 kegg_cytokine_cytokine_receptor_interaction 0.0184  0.0737   0.352 0.708  1.55    14 <chr [9]>          1
-    ## 3 kegg_chemokine_signaling_pathway            0.0517  0.135    0.219 0.734  1.44     7 <chr [7]>          1
-    ## 4 kegg_jak_stat_signaling_pathway             0.0779  0.135    0.181 0.748  1.39     5 <chr [2]>          1
-    ## 5 kegg_toll_like_receptor_signaling_pathway   0.0844  0.135    0.174 0.742  1.38     5 <chr [3]>          1
+    ##   pathway             pval   padj log2err    ES   NES  size leadingEdge sign_NES
+    ##   <chr>              <dbl>  <dbl>   <dbl> <dbl> <dbl> <int> <list>         <dbl>
+    ## 1 kegg_nod_like_r… 0.00969 0.0737   0.381 0.770  1.58     9 <chr [6]>          1
+    ## 2 kegg_cytokine_c… 0.0184  0.0737   0.352 0.708  1.55    14 <chr [9]>          1
+    ## 3 kegg_chemokine_… 0.0517  0.135    0.219 0.734  1.44     7 <chr [7]>          1
+    ## 4 kegg_jak_stat_s… 0.0779  0.135    0.181 0.748  1.39     5 <chr [2]>          1
+    ## 5 kegg_toll_like_… 0.0844  0.135    0.174 0.742  1.38     5 <chr [3]>          1
 
-      # Or for one
-      Out_GSEA %>%
-        fgsea_Results(
-          contrasts = "Hrs_2_vs_0",
-          padj_cut = 0.2,
-          mode = "leadingEdge"
-        )
+``` r
+  # Or for one
+  Out_GSEA %>%
+    fgsea_Results(
+      contrasts = "Hrs_2_vs_0",
+      padj_cut = 0.2,
+      mode = "leadingEdge"
+    )
+```
 
     ## $Hrs_2_vs_0
     ## $Hrs_2_vs_0$kegg_nod_like_receptor_signaling_pathway
     ## [1] "IL6"     "CXCL8"   "TNFAIP3" "CXCL1"   "CCL2"    "CXCL2"  
     ## 
     ## $Hrs_2_vs_0$kegg_cytokine_cytokine_receptor_interaction
-    ## [1] "IL6"    "CXCL8"  "CXCL1"  "IL11"   "CCL2"   "CXCL3"  "CXCL2"  "TGFBR1" "CXCR4" 
+    ## [1] "IL6"    "CXCL8"  "CXCL1"  "IL11"   "CCL2"   "CXCL3"  "CXCL2"  "TGFBR1"
+    ## [9] "CXCR4" 
     ## 
     ## $Hrs_2_vs_0$kegg_chemokine_signaling_pathway
     ## [1] "CXCL8" "CXCL1" "CCL2"  "CXCL3" "CXCL2" "CXCR4" "NFKB1"
@@ -634,63 +810,71 @@ Check for a feature of interest
     ## $Hrs_2_vs_0$kegg_toll_like_receptor_signaling_pathway
     ## [1] "IL6"   "CXCL8" "JUN"
 
-      # Generate a summary plot
-      Out_GSEA %>%
-        GSEA_Plots(
-          contrasts = "Hrs_2_vs_0",
-          padj_cut = 0.2,
-          width = 30,
-          Topn = 2
-        )
+``` r
+  # Generate a summary plot
+  Out_GSEA %>%
+    GSEA_Plots(
+      contrasts = "Hrs_2_vs_0",
+      padj_cut = 0.2,
+      width = 30,
+      Topn = 2
+    )
+```
 
     ## $Hrs_2_vs_0
 
-![](man/figures/README-GSEA_1-1.png)
+![](man/figures/README-GSEA_1-1.png)<!-- -->
 
-      # plotEnrichment_
-      plotEnrichment_(
-        Out_GSEA, "Hrs_2_vs_0",
-        "kegg_nod_like_receptor_signaling_pathway"
-      )
+``` r
+  # plotEnrichment_
+  plotEnrichment_(
+    Out_GSEA, "Hrs_2_vs_0",
+    "kegg_nod_like_receptor_signaling_pathway"
+  )
+```
 
     ## leading edge genes for kegg_nod_like_receptor_signaling_pathway
 
     ## c("IL6", "CXCL8", "TNFAIP3", "CXCL1", "CCL2", "CXCL2")
 
-![](man/figures/README-GSEA_1-2.png)
+![](man/figures/README-GSEA_1-2.png)<!-- -->
 
 ### Or use the HotgeneSets() function for gsva
 
-    choice_set <- "CP:KEGG"
-    choice_id <- "gene_symbol"
-      
-    gsList <- msigdbr_wrapper(
-        species = "human",
-        set = choice_set,
-        gene_col = choice_id
-      )
+``` r
+choice_set <- "CP:KEGG"
+choice_id <- "gene_symbol"
+  
+gsList <- msigdbr_wrapper(
+    species = "human",
+    set = choice_set,
+    gene_col = choice_id
+  )
 
-    # HotgeneSets -------------------------------------------------------------
-      
-      HotgeneSets_out <- HotgeneSets(
-        Hotgenes = fit_Hotgenes,
-        geneSets = gsList,
-        kcdf = "Gaussian",
-        method = "ssgsea",
-        minSize = 2,
-        maxSize = Inf
-      )
+# HotgeneSets -------------------------------------------------------------
+  
+  HotgeneSets_out <- HotgeneSets(
+    Hotgenes = fit_Hotgenes,
+    geneSets = gsList,
+    kcdf = "Gaussian",
+    method = "ssgsea",
+    minSize = 2,
+    maxSize = Inf
+  )
+```
 
     ## [1] "using Feature col"
     ## [1] "building mapper"
     ## Estimating ssGSEA scores for 93 gene sets.
     ## [1] "Calculating ranks..."
     ## [1] "Calculating absolute values from ranks..."
-    ##   |                                                                                                                                         |                                                                                                                                 |   0%  |                                                                                                                                         |===========                                                                                                                      |   8%  |                                                                                                                                         |======================                                                                                                           |  17%  |                                                                                                                                         |================================                                                                                                 |  25%  |                                                                                                                                         |===========================================                                                                                      |  33%  |                                                                                                                                         |======================================================                                                                           |  42%  |                                                                                                                                         |================================================================                                                                 |  50%  |                                                                                                                                         |===========================================================================                                                      |  58%  |                                                                                                                                         |======================================================================================                                           |  67%  |                                                                                                                                         |=================================================================================================                                |  75%  |                                                                                                                                         |============================================================================================================                     |  83%  |                                                                                                                                         |======================================================================================================================           |  92%  |                                                                                                                                         |=================================================================================================================================| 100%
+    ##   |                                                                              |                                                                      |   0%  |                                                                              |======                                                                |   8%  |                                                                              |============                                                          |  17%  |                                                                              |==================                                                    |  25%  |                                                                              |=======================                                               |  33%  |                                                                              |=============================                                         |  42%  |                                                                              |===================================                                   |  50%  |                                                                              |=========================================                             |  58%  |                                                                              |===============================================                       |  67%  |                                                                              |====================================================                  |  75%  |                                                                              |==========================================================            |  83%  |                                                                              |================================================================      |  92%  |                                                                              |======================================================================| 100%
     ## 
     ## [1] "Normalizing..."
 
-      HotgeneSets_out
+``` r
+  HotgeneSets_out
+```
 
     ## class: Hotgenes 
     ## Original class/package:  EList/limma
@@ -709,31 +893,37 @@ Check for a feature of interest
     ## Total auxiliary assays:  2 
     ## Total samples:  12
 
-    # store your Hotgenes objects in a named list
-    # The Shiny_Hotgenes() will let you toggle between objects
-      
-     
-    if(FALSE){
-      
-      List_Hotgenes <- list(HotgeneSets_out = HotgeneSets_out,
-                            fit_Hotgenes = fit_Hotgenes)
-      
-       Shiny_Hotgenes(List_Hotgenes)
-    }
+``` r
+# store your Hotgenes objects in a named list
+# The Shiny_Hotgenes() will let you toggle between objects
+  
+ 
+if(FALSE){
+  
+  List_Hotgenes <- list(HotgeneSets_out = HotgeneSets_out,
+                        fit_Hotgenes = fit_Hotgenes)
+  
+   Shiny_Hotgenes(List_Hotgenes)
+}
+```
 
 ## All functionality is available in a shiny app!
 
 See manual for details!
 
-    if(FALSE){
-      
-      Shiny_Hotgenes(dds_Hotgenes)
-    }
+``` r
+if(FALSE){
+  
+  Shiny_Hotgenes(dds_Hotgenes)
+}
+```
 
 ## Explore functions
 
-    library(Hotgenes)
-    help(package="Hotgenes")
+``` r
+library(Hotgenes)
+help(package="Hotgenes")
+```
 
 ## Code of Conduct
 
