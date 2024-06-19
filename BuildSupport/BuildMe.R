@@ -35,8 +35,8 @@ file.edit(file.path(getwd(), "BuildSupport", "source_search.R"))
 devtools::document(); devtools::load_all()
 
 # publication tools
+
 rmarkdown::render("README.Rmd", 
-                  output_format = "md_document",
                   output_file="README.md")
 
 
