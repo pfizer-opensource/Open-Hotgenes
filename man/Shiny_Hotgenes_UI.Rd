@@ -36,7 +36,7 @@ Shiny_Hotgenes(
   Hotgenes = NULL,
   OntologyMethods = Hotgenes::OntologyMethods(),
   Mapper_choices = names(Mapper_(Hotgenes)),
-  theme = NULL,
+  theme = shinythemes::shinytheme("united"),
   parallel.sz = 1L,
   max_col_levels = 12
 )
@@ -45,7 +45,7 @@ Shiny_Hotgenes(
   Hotgenes = NULL,
   OntologyMethods = Hotgenes::OntologyMethods(),
   Mapper_choices = names(Mapper_(Hotgenes)),
-  theme = NULL,
+  theme = shinythemes::shinytheme("united"),
   parallel.sz = 1L,
   max_col_levels = 12
 )
@@ -54,7 +54,7 @@ Shiny_Hotgenes(
   Hotgenes = NULL,
   OntologyMethods = Hotgenes::OntologyMethods(),
   Mapper_choices = names(Mapper_(Hotgenes)),
-  theme = NULL,
+  theme = shinythemes::shinytheme("united"),
   parallel.sz = 1L,
   max_col_levels = 12
 )
@@ -154,8 +154,8 @@ HotgenesList <- list(
 
 # app with single Hotgenes object
 if(FALSE){
-  Shiny_Hotgenes(fit_Hotgenes,
-                 theme = "shinythemes/css/united.min.css")
+  
+  Shiny_Hotgenes(fit_Hotgenes)
 }
 
 # app with multiple Hotgenes objects

@@ -27,8 +27,8 @@ HotgenesList <- list(
 
 # app with single Hotgenes object
 if(FALSE){
-  Shiny_Hotgenes(fit_Hotgenes,
-                 theme = "shinythemes/css/united.min.css")
+  
+  Shiny_Hotgenes(fit_Hotgenes)
 }
 
 # app with multiple Hotgenes objects

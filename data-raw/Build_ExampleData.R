@@ -1,6 +1,5 @@
 
 # Download example data -------------------------------
-#library(tidyverse)
 #library(readr)
 
 Web_NanoString_dir <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE110102&format=file"

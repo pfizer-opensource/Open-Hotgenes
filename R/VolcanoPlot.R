@@ -208,53 +208,13 @@ VPlot <- function(
 
   mapper_df <- Mapper_(Hotgenes)
   
-  ##
-  # if(all(!is.null(mapper_df) & length(names(mapper_df)) > 1)){
-  #   
-  #   FeatureCol <- "Feature"
-  #   mapper_col <- c(FeatureCol, names(mapper_df)) %>% unique()
-  #   
-  #   col_mapper <- mapper_df %>% names()
-  #   
-  #   if(isTRUE(interactive)){
-  #     # for plotly only
-  #     mod_these <- col_mapper %>%
-  #       stringr::str_subset(pattern = FeatureCol,
-  #                           negate = TRUE)
-  #     
-  #     mapper_df <- mapper_df %>%
-  #       
-  #       
-  #       dplyr::mutate(dplyr::across(dplyr::any_of(mod_these),
-  #                                   ~ .x %>%
-  #                                     glue::glue_collapse( sep = '<br>')),
-  #                     .by = FeatureCol) %>% unique()
-  #     
-  #     Feature_ <-"PointIDs"
-  #     DE_Frame <-DE_Frame %>%
-  #       
-  #       dplyr::left_join(mapper_df, by = FeatureCol) %>% 
-  #       dplyr::relocate(
-  #         
-  #         dplyr::any_of(mapper_col), .before = 1) %>% 
-  #    
-  #       
-  #       dplyr::mutate(!!Feature_ := paste0(.data[[FeatureCol]],
-  #                                          "<br> ",
-  #                                          mod_these[1], ": ",
-  #                                          .data[[mod_these[1]]]  ))
-  #     
-  #   }
-  #   
-  # }
+ 
   
   
   ###
   if(isTRUE(shinymode)){
     
     # sets up mapper
-    
-    
     
     outVplot <- list(
       data = DE_Frame,
@@ -429,17 +389,14 @@ This_q <- Updated_data %>%
       
      dplyr::mutate(
        Expression = forcats::fct_recode(.data$Expression, !!!This_q)
-     )# %>% 
-      #dplyr::rename(matched_contrast = "Expression")
-      #dplyr::mutate(size =  .env$point_label_size)
-
+     ) 
+      
 
  if("PointIDs" %in% names(Updated_data)){
-   #PointIDs <- 
+    
    Updated_data <- Updated_data %>% 
      dplyr::mutate(!!FeatureCol := .data$PointIDs)
    
-  # Updated_data %>% head() %>% print()
      
  }
    
@@ -448,16 +405,14 @@ This_q <- Updated_data %>%
 new_col_id <- "{matched_contrast}: "
     
   p2_test <- Updated_data %>% 
-    #dplyr::mutate(!!glue::glue(new_col_id) := .data$Expression) %>% 
-    ggplot2::ggplot(
+     ggplot2::ggplot(
    # Updated_data,
     ggplot2::aes(x = .data$log2FoldChange, y = .data$FDR)
   ) +
     ggplot2::geom_point(
       ggplot2::aes(
-        #color = .data[[glue::glue(new_col_id)]],
-        color = .data[[glue::glue("Expression")]],
-        group = .data[[FeatureCol]] #, text = .data[[mod_these[1]]]
+         color = .data[[glue::glue("Expression")]],
+        group = .data[[FeatureCol]]  
       ),
       alpha = colAlpha,
       size = pointSize
@@ -467,8 +422,7 @@ new_col_id <- "{matched_contrast}: "
     
     ggplot2::scale_color_manual(values = col_set, drop = FALSE ) +
                                 
-    #ggplot2::labs(title = glue::glue("{matched_contrast}")) +
-   
+    
 ggplot2::ggtitle(label = glue::glue("{matched_contrast}")) +
     ggplot2::theme_bw(base_size = base_size) +
     ggplot2::geom_hline(yintercept = -log10(padj_cut), linetype = "dashed") +

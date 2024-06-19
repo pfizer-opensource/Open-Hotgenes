@@ -1414,7 +1414,7 @@ Server_download_plot(
 #' but common ones include "tabs".
 
 fgsea_UI_inputs_support <- function(id = "fgsea_tab",
-  tabsetPanel_id = "dataset") {
+                                    tabsetPanel_id = "tabs") {
 ns <- shiny::NS(id)
 
 shiny::tagList(
@@ -1525,7 +1525,7 @@ shiny::tags$hr()
 #' @rdname Shiny_Tabs
 fgsea_UI_main_support <- function(
 id = "fgsea_tab",
-tabsetPanel_id = "dataset",
+tabsetPanel_id = "tabs",
 title = "GSEA") {
 ns <- shiny::NS(id)
 
@@ -2833,12 +2833,6 @@ reactive_plot = shiny::reactive(DEPlot_reactive())
 DE_coeff <- shiny::reactive({
   shiny::req(input$DE_Contrasts %in% contrasts_(Hotgenes))
 
-# shinybusy::show_modal_spinner(session = session,
-# text = "Loading...")
-
-# DE Statistics
-#t1 <- Sys.time()
-
 
 DE_Output <- DE(Hotgenes,
 contrasts = input$DE_Contrasts,
@@ -2851,13 +2845,6 @@ signif_ = input$signif_
 )%>% 
 purrr::chuck(1)
 
-# progress stop
-# shinybusy::remove_modal_spinner(session = session)
-
-#t2 <- Sys.time()
-
-# glue::glue("DE_coeff {signif(t2-t1)}") %>%
-# print()
 return(DE_Output)
 })
 
@@ -2897,19 +2884,15 @@ server = TRUE
 # Server Tab Volcano Plot -------------------------------------------------
 
 Vplot_dat <- shiny::reactive({
-#       shinymode = TRUE,
+
 
 DE_Contrasts <- shiny::req(input$DE_Contrasts)
 
-print("Vplot_dat start")
-
-
-#t1 <- Sys.time()
 
 VPlot_Out <- VPlot(
 shinymode = TRUE,
 interactive = FALSE,
-repel_labels = FALSE,
+repel_labels = TRUE,
 Hotgenes = Hotgenes,
 contrasts = DE_Contrasts
 )
@@ -2918,11 +2901,6 @@ contrasts = DE_Contrasts
 VPlot_Out$refined_cols <- c(names(VPlot_Out$mapper_df),
   "log2FoldChange", "FDR"
 )
-#t2 <- Sys.time()
-
-
-# glue::glue("Vplot_dat {signif(t2-t1)}") %>%
-# print()
 
 
 return(VPlot_Out)
@@ -2949,17 +2927,10 @@ vList[names(vList) %in% names(input_List)] <-NULL
 
 vList <- vList %>% append(input_List)
 
-#t1 <- Sys.time()
 
 
 VPlot_Out <- base::do.call(ggplot2_Volcano_prep,vList )
 
-
-# 
-# t2 <- Sys.time()
-# 
-# glue::glue("Vplot_p {signif(t2-t1)}") %>%
-# print()
 
 
 return(VPlot_Out)
@@ -3022,10 +2993,6 @@ shiny::tagList(
   shiny::conditionalPanel(
 condition = TabCondition(tabsetPanel_id = tabsetPanel_id, id = id),
 
-embed_Hotgenes_logo(),
-
-
-shiny::tags$hr(style = "border-color: black;"),
 shiny::radioButtons(
 inputId = "NormSlot" %>% ns(),
 label = "Expression slot:",
@@ -3122,8 +3089,6 @@ function(input, output, session) {
   DF_coldata <- df_coldata_handler(Hotgenes = Hotgenes,
                                    max_col_levels = max_col_levels)
   
-  
-
 # updating tab 1 on load --------------------------------------------------
 reactive_NormSlot <- shiny::reactive({
   shiny::req(input$NormSlot %in% ExpressionSlots_(Hotgenes))
@@ -3149,17 +3114,17 @@ NULL
 
 
 # update Exps_Samples for subsetting data
-# requires input$SampleGroups
+
 shiny::observeEvent(input$SampleGroups, {
   shiny::req(isTruthy(input$SampleGroups))
 
 choices <- DF_coldata()$quali_distinct %>%
-# input$SampleGroups is the column for sub setting
+
 dplyr::select(dplyr::any_of(input$SampleGroups)) %>%
 purrr::map(~ .x %>% levels())
 
 
-shinyWidgets::updatePickerInput(session,
+shinyWidgets::updatePickerInput(session = session,
       "Exps_Samples",
       choices = choices,
       selected = ""
@@ -3168,15 +3133,17 @@ shinyWidgets::updatePickerInput(session,
 
 
 
-shiny::updateSelectInput(
-session,
-"SampleGroups",
-choices = DF_coldata()$quali_distinct %>% names(),
-selected = DF_coldata()$quali_distinct %>%
-dplyr::select(dplyr::any_of(selected_fillby)) %>%
-names()
-) %>%
-  shiny::observe()
+
+  shiny::observe({
+    shiny::updateSelectInput(
+      session = session,
+      "SampleGroups",
+      choices = DF_coldata()$quali_distinct %>% names(),
+      selected = DF_coldata()$quali_distinct %>%
+        dplyr::select(dplyr::any_of(selected_fillby)) %>%
+        names()
+    ) 
+  })
 
 
 # QC tab updates ----------------------------------------------------------
@@ -3197,7 +3164,7 @@ dplyr::select(dplyr::any_of(input$SampleGroups))
 
 
 Initial_QC_tab1 <- shiny::reactive({
-t1 <- Sys.time()
+
 
 BoxPlot_out <- BoxPlot(
 Hotgenes = Hotgenes,
@@ -3218,10 +3185,7 @@ Pout <- list(
 BoxPlot_out = BoxPlot_out,
 BoxPlot_out_no_names = BoxPlot_out_no_names
 )
-t2 <- Sys.time()
 
-glue::glue("Initial_QC_tab1 {signif(t2-t1)}") %>%
-print()
 
 return(Pout)
 }) %>%
@@ -3244,8 +3208,6 @@ SampleIDs_Sel()
 QC_tab1 <- shiny::reactive({
 
 
-t1 <- Sys.time()
-
 if(base::isFALSE(input$Show_SampleIDs)) {
 
 Pout <- "BoxPlot_out_no_names"
@@ -3256,11 +3218,6 @@ Pout <- "BoxPlot_out"
 
 
 OutPlot <- Pout
-
-t2 <- Sys.time()
-
-glue::glue("QC_tab1 {signif(t2-t1)}") %>%
-print()
 
 return(OutPlot)
 }) %>%
@@ -3301,7 +3258,7 @@ return(BoxPlot_out)
 # renderplot
 output$Tab1 <- shiny::renderPlot(
 {
-t1 <- Sys.time()
+
 BoxPlot_out <- Initial_QC_tab1()[[QC_tab1()]]
 
 if (shiny::isTruthy(input$SampleGroups)) {
@@ -3324,10 +3281,6 @@ final_p <- BoxPlot_out %>%
 ForcePlot() %>%
 grid::grid.draw()
 
-t2 <- Sys.time()
-
-glue::glue("renderPlot Tab1 {signif(t2-t1)}") %>%
-print()
 
 return(final_p)
 },

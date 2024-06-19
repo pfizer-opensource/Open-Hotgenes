@@ -45,6 +45,8 @@ shiny::sidebarLayout(
 shiny::sidebarPanel(
 width = width,
 
+embed_Hotgenes_logo(),
+
 
 # BoxPlot_UI_inputs_support ------------------------------------------------
 
@@ -96,6 +98,12 @@ VennDiagram_UI_inputs_support(
 id = "VennDiag" %>% ns(),
 tabsetPanel_id = tabsetPanel_id
 ),
+
+
+
+# mainPanel ---------------------------------------------------------------
+
+
 
 # PCA_UI_inputs_support ---------------------------------------------------
 
@@ -225,27 +233,27 @@ if (!is.null(grDevices::dev.list())) {
 grDevices::graphics.off()
 }
 
-
 # AuxAssays_server --------------------------------------------------------
-
-
 
 
 shiny::observe({ 
 
-
-
 Hotgenes_out <- AuxAssays_server(
 id = "AuxAssays_A",
-Hotgenes = Hotgenes
+Hotgenes = Hotgenes,
+session = session,
+input = input,
+output = output
+
 ) 
+
+
 # BoxPlot_Server_module ----------------------------------------------------
-
-
 
 BoxPlot_output <- BoxPlot_Server_module(
 id = "BoxPlot",
-input = input, output = output,
+input = input,
+output = output,
 session = session,
 Hotgenes = Hotgenes_out,
 max_col_levels = max_col_levels,
@@ -253,21 +261,6 @@ selected_fillby = selected_fillby
 )
 
 
-# SampleIDs_Sel<-reactive({
-# BoxPlot_output$SampleIDs_Sel()
-# })
-
-# Norm_Sel <-reactive({
-# BoxPlot_output$reactive_NormSlot()
-# })
-
-# DF_coldata<-reactive({
-# BoxPlot_output$DF_coldata()
-# })
-
-# shinybusy::show_modal_spinner(session = session,
-#                               spin = "cube-grid",
-#                               text = "loading")
 # DEstats_Server_module ---------------------------------------------------
 
 
@@ -359,6 +352,8 @@ shinybusy::remove_modal_spinner(session = session)
 })
 }
 
+
+
 })
 
 }
@@ -392,31 +387,45 @@ Shiny_Hotgenes <- function(
 Hotgenes = NULL,
 OntologyMethods = Hotgenes::OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
-theme = NULL,
+theme = shinythemes::shinytheme("united"),
 parallel.sz = 1L,
 max_col_levels = 12)
 UseMethod("Shiny_Hotgenes", Hotgenes)
 
 #' @rdname Shiny_Hotgenes_UI
 #' @inheritParams  shiny::fluidPage
+#' @importFrom shinythemes shinytheme
 #' @export
 Shiny_Hotgenes.default <- function(
 Hotgenes = NULL,
 OntologyMethods = Hotgenes::OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
-theme = NULL,
+theme = shinythemes::shinytheme("united"),
 parallel.sz = 1L,
 max_col_levels = 12) {
+
+
 # UI ------------------------------------------------------------------
 
 ui <- shiny::fluidPage(
 Shiny_Hotgenes_UI(
-  id = "Hotgenes_A", 
-  tabsetPanel_id = "tabs"),
-  theme = theme
+id = "Hotgenes_A", 
+tabsetPanel_id = "tabs"),
+theme = theme
 )
 
 server <- function(input, output, session) {
+
+
+# this ensures that BoxPlot loads first   
+shiny::observe({
+shiny::updateTabsetPanel(
+  session = session,
+  inputId = "tabs",
+  selected = "BoxPlot"
+)
+})
+
 Shiny_Hotgenes_Server(
 id = "Hotgenes_A",
 input = input, output = output,
@@ -439,7 +448,7 @@ Shiny_Hotgenes.list <- function(
 Hotgenes = NULL,
 OntologyMethods = Hotgenes::OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
-theme = NULL,
+theme = shinythemes::shinytheme("united"),
 parallel.sz = 1L,
 max_col_levels = 12) {
 
@@ -456,55 +465,65 @@ shiny::fluidRow(
 shiny::column(
 width = 2,
 shiny::selectInput(
-  inputId = "StudyID",
-  label = "Choose Hotgenes Object", 
-  selectize = FALSE,
-  choices = ""),
+inputId = "StudyID",
+label = "Choose Hotgenes Object", 
+selectize = FALSE,
+choices = ""),
 
 offset = 0
 ),
 
 shiny::column(
-  width = 1,
-  shiny::tags$div(
-    
-   # style="padding-left: 20px;padding-top: 20px;align:left",
-    style="margin-left: 5px;padding-top: 20px",
-    align = "left",
- # style = "padding-top: 20px;width:100%",
-  shiny::actionButton(
-  inputId = "loadObjbutton",
-  label = "Load"))
-  )
+width = 1,
+shiny::tags$div(
+
+# style="padding-left: 20px;padding-top: 20px;align:left",
+style="margin-left: 5px;padding-top: 20px",
+align = "left",
+# style = "padding-top: 20px;width:100%",
+shiny::actionButton(
+inputId = "loadObjbutton",
+label = "Load"))
+)
 
 ),
 
 shiny::fixedRow(
-  Shiny_Hotgenes_UI(id = "Obj_A")
-  )
+Shiny_Hotgenes_UI(id = "Obj_A")
+)
 
 ) # fluidPage close
 
 
 # Set up server
 server <- function(input, output, session) {
-  
+
+
+# this ensures that BoxPlot loads first   
 shiny::observe({
-  
-shiny::updateSelectInput(
-  session,
-  inputId = "StudyID",
-  selected = character(0),
-  choices = names(HotgenesList))
-  
+shiny::updateTabsetPanel(
+  session = session,
+  inputId = "tabs",
+  selected = "BoxPlot"
+)
 })
 
-  shiny::observe({
+shiny::observe({
 
-    shinyjs::enable("loadObjbutton")
-  
-  }) %>% 
-    shiny::bindEvent(shiny::req(input$StudyID))
+shiny::updateSelectInput(
+session = session,
+inputId = "StudyID",
+selected = character(0),
+choices = names(HotgenesList))
+
+})
+
+shiny::observe({
+
+shinyjs::enable("loadObjbutton")
+
+}) %>% 
+shiny::bindEvent(shiny::req(input$StudyID))
 
 
 
@@ -513,12 +532,12 @@ Hotgenes_out <- shiny::eventReactive(
 shiny::req(input$loadObjbutton), {
 shiny::req(input$StudyID)
 
-  shinyjs::disable("loadObjbutton")
+shinyjs::disable("loadObjbutton")
 
 shinybusy::show_modal_spinner(
-  session = session,
-  spin = "cube-grid",
-  text = "loading")
+session = session,
+spin = "cube-grid",
+text = "loading")
 
 print(input$StudyID)
 ss <- HotgenesList[[input$StudyID]]

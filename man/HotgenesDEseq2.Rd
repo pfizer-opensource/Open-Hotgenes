@@ -57,8 +57,8 @@ if (interactive()) {
   sqlQuery <- "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
 
   ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) \%>\%
-    dplyr::select(c("symbol", "ensembl_id")) \%>\%
-    dplyr::rename("Feature" = .data$symbol)
+    dplyr::select(c("Feature" = "symbol", "ensembl_id"))
+  
 
   ensembl_Symbol \%>\% head()
 

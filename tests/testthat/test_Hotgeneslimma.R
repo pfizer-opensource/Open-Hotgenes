@@ -6,8 +6,8 @@ dbCon <- org.Hs.eg.db::org.Hs.eg_dbconn()
 sqlQuery <- "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
 
 ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
-  dplyr::select(c("symbol", "ensembl_id")) %>%
-  dplyr::rename("Feature" = "symbol")
+  dplyr::select(c("Feature" = "symbol", "ensembl_id"))
+
 
 ensembl_Symbol %>% head()
 

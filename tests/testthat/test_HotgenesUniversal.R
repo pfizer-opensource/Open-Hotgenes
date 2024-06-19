@@ -128,7 +128,7 @@ testthat::expect_error(
 # Verifies output_DE ------------------------------------------------------
 NewDE2 <- NewDE %>%
   purrr::map(~ .x %>%
-               dplyr::select(-padj))
+               dplyr::select(-"padj"))
 
 # expect an error for missing padj column
 testthat::expect_error(

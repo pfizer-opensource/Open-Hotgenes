@@ -1,7 +1,7 @@
 Package: Hotgenes
 Type: Package
 Title: Tools to simplify Omics DE analysis
-Version: 0.0.26
+Version: 0.0.27
 Author: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
 Maintainer: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
 Description: Converts outputs from DESeq2, limma, or a method of your
@@ -48,6 +48,7 @@ Imports:
     shinycssloaders,
     shinybusy (>= 0.3.0),
     shinyjs,
+    shinythemes,
     shinyWidgets,
     SummarizedExperiment,
     stats,
@@ -60,14 +61,11 @@ Suggests:
     apeglm,
     edgeR,
     roxygen2,
-    shinythemes,
     testthat,
-    ggsignif,
     httr,
     org.Hs.eg.db,
     DelayedArray (>= 0.24.0),
     DBI,
-    tidyverse,
     rmarkdown
 VignetteBuilder: knitr
 Depends: R (>= 4.3.0)

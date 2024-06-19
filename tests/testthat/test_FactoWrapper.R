@@ -109,21 +109,3 @@ FactoWrapper(htgs,
   aux_features = ""
 )
 
-
-# testing  ----------------------------------------------------------------
-
-if (FALSE) {
-  require(FactoMineR)
-  require(factoextra)
-  require(tidyverse)
-
-  x <- as.list(formals(FactoWrapper))
-  list2env(x, .GlobalEnv)
-  Hotgenes <- htgs
-  contrasts <- "Hrs_6_vs_0"
-  coldata_ids <- c("text_Hrs", "Hrs", "Time")
-  padj_cut <- 0.1
-  .log2FoldChange <- 0
-  # biplot<-FALSE
-  label_sel <- "all"
-}

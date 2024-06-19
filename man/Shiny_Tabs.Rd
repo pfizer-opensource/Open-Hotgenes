@@ -92,11 +92,11 @@ DE_pheServer(
   annotation_row = shiny::reactive(NULL)
 )
 
-fgsea_UI_inputs_support(id = "fgsea_tab", tabsetPanel_id = "dataset")
+fgsea_UI_inputs_support(id = "fgsea_tab", tabsetPanel_id = "tabs")
 
 fgsea_UI_main_support(
   id = "fgsea_tab",
-  tabsetPanel_id = "dataset",
+  tabsetPanel_id = "tabs",
   title = "GSEA"
 )
 

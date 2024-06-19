@@ -50,6 +50,9 @@ Default is"Figure"}
 
 \item{extension}{string for file extension. Default is".png"}
 
+\item{units}{One of the following units in which the \code{width} and \code{height}
+arguments are expressed: \code{"in"}, \code{"cm"}, \code{"mm"} or \code{"px"}.}
+
 \item{input}{shiny server input parameter}
 
 \item{output}{shiny server output parameter}
@@ -57,8 +60,8 @@ Default is"Figure"}
 \item{session}{Session from which to make a child scope (the default should
 almost always be used).}
 
-\item{width, height, units}{Plot size in \code{units} ("in", "cm", "mm", or "px").
-If not supplied, uses the size of current graphics device.}
+\item{width, height}{Plot size in units expressed by the \code{units} argument.
+If not supplied, uses the size of the current graphics device.}
 
 \item{...}{additional arguments for \code{\link[shiny]{plotOutput}}}
 

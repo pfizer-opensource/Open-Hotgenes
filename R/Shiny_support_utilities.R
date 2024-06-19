@@ -12,9 +12,9 @@
 TabCondition <- function(
     tabsetPanel_id = "tabs",
     id = NULL) {
-  #out <- paste0("input.", tabsetPanel_id, ' =="', id, '"')
+  
   out <- glue::glue("input.{tabsetPanel_id} ==\ '{id}\'")
- # paste0("input.", "tabsetPanel_id", ' =="', "id", '"')
+ 
   print(out)
   return(out)
 }

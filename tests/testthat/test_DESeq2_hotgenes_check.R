@@ -6,14 +6,13 @@ dbCon <- org.Hs.eg.db::org.Hs.eg_dbconn()
 sqlQuery <- "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
 
 ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
-  dplyr::select(dplyr::any_of(c("symbol", "ensembl_id"))) %>%
-  dplyr::rename("Feature" = "symbol")
+  dplyr::select(c("Feature" = "symbol", "ensembl_id"))
+
 
 ensembl_Symbol %>% head()
 
 # HotgenesDEseq2 ----------------------------------------------------------
 require(DESeq2)
-require(Hotgenes)
 
 # Example Expression data and coldata
 cts <- counts(dds_con) %>% as.data.frame()
