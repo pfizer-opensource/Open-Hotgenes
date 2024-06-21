@@ -16,7 +16,7 @@ tabPanel_Hotgenes(
   value = title
 )
 
-Shiny_Hotgenes_UI(id = NULL, tabsetPanel_id = "tabs", width = 2)
+Shiny_Hotgenes_UI(id = NULL, tabsetPanel_id = "tabs", width = 3)
 
 Shiny_Hotgenes_Server(
   id = NULL,

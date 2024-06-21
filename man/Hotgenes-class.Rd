@@ -75,7 +75,7 @@ contrasts_(Hotgenes = NULL)
 
 Features_(Hotgenes = NULL)
 
-Mapper_(Hotgenes = NULL)
+Mapper_(Hotgenes = NULL, min_n = 1)
 
 Mapper_(object) <- value
 
@@ -128,6 +128,9 @@ to show significance for any hotList feature (based on cut offs).}
 
 \item{as_list}{logical, default is FALSE. If true, results returned
 as a named list other object with be a dataframe grouped by "contrast".}
+
+\item{min_n}{numeric, sets the minimum number of unique values
+a column can have, default is 1.}
 
 \item{Col}{String matching the column id from Mapper
 slot to pull. Default is "Feature".}

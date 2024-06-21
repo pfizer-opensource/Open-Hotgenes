@@ -13,7 +13,7 @@ TabCondition <- function(
     tabsetPanel_id = "tabs",
     id = NULL) {
   
-  out <- glue::glue("input.{tabsetPanel_id} ==\ '{id}\'")
+  out <- glue::glue("input.{tabsetPanel_id} ===\ '{id}\'")
  
   print(out)
   return(out)

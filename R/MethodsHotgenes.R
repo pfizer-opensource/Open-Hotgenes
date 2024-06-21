@@ -1055,18 +1055,22 @@ Features_ <- function(Hotgenes = NULL) {
 #' @export
 # @importFrom BiocGenerics getObjectSlots updateObject
 #' @param Hotgenes Hotgenes object.
+#' @param min_n numeric, sets the minimum number of unique values
+#' a column can have, default is 1. 
 #' @return Mapper_ Returns Mapper containing
 #' aliases mapped to Features. Only aliases in 
 #' expression data are returned
 #'
-Mapper_ <- function(Hotgenes = NULL) {
+Mapper_ <- function(Hotgenes = NULL, min_n = 1) {
   # Check object
   stopifnot(is(Hotgenes, "Hotgenes"))
 
   
   MapperSlot <- data.frame(Feature = Features_(Hotgenes)) %>%
     tibble::as_tibble() %>%
-    dplyr::left_join(Hotgenes@Mapper, by = "Feature")
+    dplyr::left_join(Hotgenes@Mapper, by = "Feature") %>% 
+  
+  dplyr::select_if(~ dplyr::n_distinct(.x, na.rm = TRUE) > min_n) 
 
   return(MapperSlot)
  

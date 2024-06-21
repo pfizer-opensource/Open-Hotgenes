@@ -1,3 +1,9 @@
+# version 0.0.28:
+    - Added support for alias labeling in shiny app.
+    - Alias selection is available via the names_col arg in ExpsPlot()
+    - Mapper_() now limits cols by minimum number of distinct values.
+    - Cleaned up some of the shiny code
+
 # version 0.0.27:
     - Moved logo in app
     - Set the default tab to "BoxPlot" for app loading

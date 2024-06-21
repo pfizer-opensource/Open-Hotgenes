@@ -17,6 +17,7 @@ value = title) {
 # module start
 ns <- shiny::NS(id)
 
+
 outTab <-shiny::tabPanel(
 title = title, 
 value = value,
@@ -37,156 +38,158 @@ return(outTab)
 Shiny_Hotgenes_UI <- function(
 id = NULL,
 tabsetPanel_id = "tabs",
-width = 2) {
+width = 3) {
 ns <- shiny::NS(id)
 
-shiny::tagList(
-shiny::sidebarLayout(
-shiny::sidebarPanel(
-width = width,
-
-embed_Hotgenes_logo(),
-
-
-# BoxPlot_UI_inputs_support ------------------------------------------------
-
-
-BoxPlot_UI_inputs_support(
-id = "BoxPlot" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-
-
-# AuxAssays_sidepanel -----------------------------------------------------
-
-
-AuxAssays_sidepanel( id = "AuxAssays_A" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-
-
-# DEstats_UI_inputs_support -----------------------------------------------
-
-
-DEstats_UI_inputs_support(
-id = "DEstats" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-
-# ExpsPlot_UI_inputs_support ----------------------------------------------
-
-
-ExpsPlot_UI_inputs_support(
-id = "ExpsPlot" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-
-
-# fgsea_UI_inputs_support -------------------------------------------------
-
-
-fgsea_UI_inputs_support(
-id = "GSEA" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-
-
-# VennDiagram_UI_inputs_support -------------------------------------------
-
-
-VennDiagram_UI_inputs_support(
-id = "VennDiag" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-
-
+# sidePanel_list
+sidePanel_params <- shiny::sidebarPanel(
+  width = width,
+  
+  embed_Hotgenes_logo(),
+  
+  
+  # BoxPlot_UI_inputs_support ------------------------------------------------
+  
+  
+  BoxPlot_UI_inputs_support(
+    id = "BoxPlot" %>% ns(),
+    tabsetPanel_id = tabsetPanel_id
+  ),
+  
+  
+  # AuxAssays_sidepanel -----------------------------------------------------
+  
+  
+  AuxAssays_sidepanel( id = "AuxAssays_A" %>% ns(),
+                       tabsetPanel_id = tabsetPanel_id
+  ),
+  
+  
+  # DEstats_UI_inputs_support -----------------------------------------------
+  
+  
+  DEstats_UI_inputs_support(
+    id = "DEstats" %>% ns(),
+    tabsetPanel_id = tabsetPanel_id
+  ),
+  
+  # ExpsPlot_UI_inputs_support ----------------------------------------------
+  
+  
+  ExpsPlot_UI_inputs_support(
+    id = "ExpsPlot" %>% ns(),
+    tabsetPanel_id = tabsetPanel_id
+  ),
+  
+  
+  # fgsea_UI_inputs_support -------------------------------------------------
+  
+  
+  fgsea_UI_inputs_support(
+    id = "GSEA" %>% ns(),
+    tabsetPanel_id = tabsetPanel_id
+  ),
+  
+  
+  # VennDiagram_UI_inputs_support -------------------------------------------
+  
+  
+  VennDiagram_UI_inputs_support(
+    id = "VennDiag" %>% ns(),
+    tabsetPanel_id = tabsetPanel_id
+  ),
+  
+  
+  # PCA_UI_inputs_support ---------------------------------------------------
+  
+  
+  PCA_UI_inputs_support(
+    id = "PCA" %>% ns(),
+    tabsetPanel_id = tabsetPanel_id
+  )
+)
 
 # mainPanel ---------------------------------------------------------------
 
-
-
-# PCA_UI_inputs_support ---------------------------------------------------
-
-
-PCA_UI_inputs_support(
-id = "PCA" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
+mainPanel_params <- shiny::mainPanel(
+  shiny::tabsetPanel(
+    id = tabsetPanel_id,
+    
+    # BoxPlot_UI_main_support --------------------------------------------------
+    
+    
+    BoxPlot_UI_main_support(
+      id = "BoxPlot" %>% ns(),
+      tabsetPanel_id = tabsetPanel_id
+    ),
+    
+    # AuxAssays_mainpanel -----------------------------------------------------
+    
+    
+    AuxAssays_mainpanel(
+      id = "AuxAssays_A" %>% ns(),
+      tabsetPanel_id = tabsetPanel_id
+    ),
+    
+    # DEstats_UI_main_support -------------------------------------------------
+    
+    DEstats_UI_main_support(
+      id = "DEstats" %>% ns(),
+      tabsetPanel_id = tabsetPanel_id
+    ),
+    # fgsea_UI_main_support ---------------------------------------------------
+    
+    
+    fgsea_UI_main_support(
+      id = "GSEA" %>% ns(),
+      tabsetPanel_id = tabsetPanel_id
+    ),
+    
+    
+    # VennDiagram_UI_main_support ---------------------------------------------
+    
+    
+    VennDiagram_UI_main_support(
+      id = "VennDiag" %>% ns(),
+      tabsetPanel_id = tabsetPanel_id
+    ),
+    
+    # PCA_UI_main_support -----------------------------------------------------
+    
+    
+    PCA_UI_main_support(
+      id = "PCA" %>% ns(),
+      tabsetPanel_id = tabsetPanel_id
+    ),
+    
+    # ExpsPlot_UI_main_support ------------------------------------------------
+    
+    
+    ExpsPlot_UI_main_support(
+      id = "ExpsPlot" %>% ns(),
+      tabsetPanel_id = tabsetPanel_id
+    ),
+    
+    
+    # Metadata_UI_main_support ------------------------------------------------
+    
+    
+    Metadata_UI_main_support(
+      id = "Metadata" %>% ns(),
+      tabsetPanel_id = tabsetPanel_id
+    )
+  )
 )
-),
+
+#shiny::sidebarLayout()
+UI_params <-shiny::sidebarLayout(
+  
+  sidebarPanel = sidePanel_params,
+  
+  mainPanel = mainPanel_params)
 
 
-# tab1
-shiny::mainPanel(
-shiny::tabsetPanel(
-id = tabsetPanel_id,
-
-# BoxPlot_UI_main_support --------------------------------------------------
-
-
-BoxPlot_UI_main_support(
-id = "BoxPlot" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-
-# AuxAssays_mainpanel -----------------------------------------------------
-
-
-AuxAssays_mainpanel(
-id = "AuxAssays_A" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-
-# DEstats_UI_main_support -------------------------------------------------
-
-DEstats_UI_main_support(
-id = "DEstats" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-# fgsea_UI_main_support ---------------------------------------------------
-
-
-fgsea_UI_main_support(
-id = "GSEA" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-
-
-# VennDiagram_UI_main_support ---------------------------------------------
-
-
-VennDiagram_UI_main_support(
-id = "VennDiag" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-
-# PCA_UI_main_support -----------------------------------------------------
-
-
-PCA_UI_main_support(
-id = "PCA" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-
-# ExpsPlot_UI_main_support ------------------------------------------------
-
-
-ExpsPlot_UI_main_support(
-id = "ExpsPlot" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-),
-
-
-# Metadata_UI_main_support ------------------------------------------------
-
-
-Metadata_UI_main_support(
-id = "Metadata" %>% ns(),
-tabsetPanel_id = tabsetPanel_id
-)
-)
-)
-)
-)
+return(UI_params)
 }
 
 

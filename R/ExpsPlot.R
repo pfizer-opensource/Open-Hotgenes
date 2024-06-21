@@ -19,7 +19,7 @@
 #' be generated
 #' @param pointplot logical if TRUE (default), point will be generated.
 #' @param name_col string for naming column with feature names,
-#' default is "Feature".
+#' default is "Feature". Options include columns in mapper slot.
 #' @param value_col string for naming column with expression
 #' values, default is "value".
 #' @param filter_eval to be passed to
@@ -28,6 +28,7 @@
 #' @importFrom rlang enexprs !!!
 #' @param ... additional arguments for
 #' \code{\link[ggplot2]{facet_wrap}}
+#' @inheritParams DEphe
 #' @export
 #' @return ggplot object
 #' @details xVar and group must be a column name accessible by coldata_
@@ -89,6 +90,7 @@ ExpsPlot <- function(
                                 features = c(xVar, yVar, "SampleIDs",
                                              color, linevar,
                                              group, fill, facets))
+ 
   
   yVar_parsed <- parsed_features[c("aux_features",
                                    "exps_features")] %>% 
@@ -118,13 +120,36 @@ ExpsPlot <- function(
         ExpressionSlots = Matched_ExpSel,
         SampleIDs = SampleIDs
       ) %>%
-      dplyr::arrange(dplyr::across(dplyr::any_of(xVar))) %>%
+      dplyr::arrange(dplyr::across(dplyr::any_of(xVar)))# %>%
+      
+    
+    if(name_col != "Feature"){
+      # label_by
+      label_aliases <- hotList_mapper(Hotgenes,
+                                      hotList = parsed_features$exps_features)%>%
+        dplyr::select(dplyr::any_of(c("Feature", name_col))) 
+      
+      ExpDat <- ExpDat %>% 
+        tidyr::pivot_longer(
+          cols = dplyr::any_of(c(yVar_parsed)),
+          names_to = "Feature",
+          values_to = value_col
+        ) %>% 
+        dplyr::left_join(label_aliases, by = "Feature")
+    } else {
+      
+      
+      ExpDat <- ExpDat %>% 
       # converting to long format
       tidyr::pivot_longer(
         cols = dplyr::any_of(c(yVar_parsed)),
         names_to = name_col,
         values_to = value_col
-      )
+      ) 
+    }
+    
+    
+    
   }
 
   # setting blank

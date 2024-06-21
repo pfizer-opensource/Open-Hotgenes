@@ -81,3 +81,22 @@ testthat::expect_identical(
   DEGs_mapped,
   DEGs_Not_mapped
 )
+
+
+# check minimum -----------------------------------------------------------
+min_map <- Mapper_(htgs) %>% 
+  dplyr::mutate(species = "hooman")
+
+htgs2 <- htgs
+Mapper_(htgs2) <- min_map
+
+# identical when min = 0
+testthat::expect_true(
+  identical(names(Mapper_(htgs2, min_n = 0)), names(min_map)))
+
+# not identical with defaults
+testthat::expect_false(
+  identical(names(Mapper_(htgs2)), names(min_map)))
+
+
+

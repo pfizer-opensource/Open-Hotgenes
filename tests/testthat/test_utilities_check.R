@@ -71,3 +71,23 @@ BoxPlot(fit_Hotgenes)
 
 # list available data
 ExpressionSlots_(fit_Hotgenes)
+
+
+
+
+# ExpsPlot ----------------------------------------------------------------
+
+yvar <- c("CSF2", "CXCL8", "IL6")
+xvar <- "Hrs"
+
+# name_col param must be available in Mapper_()
+M_Plot_aliases <- ExpsPlot(fit_Hotgenes,
+                           xVar = xvar,
+                           color = "Hrs",
+                           yVar = yvar,
+                           scales = "fixed", 
+                           name_col = "ensembl_id"
+)
+
+testthat::expect_true("ensembl_id" %in% names(M_Plot_aliases$data))
+

@@ -2012,6 +2012,9 @@ label = "Feature:", multiple = TRUE,
 options = list(delimiter = ",", create = TRUE),
 choices = ""
 ),
+
+
+
 shiny::selectInput(
 inputId = "xVar" %>% ns(),
 label = "xVar:", multiple = FALSE,
@@ -2032,15 +2035,35 @@ label = "Color:", multiple = FALSE,
 choices = ""
 ),
 
+shiny::selectInput(
+  inputId = ns("label_by"),
+  label = "Select alias:",
+  choices = "Feature"
+),
 # sidepanel input row start -----------------------------------------------
 
 #shiny::h5(shiny::strong('Font:')),
 shiny::fluidRow(
+  shiny::tags$head(
+    shiny::tags$style(
+      shiny::HTML("
+        input[type=number] {
+              -moz-appearance:textfield;
+        }
+        input[type=number]::{
+              -moz-appearance:textfield;
+        }
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+              -webkit-appearance: none;
+              margin: 0;
+        }")) ),
 shiny::column(
 width = 6,
 offset = 0, 
 shiny::tags$div(
 align = "left",
+
 shiny::selectInput(
 inputId = "facet_wrap" %>% ns(),
 label = "Facets:",
@@ -2059,7 +2082,8 @@ align = "left",
 shiny::numericInput(
 inputId = "facet_ncol" %>% ns(),
 width = "100px",
-label = "# cols:", value = 4,
+label = "ncols:", 
+value = 4,
 min = 1, max = 100, step = 1
 ) )
 )
@@ -2101,14 +2125,14 @@ selected = "Helvetica"
 ) )
 ),
 shiny::column(
-width = 5,
+width = 4,
 offset = 1,
 shiny::tags$div( 
 
 align = "left",
 shiny::numericInput(
 inputId = "base_size" %>% ns(),
-width = "100px",
+width = "90px",
 label = "Size", 
 value = 20,
 min = 0, max = 100, step = 1
@@ -2145,7 +2169,7 @@ shiny::column(
 width = 1,
 shiny::tags$div(
 
-style="margin-left: 0px;margin-right: 5px;padding-top: 20px",
+style="margin-left: 0px;margin-right: 10px;padding-top: 20px",
 align = "left",
 
 shiny::actionButton(inputId = "makePlot" %>% ns(),
@@ -2266,7 +2290,14 @@ function(input, output, session) {
 
   DF_coldata <- df_coldata_handler(Hotgenes = Hotgenes)
 
-
+shiny::observe({
+  
+  # label_by
+  
+  shiny::updateSelectInput(session, "label_by",
+                           choices = Mapper_(Hotgenes) %>% names(),
+                           selected = "Feature")
+})
 # updating vars -----------------------------------------------------------
  shiny::observe({
    shiny::updateSelectInput(session, "facet_wrap",
@@ -2413,7 +2444,8 @@ SampleIDs = SampleIDs(),
 facets = c(input$facet_wrap),
 labeller = label_both,
 ncol = input$facet_ncol,
-scales = set_scales
+scales = set_scales, 
+name_col = input$label_by
 ) +
 
 
@@ -2715,7 +2747,7 @@ selected = character(0))
 
 shiny::observe({
 
-shiny::req(input$mapper_col %in% names(Hotgenes@Mapper))
+shiny::req(input$mapper_col %in% names(Mapper_(Hotgenes)))
 shiny::updateSelectizeInput(session, "DE_HotList",
   choices = Background_(Hotgenes,
                         Col = input$mapper_col),
@@ -2728,7 +2760,7 @@ shiny::observe({
 
 shiny::updateSelectInput(
 inputId = "mapper_col" ,
-choices = names(Hotgenes@Mapper),
+choices = names(Mapper_(Hotgenes)),
 selected = "Feature"
 )
 })

@@ -29,6 +29,24 @@ M_Plot %>%
   ExpsPlot_Table(xVar = xvar)
 
 
+# ExpsPlot with aliases ---------------------------------------------------
+
+# name_col param must be available in Mapper
+M_Plot_aliases <- ExpsPlot(htgs,
+                   xVar = xvar,
+                   color = "Hrs",
+                   yVar = yvar,
+                   scales = "fixed", 
+                   name_col = "ensembl_id"
+)
+
+M_Plot_aliases
+
+M_Plot_aliases %>%
+  ExpsPlot_Table(xVar = xvar,  
+                 name_col = "ensembl_id" )
+
+
 # with auxiliary assays ----------------------------------------------------
 
 

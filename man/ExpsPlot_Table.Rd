@@ -27,7 +27,7 @@ formula or character vector. Use either a one sided formula, \code{~a + b},
 or a character vector, \code{c("a", "b")}.}
 
 \item{name_col}{string for naming column with feature names,
-default is "Feature".}
+default is "Feature". Options include columns in mapper slot.}
 
 \item{value_col}{string for naming column with expression
 values, default is "value".}
