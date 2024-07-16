@@ -439,7 +439,11 @@ inputId = "padj_cut_PCA" %>% ns(),
 label = "padj cut off:", value = 0.1,
 min = 0, max = 1, step = 0.01
 ),
-
+shiny::numericInput(
+inputId = "lfc_Statistics" %>% ns(),
+label = "absolute(log2fc) cut off:", value = 0,
+min = 0, max = 20, step = 1
+),
 # PCA_signif_
 shiny::numericInput(
 inputId = "PCA_signif_" %>% ns(),
@@ -471,7 +475,7 @@ shiny::tabPanel(
 title = title,
 value = id,
 shiny::tabsetPanel(
-id = tabsetPanel_id ,
+#id = tabsetPanel_id ,
 
 # PCA
 shiny::tabPanel(
@@ -676,6 +680,7 @@ Hotgenes = Hotgenes,
 max = input$HCPC_max,
 min = input$HCPC_min,
 padj_cut = input$padj_cut_PCA,
+.log2FoldChange = input$lfc_Statistics,
 ExpressionSlots = ExpressionSlots(),
 habillage_selection = input$habillage_id,
 biplot = FALSE,
@@ -914,7 +919,7 @@ hotList = hotlist_PCA,
 annotation_row = hotlist_annotation_row,
 contrasts = shiny::reactive(input$PCA_contrasts),
 padj_cut = shiny::reactive(input$padj_cut_PCA),
-.log2FoldChange = shiny::reactive(0),
+.log2FoldChange = shiny::reactive(input$lfc_Statistics),
 SampleIDs = SampleIDs
 )
 
@@ -1533,7 +1538,7 @@ shiny::tabPanel(
 title = title, 
 value = id,
 shiny::tabsetPanel(
-id = tabsetPanel_id ,
+#id = tabsetPanel_id ,
 
 shiny::tabPanel(
 title = "setup",

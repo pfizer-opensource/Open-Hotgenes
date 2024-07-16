@@ -1,3 +1,7 @@
+# version 0.0.29:
+    - Added log2fc cut off to PCA tab
+    - Also fixed sidepanel conditional panel issue
+
 # version 0.0.28:
     - Added support for alias labeling in shiny app.
     - Alias selection is available via the names_col arg in ExpsPlot()
