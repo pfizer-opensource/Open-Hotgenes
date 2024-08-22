@@ -25,7 +25,34 @@ HotgeneSets_out <- HotgeneSets(
   BPPARAM = BiocParallel::SerialParam(progressbar = FALSE)
 )
 
-HotgeneSets_out
+
+# check names -------------------------------------------------------------
+
+gsList_not_clean <- gsList %>% 
+  purrr::set_names(~.x %>% stringr::str_replace_all("_", " "))
+  
+names_check <-checkisValidAndUnreserved(names(gsList_not_clean))
+
+testthat::expect_false(all(names_check))
+
+# these are valid
+names_check_valid <-checkisValidAndUnreserved(names(gsList))
+
+testthat::expect_true(all(names_check_valid))
+
+
+testthat::expect_warning(
+  HotgeneSets(
+    Hotgenes = htgs,
+    geneSets = gsList_not_clean,
+    kcdf = "Gaussian",
+    method = "gsva",
+    minSize = 5,
+    maxSize = Inf,
+    BPPARAM = BiocParallel::SerialParam(progressbar = FALSE)
+  ),
+  
+  regexp = "correcting invalid geneSets names")
 
 
 

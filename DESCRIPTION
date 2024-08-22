@@ -1,7 +1,7 @@
 Package: Hotgenes
 Type: Package
 Title: Tools to simplify Omics DE analysis
-Version: 0.0.29
+Version: 0.0.30
 Author: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
 Maintainer: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
 Description: Converts outputs from DESeq2, limma, or a method of your
@@ -11,7 +11,7 @@ Description: Converts outputs from DESeq2, limma, or a method of your
 License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Imports: 
     BiocParallel,
     BiocGenerics,

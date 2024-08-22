@@ -79,6 +79,17 @@ HotgeneSets <- function(Hotgenes = NULL,
   
   Featur_s <- rownames(NormalizedData)
   
+  # check names
+  are_names_valid <-checkisValidAndUnreserved(names(geneSets))
+  
+  if(!all(are_names_valid)){
+    warning("correcting invalid geneSets names")
+    
+    geneSets <- geneSets %>% 
+      purrr::set_names(~.x %>% janitor::make_clean_names())
+  }
+  
+  
   # msigdbr_Mapper
   Final_Mapper <- geneSets %>%
     purrr::imap(function(x, y) {
@@ -87,8 +98,9 @@ HotgeneSets <- function(Hotgenes = NULL,
       
       gene_x %>%
         tibble::as_tibble() %>%
-        # dplyr::rename("GeneSymbols" = .data$value ) %>%
-        dplyr::mutate(Feature = y) %>%
+        dplyr::rename("original_features" = "value" ) %>%
+        dplyr::mutate(Feature = y, 
+                      size = length(filt_x)) %>%
         dplyr::relocate("Feature", .before = 1)
     }) %>% 
     purrr::list_rbind()
@@ -188,3 +200,12 @@ HotgeneSets <- function(Hotgenes = NULL,
   
   return(fit_Hotgenes_base)
 }
+
+
+# internal names check function
+#' @noRd
+checkisValidAndUnreserved <- function(string, ...) {
+  make.names(string, ...) == string
+}
+
+

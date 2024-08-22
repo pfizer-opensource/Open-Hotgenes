@@ -1,3 +1,10 @@
+# version 0.0.30:
+    - Added HotgeneSets name checks and fixes (with a warning)
+    - HotgeneSets includes a "size" column in the Mapper slot, which represents
+      the geneset size.
+    - Added "Subset" button to shiny expression plot tab
+    - Added "Hotlist" tab to DE stats tab, which shows details for select features
+
 # version 0.0.29:
     - Added log2fc cut off to PCA tab
     - Also fixed sidepanel conditional panel issue

@@ -111,7 +111,7 @@ fgsea_Server_module(
   SampleIDs = shiny::reactive(NULL),
   OntologyMethods = OntologyMethods(),
   Mapper_choices = names(Mapper_(Hotgenes)),
-  parallel.sz = 10
+  parallel.sz = 1
 )
 
 ExpsPlot_UI_inputs_support(id = NULL, tabsetPanel_id = "tabs")

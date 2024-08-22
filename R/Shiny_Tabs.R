@@ -1634,7 +1634,7 @@ ExpressionSlots = shiny::reactive(NULL),
 SampleIDs = shiny::reactive(NULL),
 OntologyMethods = OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
-parallel.sz = 10) {
+parallel.sz = 1) {
 shiny::moduleServer(
 id,
 function(input, output, session) {
@@ -2545,10 +2545,9 @@ inputId = "DE_Contrasts" %>% ns(),
 label = "Contrasts selection:",
 multiple = FALSE,
 choices = "",
-selectize = FALSE,
 selected = NULL
 ),
-shiny::h5("'Empty' contrasts dropped"),
+#shiny::h5("'Empty' contrasts dropped"),
 
 shiny::tags$hr(style = "border-color: black;"),
 shiny::h5("Filter by stats"),
@@ -2619,15 +2618,21 @@ shiny::tabsetPanel(
 shiny::tabPanel(
 title = "Statistics",
 value = "Statistics" %>% ns(),
-UI_download_plot(id = "downloadDESummary_plot" %>% ns()),
 
-shiny::conditionalPanel( 
-condition = glue::glue("input.DE_Contrasts != '' "),
-ns = ns,
-style = "display: none;",
+UI_download_plot(id = "downloadDESummary_plot" %>% ns()),
+shiny::numericInput(inputId = "aspect.ratio" %>% ns(), 
+                    label = "asp ratio",
+                    width = '100px',
+                    value = 1),
+
+# shiny::conditionalPanel( 
+# condition = glue::glue("input.DE_Contrasts != '' "),
+# ns = ns,
+# style = "display: none;",
 shiny::plotOutput(outputId = "DESummary_plot" %>% ns(),
 width = "100%", height = "400px") %>%
-shinycssloaders::withSpinner()),
+shinycssloaders::withSpinner(),
+#),
 
 
 DT::dataTableOutput("Tab3_Query" %>% ns()),
@@ -2690,12 +2695,24 @@ min = 0, max = 100, step = 1
 )
 ),
 
-# Heatmap
+# Heatmap -----------------------------------
 shiny::tabPanel(
 title = "Heatmap",
 value = "Statistics" %>% ns(),
 shiny::fluidRow(DE_pheUI(id = "A" %>% ns()))
+), 
+
+# Hotlist table
+shiny::tabPanel(
+  title = "Hotlist",
+  value = "Statistics" %>% ns(),
+  shiny::fluidRow(
+    
+    DT::dataTableOutput("HotlistTable" %>% ns())
+    
+  )
 )
+
 )
 )
 }
@@ -2819,27 +2836,37 @@ return(out)
 # DESummary_plot
 DEPlot_reactive <- shiny::reactive({
 
+  
+  if(shiny::isTruthy(input$Filter_Contrasts)){
+    contrasts_ <- input$Filter_Contrasts
+  } else {
+    contrasts_ <- NULL
+  }
+  
 
 P <- Hotgenes %>%
 DEPlot(
-contrasts = input$Filter_Contrasts,
+contrasts = contrasts_,
 padj_cut = input$padj_cut_DE_tables,
 .log2FoldChange = input$lfc_Statistics,
 hotList = DE_HotList_re()
 )
 
-# set asp
-deno <- P$data$contrast %>%
-unique() %>%
-length() / 4 %>% round()
-
-if (deno < 1) {
-deno <- 1
-}
-
+# # set asp
+# deno <- P$data$contrast %>%
+# unique() %>%
+# length() / 4 %>% round()
+# 
+# if (deno < 1) {
+# deno <- 1
+# }
+# 
 P <- P +
   ggplot2::theme(
-aspect.ratio = 1 / deno,
+    aspect.ratio = input$aspect.ratio,
+    plot.margin = ggplot2::unit(c(0, 0, 0, 0), "cm"),
+    axis.text.x = ggplot2::element_text(angle = 90, vjust = 1, hjust = 1),
+    
 legend.position = "top"
 )
 
@@ -2886,6 +2913,77 @@ return(DE_Output)
 })
 
 
+# HotlistTable ------------------------------------------------------------
+
+DE_HotlistTable <- shiny::reactive({
+  hotList_input <-shiny::req(DE_HotList_re())
+  
+  if(shiny::isTruthy(input$Filter_Contrasts)){
+    contrasts_ <- input$Filter_Contrasts
+  } else {
+    contrasts_ <- NULL
+  }
+  
+  DE_Output <- Output_DE_(Hotgenes,
+                  contrasts = contrasts_,
+                  padj_cut = input$padj_cut_DE_tables,
+                  hotList = hotList_input,
+                  .log2FoldChange = input$lfc_Statistics,
+                  mapFeatures = TRUE  ) %>% 
+    dplyr::relocate(c("significant", "contrast"), .before = 1)
+  
+  
+  if (!is.null(input$signif_)) {
+    
+    # DF version
+    DE_Output <- DE_Output %>%
+      dplyr::mutate(dplyr::across(
+        dplyr::where(is.numeric),
+        ~ signif(.x, input$signif_)
+      ))
+    
+    
+  }
+  
+  return(DE_Output)
+})
+
+
+
+
+output$HotlistTable <- DT::renderDataTable(
+  {
+    DT::datatable(
+      DE_HotlistTable(),
+      filter = "none",
+      extensions = "Buttons", rownames = FALSE,
+      options = list(
+        dom = "lpBt",
+        lengthMenu = list(
+          c(10, 25, 100, -1),
+          c("10", "25", "100", "All")
+        ),
+        pageLength = -1,
+        scrollY = 500,
+        scrollX = 300,
+        scrollCollapse = TRUE,
+        # pageLength = -1,
+        # pageLength = 5,
+        # lengthMenu = c(5, 10, 15, 20),
+        
+        buttons = list(
+          list(extend = "copy", title = NULL),
+          "csv",
+          list(extend = "excel", title = NULL)
+        )
+      )
+    )
+  },
+  server = TRUE
+) 
+
+
+##
 output$Tab3_Query <- DT::renderDataTable(
 {
 DT::datatable(
@@ -3038,6 +3136,12 @@ selected = "",
 choices = ""
 ),
 
+# Show_SampleIDs
+shiny::checkboxInput(
+  inputId = "Show_SampleIDs" %>% ns(),
+  label = "Sample names",
+  value = FALSE
+),
 
 # SampleGroups
 shiny::selectInput(
@@ -3048,12 +3152,6 @@ choices = ""
 ),
 
 
-# Show_SampleIDs
-shiny::checkboxInput(
-inputId = "Show_SampleIDs" %>% ns(),
-label = "Sample names",
-value = FALSE
-),
 shinyWidgets::pickerInput(
 inputId = "Exps_Samples" %>% ns(),
 label = "Select levels:",
@@ -3061,7 +3159,11 @@ multiple = TRUE,
 options = list(`actions-box` = TRUE),
 choices = ""
 ),
-shiny::h4("Values here applied to all tabs")
+shiny::h4("Values here applied to all tabs"),
+shiny::actionButton("goButton2" %>% ns(),
+                    "Subset!",
+                    class = "btn-primary"
+)
 ) # condition end
 ) # tagList end
 }
@@ -3133,10 +3235,13 @@ reactive_NormSlot <- shiny::reactive({
 return(input$NormSlot)
 })
 
+
+
 # getting sampleids for everything else
 SampleIDs_Sel <- shiny::reactive({
-if (shiny::isTruthy(input$SampleGroups) &
-    shiny::isTruthy(input$Exps_Samples)) {
+if (all(shiny::isTruthy(input$SampleGroups),
+        
+    shiny::isTruthy(input$Exps_Samples) )) {
 fil_col() %>%
 dplyr::filter(dplyr::if_any(
 .cols = dplyr::any_of(input$SampleGroups),
@@ -3146,7 +3251,7 @@ rownames()
 } else {
 NULL
 }
-})
+})  %>% shiny::bindEvent(input$goButton2, ignoreNULL = FALSE)
 
 
 
@@ -3207,20 +3312,19 @@ BoxPlot_out <- BoxPlot(
 Hotgenes = Hotgenes,
 ExpressionSlots = input$NormSlot,
 SampleIDs = SampleIDs_Sel()
-) +
+) 
 
-ggplot2::theme(legend.position = "top")
 
-BoxPlot_out_no_names <- BoxPlot_out +
-  ggplot2::theme(
-axis.title.x = ggplot2::element_blank(),
-axis.text.x = ggplot2::element_blank(),
-axis.ticks.x = ggplot2::element_blank()
-)
 
 Pout <- list(
-BoxPlot_out = BoxPlot_out,
-BoxPlot_out_no_names = BoxPlot_out_no_names
+BoxPlot_out = BoxPlot_out +
+  ggplot2::theme(legend.position = "top"),
+
+BoxPlot_out_no_names = BoxPlot_out +
+  ggplot2::theme(legend.position = "top",
+                 axis.title.x = ggplot2::element_blank(),
+                 axis.text.x = ggplot2::element_blank(),
+                 axis.ticks.x = ggplot2::element_blank())
 )
 
 
