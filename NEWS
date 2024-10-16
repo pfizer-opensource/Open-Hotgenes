@@ -1,3 +1,6 @@
+# version 0.0.31:
+    - Changed R 4.3 requirement to R 4.2; however, HotgeneSets() functionality will only work for R 4.3+
+
 # version 0.0.30:
     - Added HotgeneSets name checks and fixes (with a warning)
     - HotgeneSets includes a "size" column in the Mapper slot, which represents

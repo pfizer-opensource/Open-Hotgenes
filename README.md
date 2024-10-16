@@ -5,7 +5,7 @@
 
 <br>
 
-## Installation requires R (\>= 4.3.0)
+## Installation requires R (\>= 4.2.0); however R (\>= 4.3.0) is recommended
 
 ``` r
 # Install required packages. ----------------------------------------------
@@ -17,7 +17,7 @@ BiocManager::install("apeglm")
 # set repos
 options(repos = c(
   CRAN = "https://cran.rstudio.com/",
-  BiocManager::repositories(version = "3.18")[1:4]
+  BiocManager::repositories()[1:4]
 ))
 
 devtools::install_github("pfizer-opensource/Open-Hotgenes",
@@ -471,16 +471,17 @@ fit_Hotgenes %>%
     ## [1] "NFE2L2" "KEAP1"  "PDGFA"  "HDAC4"  "OXER1"  "GAPDH"  "MEF2C" 
     ## 
     ## $Intsect$Hrs_6_vs_0
-    ##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"   "BCL6"   "TLR3"   "GRB2"   "IL6R"   "IL15"  
-    ## [16] "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2"  "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
+    ##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"   "BCL6"   "TLR3"  
+    ## [13] "GRB2"   "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2"  "IL1A"   "CCL20" 
+    ## [25] "PGK1"   "MAPK3" 
     ## 
     ## $Intsect$sh_EWS_vs_Ctrl
-    ##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"    "HMGN1"  "CLTC"   "GNAQ"   "LY96"   "CD40"  
-    ## [16] "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"   "LTB4R2"
+    ##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"    "HMGN1"  "CLTC"  
+    ## [13] "GNAQ"   "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"   "LTB4R2"
     ## 
     ## $Intsect$`Hrs_2_vs_0:Hrs_6_vs_0`
-    ##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"    "CXCR4"   "MAFK"    "PTGFR"   "FOS"    
-    ## [14] "MYC"     "RIPK2"   "IL2"     "MAFG"    "CSF2"    "TWIST2"  "IFIT1"   "FLT1"   
+    ##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"    "CXCR4"   "MAFK"   
+    ## [12] "PTGFR"   "FOS"     "MYC"     "RIPK2"   "IL2"     "MAFG"    "CSF2"    "TWIST2"  "IFIT1"   "FLT1"   
     ## 
     ## $Intsect$`sh_EWS_vs_Ctrl:Hrs_2_vs_0`
     ## [1] "HMGB2"  "MAP3K9" "CEBPB"  "IRF1"  
@@ -489,13 +490,13 @@ fit_Hotgenes %>%
     ##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2" "IFI44" "CCL7" 
     ## 
     ## $Intsect$`sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0`
-    ##  [1] "CCL2"     "IL1R1"    "MEF2D"    "JUN"      "BIRC2"    "CXCL3"    "MEF2A"    "CXCL2"    "IL6"      "NFKB1"    "SMAD7"    "MAPKAPK2"
-    ## [13] "RELB"    
+    ##  [1] "CCL2"     "IL1R1"    "MEF2D"    "JUN"      "BIRC2"    "CXCL3"    "MEF2A"    "CXCL2"    "IL6"      "NFKB1"   
+    ## [11] "SMAD7"    "MAPKAPK2" "RELB"    
     ## 
     ## 
     ## $Names
-    ## [1] "Hrs_2_vs_0:Hrs_6_vs_0"                "sh_EWS_vs_Ctrl:Hrs_2_vs_0"            "sh_EWS_vs_Ctrl:Hrs_6_vs_0"           
-    ## [4] "sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0"
+    ## [1] "Hrs_2_vs_0:Hrs_6_vs_0"                "sh_EWS_vs_Ctrl:Hrs_2_vs_0"           
+    ## [3] "sh_EWS_vs_Ctrl:Hrs_6_vs_0"            "sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0"
 
 ### Identify key features using PCA and clustering
 
@@ -597,8 +598,6 @@ DEphe(fit_Hotgenes,
       annotations = c("Hrs", "sh"))
 ```
 
-![](man/figures/README-heatmap_1-1.png)<!-- -->
-
 ``` r
 # change labels to ensembl_id
 DEphe(fit_Hotgenes,
@@ -610,8 +609,6 @@ DEphe(fit_Hotgenes,
       annotation_colors = coldata_palettes(fit_Hotgenes),
       annotations = c("Hrs", "sh"))
 ```
-
-![](man/figures/README-heatmap_2-1.png)<!-- -->
 
 ### Run GSEA using msigdbr genesets
 
@@ -644,7 +641,7 @@ H_paths <- msigdbr_wrapper(
 ```
 
     ## [1] "Hrs_2_vs_0"
-    ##   |                                                                                                                                         |                                                                                                                                 |   0%  |                                                                                                                                         |================================================================                                                                 |  50%  |                                                                                                                                         |=================================================================================================================================| 100%
+    ##   |                                                                                                                    |                                                                                                            |   0%  |                                                                                                                    |======================================================                                                      |  50%  |                                                                                                                    |============================================================================================================| 100%
 
 ``` r
   # Get details for all
@@ -750,7 +747,7 @@ gsList <- msigdbr_wrapper(
     ## Estimating ssGSEA scores for 93 gene sets.
     ## [1] "Calculating ranks..."
     ## [1] "Calculating absolute values from ranks..."
-    ##   |                                                                                                                                         |                                                                                                                                 |   0%  |                                                                                                                                         |===========                                                                                                                      |   8%  |                                                                                                                                         |======================                                                                                                           |  17%  |                                                                                                                                         |================================                                                                                                 |  25%  |                                                                                                                                         |===========================================                                                                                      |  33%  |                                                                                                                                         |======================================================                                                                           |  42%  |                                                                                                                                         |================================================================                                                                 |  50%  |                                                                                                                                         |===========================================================================                                                      |  58%  |                                                                                                                                         |======================================================================================                                           |  67%  |                                                                                                                                         |=================================================================================================                                |  75%  |                                                                                                                                         |============================================================================================================                     |  83%  |                                                                                                                                         |======================================================================================================================           |  92%  |                                                                                                                                         |=================================================================================================================================| 100%
+    ##   |                                                                                                                    |                                                                                                            |   0%  |                                                                                                                    |=========                                                                                                   |   8%  |                                                                                                                    |==================                                                                                          |  17%  |                                                                                                                    |===========================                                                                                 |  25%  |                                                                                                                    |====================================                                                                        |  33%  |                                                                                                                    |=============================================                                                               |  42%  |                                                                                                                    |======================================================                                                      |  50%  |                                                                                                                    |===============================================================                                             |  58%  |                                                                                                                    |========================================================================                                    |  67%  |                                                                                                                    |=================================================================================                           |  75%  |                                                                                                                    |==========================================================================================                  |  83%  |                                                                                                                    |===================================================================================================         |  92%  |                                                                                                                    |============================================================================================================| 100%
     ## 
     ## [1] "Normalizing..."
 
@@ -770,7 +767,7 @@ gsList <- msigdbr_wrapper(
     ## |shEWS.Hrs2     |     0|
     ## |shEWS.Hrs6     |     0|
     ## 
-    ## Available feature mapping:  Feature, value 
+    ## Available feature mapping:  Feature, original_features, size 
     ## ExpressionSlots:  ssgsea 
     ## Total auxiliary assays:  2 
     ## Total samples:  12

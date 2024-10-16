@@ -29,7 +29,11 @@ HotgeneSets <- function(Hotgenes = NULL,
                         contrast_matrix = NULL,
                         ...) {
   
+  GSVA_check <- utils::packageVersion("GSVA")
   
+  if(GSVA_check < '1.50.0'){
+    stop("This function requires GSVA (>= 1.50.0).")
+  }
   
   # Preparing expression data
   ExprOptions <- Hotgenes %>%

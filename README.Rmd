@@ -24,7 +24,7 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 
 <br>
 
-## Installation requires R (>= 4.3.0)
+## Installation requires R (>= 4.2.0); however R (>= 4.3.0) is recommended
 
 ```{r install_reqs, eval=FALSE, include=TRUE}
 
@@ -37,7 +37,7 @@ BiocManager::install("apeglm")
 # set repos
 options(repos = c(
   CRAN = "https://cran.rstudio.com/",
-  BiocManager::repositories(version = "3.18")[1:4]
+  BiocManager::repositories()[1:4]
 ))
 
 devtools::install_github("pfizer-opensource/Open-Hotgenes",

@@ -1,7 +1,7 @@
 Package: Hotgenes
 Type: Package
 Title: Tools to simplify Omics DE analysis
-Version: 0.0.30
+Version: 0.0.31
 Author: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
 Maintainer: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
 Description: Converts outputs from DESeq2, limma, or a method of your
@@ -28,7 +28,7 @@ Imports:
     ggrepel,
     grDevices,
     grid,
-    GSVA (>= 1.50.0),
+    GSVA (>= 1.46.0),
     janitor,
     knitr,
     limma,
@@ -68,4 +68,4 @@ Suggests:
     DBI,
     rmarkdown
 VignetteBuilder: knitr
-Depends: R (>= 4.3.0)
+Depends: R (>= 4.2.0)
