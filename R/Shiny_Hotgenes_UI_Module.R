@@ -225,7 +225,7 @@ Hotgenes = NULL,
 OntologyMethods = Hotgenes::OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
 parallel.sz = 1L,
-max_col_levels = 12,
+max_col_levels = Inf,
 selected_fillby = "",
 remove_modal_spinner = TRUE) {
 shiny::moduleServer(
@@ -392,7 +392,7 @@ OntologyMethods = Hotgenes::OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
 theme = shinythemes::shinytheme("united"),
 parallel.sz = 1L,
-max_col_levels = 12)
+max_col_levels = Inf)
 UseMethod("Shiny_Hotgenes", Hotgenes)
 
 #' @rdname Shiny_Hotgenes_UI
@@ -405,7 +405,7 @@ OntologyMethods = Hotgenes::OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
 theme = shinythemes::shinytheme("united"),
 parallel.sz = 1L,
-max_col_levels = 12) {
+max_col_levels = Inf) {
 
 
 # UI ------------------------------------------------------------------
@@ -453,7 +453,7 @@ OntologyMethods = Hotgenes::OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
 theme = shinythemes::shinytheme("united"),
 parallel.sz = 1L,
-max_col_levels = 12) {
+max_col_levels = Inf) {
 
 print("processing as list")
 
@@ -561,7 +561,7 @@ input = input,
 output = output,
 session = session,
 OntologyMethods = OntologyMethods,
-
+max_col_levels = max_col_levels,
 Hotgenes = Hotgenes_out() ,
 parallel.sz = parallel.sz,
 id = "Obj_A"

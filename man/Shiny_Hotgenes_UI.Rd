@@ -27,7 +27,7 @@ Shiny_Hotgenes_Server(
   OntologyMethods = Hotgenes::OntologyMethods(),
   Mapper_choices = names(Mapper_(Hotgenes)),
   parallel.sz = 1L,
-  max_col_levels = 12,
+  max_col_levels = Inf,
   selected_fillby = "",
   remove_modal_spinner = TRUE
 )
@@ -38,7 +38,7 @@ Shiny_Hotgenes(
   Mapper_choices = names(Mapper_(Hotgenes)),
   theme = shinythemes::shinytheme("united"),
   parallel.sz = 1L,
-  max_col_levels = 12
+  max_col_levels = Inf
 )
 
 \method{Shiny_Hotgenes}{default}(
@@ -47,7 +47,7 @@ Shiny_Hotgenes(
   Mapper_choices = names(Mapper_(Hotgenes)),
   theme = shinythemes::shinytheme("united"),
   parallel.sz = 1L,
-  max_col_levels = 12
+  max_col_levels = Inf
 )
 
 \method{Shiny_Hotgenes}{list}(
@@ -56,7 +56,7 @@ Shiny_Hotgenes(
   Mapper_choices = names(Mapper_(Hotgenes)),
   theme = shinythemes::shinytheme("united"),
   parallel.sz = 1L,
-  max_col_levels = 12
+  max_col_levels = Inf
 )
 }
 \arguments{
