@@ -12,7 +12,7 @@ H_paths <- msigdbr::msigdbr(
 
   dplyr::select(c("gene_symbol", "gs_name")) %>%
   plyr::dlply("gs_name", identity) %>%
-  purrr::map(function(x) x %>% dplyr::pull("gene_symbol")) %>% 
+  purrr::map(function(x) x %>% dplyr::pull("gene_symbol") %>% unique()) %>% 
   purrr::set_names(~ janitor::make_clean_names(.x ))
 
 # These genes sets are mapped to gene symbols
@@ -99,7 +99,7 @@ H_paths <- msigdbr::msigdbr(
 
   dplyr::select(gene_symbol, gs_name) %>%
   plyr::dlply("gs_name", identity) %>%
-  purrr::map(function(x) x %>% dplyr::pull("gene_symbol")) %>% 
+  purrr::map(function(x) x %>% dplyr::pull("gene_symbol") %>% unique()) %>% 
   purrr::set_names(~ janitor::make_clean_names(.x ))
 
 
@@ -144,3 +144,68 @@ msigdbr_pthyways <- OntologyFunctions(
 
 testthat::expect_equal(gsList, msigdbr_pthyways)
 testthat::expect_equal(gsList, H_paths)
+
+
+
+# custom library ----------------------------------------------------------
+
+example_sigs <- msigdbr::msigdbr( species = "human", category = "H") %>% 
+  dplyr::mutate_at( c("gene_symbol",  "entrez_gene", "ensembl_gene"),
+                    as.character) #%>% 
+  
+# convert to long format
+  
+source_genesets <- example_sigs %>% 
+  dplyr::mutate(species = "human",
+                set = .data$gs_cat,
+                geneset_names = .data$gs_name) %>% 
+  dplyr::select(c("species", "set", "geneset_names", 
+                  "gene_symbol",  "entrez_gene", "ensembl_gene"
+                  )) %>% 
+  tidyr::pivot_longer(cols = c("gene_symbol",  "entrez_gene", "ensembl_gene"),
+                      names_to = "aliase_category", values_to = "aliases") %>% 
+  unique()
+
+source_genesets 
+
+# setting requirements
+source_requirements <- list(
+  species_choices = unique(source_genesets$species), 
+  InputChoices = unique(source_genesets$set), 
+  gene_col_choices = unique(source_genesets$aliase_category))
+
+
+# building library --------------------------------------------------------
+
+
+my_fun <-make_custom_geneset_library(library_name = "custom",
+                                     version = "1", 
+                                     source_genesets = source_genesets, 
+                                     source_requirements = source_requirements)
+#my_fun
+
+
+OntologyMethods_default <- OntologyMethods() %>% 
+  append(my_fun)
+
+
+msigdbr_ref <-Hotgenes::OntologyFunctions(
+  Methods = OntologyMethods_default,
+  db = "msigdbr",
+  species = "human",
+  set = "H",
+  gene_col = "gene_symbol")
+
+#msigdbr_ref$hallmark_adipogenesis
+
+custom_ref <-Hotgenes::OntologyFunctions(
+  Methods = OntologyMethods_default,
+  db = "custom",
+  species = "human",
+  set = "H",
+  gene_col = "gene_symbol")
+
+
+testthat::expect_identical(msigdbr_ref, custom_ref)
+
+

@@ -647,7 +647,9 @@ final_sigs <- do.call(msigdbr::msigdbr, arg_list) %>%
  
     dplyr::select(dplyr::all_of(c(Final_gene_col, "gs_name"))) %>%
     plyr::dlply("gs_name", identity) %>%
-    purrr::map(function(x) x %>% dplyr::pull(Final_gene_col))
+    purrr::map(function(x) x %>%
+                 dplyr::pull(Final_gene_col) %>% 
+                  unique())
  
 
 if(isTRUE(clean_names)){
@@ -658,3 +660,95 @@ if(isTRUE(clean_names)){
 }
  return(final_sigs)
 }
+
+
+
+#' Support functions for GSVA
+#' @export
+#' @rdname GSEA_Support
+#' @importFrom msigdbr msigdbr
+#' @param library_name string to call this. 
+#' @param source_genesets a long format dataframe with the following 
+#' columns: 'species', 'set', 'geneset_names', 'aliase_category', 'aliases', 
+#' corresponding to species, geneset category, 
+#' gene set names, gene alias category, and alias values (respectively).
+#' @param source_requirements a named list of
+#' input requirements. Must include:
+#' 'species_choices', 'InputChoices', and 'gene_col_choices', 
+#' popluated with vector choices for species, geneset categories, 
+#' and gene alias categories (respectively). 
+#' @param versions stringr for version to append
+#' to database name. This will be concantenated to name
+#' in shiny app.
+#'
+
+
+make_custom_geneset_library <- function(library_name = "custom", 
+                                        source_genesets = NULL, 
+                                        source_requirements = NULL,
+                                        versions = NULL){
+  
+  
+  custom_geneset_function <- function(
+    species = NULL, 
+    set = NULL, 
+    gene_col = NULL, 
+    
+    source_genesets = NULL,
+    source_requirements = NULL,
+    
+    clean_names = TRUE) {
+    
+   
+    Final_gene_col <- match.arg(arg = gene_col, 
+                                choices = unique(source_requirements$gene_col_choices),
+                                several.ok = FALSE)
+    
+    matched_set <- match.arg(arg = set, 
+                             choices = unique(source_requirements$InputChoices), 
+                             several.ok = TRUE)
+    
+    matched_species <- match.arg(arg = species, 
+                                 choices = unique(source_requirements$species_choices), 
+                                 several.ok = FALSE)
+    
+    
+    filtered_sigs <- source_genesets %>% 
+      dplyr::filter(dplyr::if_any("species", ~.x == .env$matched_species)) %>% 
+      dplyr::filter(dplyr::if_any("set", ~.x %in% .env$matched_set)) %>%
+      dplyr::filter(dplyr::if_any("aliase_category", ~.x == .env$Final_gene_col)) %>% 
+      dplyr::select(dplyr::all_of(c("geneset_names", "aliases"))) %>% 
+      dplyr::distinct()
+    
+    
+    final_sigs_list <- filtered_sigs %>%
+      plyr::dlply("geneset_names", identity) %>% 
+      purrr::map(function(x) x %>% 
+                   dplyr::pull("aliases"))
+    
+    if (isTRUE(clean_names)) {
+      final_sigs_list <- final_sigs_list %>%
+        purrr::set_names(~janitor::make_clean_names(.x))
+    }
+    return(final_sigs_list)
+  }
+  
+  
+  
+  OntologyMethods_new <- source_requirements %>% 
+    append(list(versions = versions)) %>% 
+    purrr::imap(~  list(.x) %>% 
+                  purrr::set_names(library_name) )
+  
+  
+  base::formals(custom_geneset_function)$source_requirements <- source_requirements
+  base::formals(custom_geneset_function)$source_genesets <- source_genesets
+  
+  
+  OntologyMethods_new$Ontology_Function <-  list(custom_geneset_function)%>% 
+    purrr::set_names(library_name)
+  
+  out<-base::do.call(what = OntologyMethods, args = OntologyMethods_new)
+  return(out) 
+}
+

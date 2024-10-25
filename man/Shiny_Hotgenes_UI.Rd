@@ -215,4 +215,58 @@ Hotgenes_sets_List <- list(
   
 }
 
+
+# adding custom signatures ------------------------------------------------
+# custom library ----------------------------------------------------------
+  
+if(FALSE){
+  
+  example_sigs <- msigdbr::msigdbr( species = "human", category = "H") \%>\% 
+    dplyr::mutate_at( c("gene_symbol",  "entrez_gene", "ensembl_gene"),
+                      as.character) #\%>\% 
+  
+  # create custom genesets in long format
+  source_genesets <- example_sigs \%>\% 
+    dplyr::mutate(species = "human",
+                  set = .data$gs_cat,
+                  geneset_names = .data$gs_name) \%>\% 
+    dplyr::select(c("species", "set", "geneset_names", 
+                    "gene_symbol",  "entrez_gene", "ensembl_gene"
+    )) \%>\% 
+    tidyr::pivot_longer(cols = c("gene_symbol",  "entrez_gene", "ensembl_gene"),
+                        names_to = "aliase_category", values_to = "aliases") \%>\% 
+    unique()
+  
+  # must have these column names:
+  c("species", "set", "geneset_names", "aliase_category", "aliases")
+  source_genesets 
+  
+  # create source requirements
+  # this will feed into the shiny UI
+  source_requirements <- list(
+    species_choices = unique(source_genesets$species), 
+    InputChoices = unique(source_genesets$set), 
+    gene_col_choices = unique(source_genesets$aliase_category))
+  
+  
+  # building library --------------------------------------------------------
+  
+  # give it a good name
+  my_fun <-make_custom_geneset_library(library_name = "my_custom",
+                                       version = "1", 
+                                       source_genesets = source_genesets, 
+                                       source_requirements = source_requirements)
+  
+  
+  # append your custom library with default OntologyMethods 
+  OntologyMethods_default <- OntologyMethods() \%>\% 
+    append(my_fun)
+  
+  # now yor custom library is available in the app
+  Shiny_Hotgenes(HotgenesObj,
+                 OntologyMethods = OntologyMethods_default)
+  
+  
+}
+
 }

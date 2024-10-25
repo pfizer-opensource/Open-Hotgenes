@@ -1,3 +1,7 @@
+# version 0.0.33:
+    - Added additional support function for supplying custom genesets
+    - Fixed bug in msig_wrapper
+
 # version 0.0.32:
     - Fixed max_col_levels bug in Shiny_Hotgenes()
     - Changed set the default for max_col_levels to Inf

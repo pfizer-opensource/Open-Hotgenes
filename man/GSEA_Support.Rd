@@ -11,6 +11,7 @@
 \alias{OntologyFunctions}
 \alias{msigdbr_wrapper_choices}
 \alias{msigdbr_wrapper}
+\alias{make_custom_geneset_library}
 \title{Support functions for GSEA}
 \usage{
 fgsea_(
@@ -66,6 +67,13 @@ msigdbr_wrapper(
   set = NULL,
   gene_col = NULL,
   clean_names = TRUE
+)
+
+make_custom_geneset_library(
+  library_name = "custom",
+  source_genesets = NULL,
+  source_requirements = NULL,
+  versions = NULL
 )
 }
 \arguments{
@@ -124,8 +132,9 @@ for supplied ontology functions.}
 vector with string choices corresponding to species choices
 for supplied ontology functions.}
 
-\item{versions}{a named list containing
-Ontology database version number as a reference.}
+\item{versions}{stringr for version to append
+to database name. This will be concantenated to name
+in shiny app.}
 
 \item{Methods}{output of OntologyMethods function}
 
@@ -142,6 +151,19 @@ Choices include "gene_symbol" (default),}
 
 \item{clean_names}{Logical, if TRUE (default) geneset names are passed to
 \link[janitor]{make_clean_names}}
+
+\item{library_name}{string to call this.}
+
+\item{source_genesets}{a long format dataframe with the following 
+columns: 'species', 'set', 'geneset_names', 'aliase_category', 'aliases', 
+corresponding to species, geneset category, 
+gene set names, gene alias category, and alias values (respectively).}
+
+\item{source_requirements}{a named list of
+input requirements. Must include:
+'species_choices', 'InputChoices', and 'gene_col_choices', 
+popluated with vector choices for species, geneset categories, 
+and gene alias categories (respectively).}
 }
 \description{
 `OntologyMethods()` and `OntologyFunctions()` work together

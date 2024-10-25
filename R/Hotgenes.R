@@ -187,7 +187,7 @@ HotgenesDEseq2 <- function(DEseq2_object = NULL,
       # Calculating stat for GSEA
       if (lfcShrink_type == "apeglm") {
         out_lfcSh <- out_lfcSh %>%
-          dplyr::mutate(stat = (-log10(.data$pvalue) * sign(.data$log2FoldChange)))
+          dplyr::mutate(stat = (-log10(.data$padj) * sign(.data$log2FoldChange)))
       }
       
       return(out_lfcSh)
