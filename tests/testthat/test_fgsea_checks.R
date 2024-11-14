@@ -81,13 +81,33 @@ InputRanks$sh_EWS_vs_Ctrl %>%
 # fgsea wrapper --------
 testthat::expect_message(
   fgsea_(
-    Ranks = InputRanks,
+    Ranks = InputRanks["TestPos"],
     pathways = H_paths,
     minSize = 5,
     maxSize = Inf
   ),
-  regexp = "switching to scoreType"
+  regexp = "pos"
 )
+
+testthat::expect_message(
+  fgsea_(
+    Ranks = InputRanks["TestNeg"],
+    pathways = H_paths,
+    minSize = 5,
+    maxSize = Inf
+  ),
+  regexp = "neg"
+)
+
+# expect_no_message since std
+testthat::expect_no_message(
+  fgsea_(
+    Ranks = InputRanks["sh_EWS_vs_Ctrl"],
+    pathways = H_paths,
+    minSize = 5,
+    maxSize = Inf
+  )
+  )
 
 
 H_paths <- msigdbr::msigdbr(

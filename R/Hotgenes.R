@@ -195,7 +195,6 @@ HotgenesDEseq2 <- function(DEseq2_object = NULL,
   
   
   # Normalized Expression Data ----------------------------------------------
-  
   # matching normalization
   Sel_Norm <- match.arg(
     arg = ExpressionData,

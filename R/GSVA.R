@@ -29,6 +29,89 @@ HotgeneSets <- function(Hotgenes = NULL,
                         contrast_matrix = NULL,
                         ...) {
   
+  
+  gsva_outList <- Hotgsva(Hotgenes = Hotgenes,
+          ExpressionSlots = ExpressionSlots,
+          geneSets = geneSets,
+          method = method,
+          kcdf = kcdf,
+          minSize = minSize,
+          maxSize = maxSize,
+          MapperCol = MapperCol)
+  
+  
+  # converting
+  gsva_es <-  gsva_outList$Expression
+  Mapper <- gsva_outList$Mapper
+  
+  # limma method
+  if(is.null(voomaGroup)){
+    vm_exp <- limma::vooma(y = gsva_es,
+                           design = designMatrix_(Hotgenes),
+                           plot = TRUE
+    ) 
+  } else {
+    
+    stopifnot(voomaGroup %in% coldata_names(Hotgenes) )
+    
+    vm_exp <- limma::voomaByGroup(y = gsva_es,
+                          group = as.character(coldata_(Hotgenes)[,voomaGroup]),
+                           design = designMatrix_(Hotgenes),
+                           plot = TRUE
+    ) 
+    
+  }
+  
+  
+  vooma_plot <- recordPlot()
+  dev.off() ## clean up device
+  
+  # make fit
+  fit <- limma::lmFit(vm_exp)
+  
+  # using contrast matrix
+  if(!is.null(contrast_matrix)){
+    glue::glue("using contrast matrix") %>% message()
+    
+    fit_final <- limma::contrasts.fit(fit = fit, contrasts = contrast_matrix) 
+    fit_final <- limma::eBayes(fit = fit_final)
+  } else {
+    
+    fit_final <- limma::eBayes(fit = fit)
+  }
+  
+  
+  
+  # vm_exp
+  vm_exp$vooma_plot <- vooma_plot
+  
+  fit_Hotgenes_base <- Hotgeneslimma(
+    limmafit = fit_final,
+    coldata = coldata_(Hotgenes),
+    auxiliary_assays = Hotgenes@auxiliary_assays,
+    Expression = vm_exp,
+    Expression_name = method,
+    Mapper = Mapper
+  )
+  
+  
+  
+  return(fit_Hotgenes_base)
+}
+
+# internal function for preparing HotgeneSets
+#' @noRd
+Hotgsva <- function(Hotgenes = NULL,
+                       ExpressionSlots = NULL,
+                       geneSets = NULL,
+                       method = c("ssgsea"),
+                       kcdf = c("Gaussian"),
+                       minSize = 2,
+                       maxSize = Inf,
+                       MapperCol = "Feature",
+                       ...){
+
+  
   GSVA_check <- utils::packageVersion("GSVA")
   
   if(GSVA_check < '1.50.0'){
@@ -113,7 +196,7 @@ HotgeneSets <- function(Hotgenes = NULL,
   
   
   method_sel <- match.arg(method, 
-  choices = c("gsva", "ssgsea", "zscore", "plage"))
+                          choices = c("gsva", "ssgsea", "zscore", "plage"))
   
   method_list <- list("gsva" = GSVA::gsvaParam, 
                       "ssgsea" = GSVA::ssgseaParam,
@@ -130,13 +213,13 @@ HotgeneSets <- function(Hotgenes = NULL,
                     maxSize = maxSize,
                     kcdf = kcdf,
                     ...)
- 
+  
   obj_names <- base::intersect(
     names(param_list), method_formalArgs)
   
   # creating method object
   gsva_es_method_obj <- base::do.call(method_list, 
-  param_list[obj_names])
+                                      param_list[obj_names])
   
   # preparing gsva parameter list
   gsva_params <- list(expr = gsva_es_method_obj) %>% 
@@ -150,61 +233,17 @@ HotgeneSets <- function(Hotgenes = NULL,
   gsva_es <-  base::do.call(GSVA::gsva, gsva_params[gsva_params_names])
   
   
-  
-  if(is.null(voomaGroup)){
-    vm_exp <- limma::vooma(y = gsva_es,
-                           design = designMatrix_(Hotgenes),
-                           plot = TRUE
-    ) 
-  } else {
-    
-    stopifnot(voomaGroup %in% coldata_names(Hotgenes) )
-    
-    vm_exp <- limma::voomaByGroup(y = gsva_es,
-                          group = as.character(coldata_(Hotgenes)[,voomaGroup]),
-                           design = designMatrix_(Hotgenes),
-                           plot = TRUE
-    ) 
-    
-  }
-  
-  
-  vooma_plot <- recordPlot()
-  dev.off() ## clean up device
-  
-  # make fit
-  fit <- limma::lmFit(vm_exp)
-  
-  # using contrast matrix
-  if(!is.null(contrast_matrix)){
-    glue::glue("using contrast matrix") %>% message()
-    
-    fit_final <- limma::contrasts.fit(fit = fit, contrasts = contrast_matrix) 
-    fit_final <- limma::eBayes(fit = fit_final)
-  } else {
-    
-    fit_final <- limma::eBayes(fit = fit)
-  }
-  
-  
-  
-  # vm_exp
-  vm_exp$vooma_plot <- vooma_plot
-  
-  fit_Hotgenes_base <- Hotgeneslimma(
-    limmafit = fit_final,
+  gen_gsva_Out <- list(
     coldata = coldata_(Hotgenes),
     auxiliary_assays = Hotgenes@auxiliary_assays,
-    Expression = vm_exp,
+    Expression = gsva_es,
     Expression_name = method,
     Mapper = Final_Mapper
   )
   
+  return(gen_gsva_Out)
   
-  
-  return(fit_Hotgenes_base)
 }
-
 
 # internal names check function
 #' @noRd

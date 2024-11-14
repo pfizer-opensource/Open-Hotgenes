@@ -13,6 +13,32 @@ gsList <- msigdbr_wrapper(
 class(gsList)
 names(gsList)
 
+# test wrap_fixed_names() -------------------------------------------------
+
+tst <- "kegg_nod_like_receptor_signaling_pathway"
+
+tst2 <- tst %>% 
+  wrap_fixed_names(width = 8) 
+
+testthat::expect_identical(
+ tst2,
+"kegg\nnod_like\nreceptor\nsignaling\npathway")
+
+# test Hotgsva _-----------------------------------------------------------
+
+Hotgsva_O2 <- Hotgsva(
+  Hotgenes = htgs,
+  geneSets = gsList,
+  kcdf = "Gaussian",
+  method = "gsva",
+  minSize = 5,
+  maxSize = Inf,
+  BPPARAM = BiocParallel::SerialParam(progressbar = FALSE)
+)
+
+# Hotgsva_O2 %>% names()
+# Hotgsva_O2$Expression
+
 # HotgeneSets -------------------------------------------------------------
 
 HotgeneSets_out <- HotgeneSets(

@@ -54,22 +54,22 @@ fgsea_ <- function(
       print(y)
 
 
-      allSigns <- sign(x) %>%
-        unique() %>%
-        sum()
+      allSigns <- sign(x)# %>%
+        #unique() %>%
+        #sum()
 
 
-      if (allSigns == 1) {
+      if (all(allSigns == 1)) {
         "allSigns == 1, switching to scoreType <-'pos' " %>%
           message()
 
         scoreType <- "pos"
-      } else if (allSigns == -1) {
+      } else if (all(allSigns == -1)) {
         "allSigns == -1, switching to scoreType <-'neg' " %>%
           message()
 
         scoreType <- "neg"
-      } else if (allSigns == 0) {
+      } else {
         scoreType <- "std"
       }
 
@@ -202,6 +202,37 @@ fgsea_Results <- function(
 }
 
 
+#' `wrap_fixed_names()` supports wrapping gene set names that
+#' have '_' instead of ' '
+#' @export
+#' @rdname GSEA_Support
+#' @importFrom stringr str_replace_all str_wrap
+#' @inheritParams stringr::str_wrap
+#' @inheritParams stringr::str_replace_all
+wrap_fixed_names <- function(string,
+                             width = 80, 
+                             indent = 0,
+                             exdent = 0,
+                             pattern = "_", 
+                             replacement = " "){
+  
+   out_string <- string %>% 
+    stringr::str_replace_all(pattern = pattern,
+                             replacement = replacement) %>% 
+  stringr::str_wrap( width = width,
+                     indent = indent,
+                     exdent = exdent, 
+                     whitespace_only = FALSE ) %>% 
+    
+    stringr::str_replace_all(replacement = pattern,
+                             pattern = replacement) 
+  
+ 
+  return(out_string)
+  
+}
+
+
 #' Shows top pathways by contrast
 #' @export
 #' @rdname GSEA_Support
@@ -241,7 +272,7 @@ GSEA_Plots <- function(
         )) %>%
         dplyr::mutate(Enrichment = as.factor(.data$Enrichment)) %>%
         dplyr::mutate(Enrichment = forcats::fct_rev(.data$Enrichment)) %>%
-        dplyr::mutate(pathway_breaks = stringr::str_wrap(.data$pathway,
+        dplyr::mutate(pathway_breaks = wrap_fixed_names(.data$pathway,
           width = width
         )) %>%
         dplyr::as_tibble()

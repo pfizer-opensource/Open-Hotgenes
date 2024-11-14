@@ -4,6 +4,7 @@
 \alias{GSEA_Support}
 \alias{fgsea_}
 \alias{fgsea_Results}
+\alias{wrap_fixed_names}
 \alias{GSEA_Plots}
 \alias{leadingGenes}
 \alias{plotEnrichment_}
@@ -29,6 +30,15 @@ fgsea_Results(
   padj_cut = 0.1,
   contrasts = NULL,
   mode = "Details"
+)
+
+wrap_fixed_names(
+  string,
+  width = 80,
+  indent = 0,
+  exdent = 0,
+  pattern = "_",
+  replacement = " "
 )
 
 GSEA_Plots(
@@ -108,9 +118,39 @@ Details (Complete pathway details per contrast),
 leadingEdge (vector for of the column with the same name
 Length (Number pathways per contrast),}
 
+\item{string}{Input vector. Either a character vector, or something
+coercible to one.}
+
 \item{width}{Positive integer giving target line width (in number of
 characters). A width less than or equal to 1 will put each word on its
 own line.}
+
+\item{indent, exdent}{A non-negative integer giving the indent for the
+first line (\code{indent}) and all subsequent lines (\code{exdent}).}
+
+\item{pattern}{Pattern to look for.
+
+The default interpretation is a regular expression, as described
+in \link[stringi:about_search_regex]{stringi::about_search_regex}. Control options with
+\code{\link[stringr:regex]{regex()}}.
+
+For \code{str_replace_all()} this can also be a named vector
+(\code{c(pattern1 = replacement1)}), in order to perform multiple replacements
+in each element of \code{string}.
+
+Match a fixed string (i.e. by comparing only bytes), using
+\code{\link[stringr:fixed]{fixed()}}. This is fast, but approximate. Generally,
+for matching human text, you'll want \code{\link[stringr:coll]{coll()}} which
+respects character matching rules for the specified locale.}
+
+\item{replacement}{The replacement value, usually a single string,
+but it can be the a vector the same length as \code{string} or \code{pattern}.
+References of the form \verb{\\1}, \verb{\\2}, etc will be replaced with
+the contents of the respective matched group (created by \verb{()}).
+
+Alternatively, supply a function, which will be called once for each
+match (from right to left) and its return value will be used to replace
+the match.}
 
 \item{contrast}{String indicating the contrast to select.}
 

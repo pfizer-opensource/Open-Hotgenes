@@ -1,3 +1,7 @@
+# version 0.0.34:
+    - Modularized HotgeneSets() function with internal Hotgsva()
+    - Added wrap_fixed_names() to wrap names that have been cleaned
+
 # version 0.0.33:
     - Added additional support function for supplying custom genesets
     - Fixed bug in msig_wrapper
