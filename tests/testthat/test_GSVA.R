@@ -1,7 +1,9 @@
 
 
 # msigdbr_wrapper ---------------------------------------------------------
-choice_set <- "CP:KEGG"
+#choice_set <- "CP:KEGG"
+choice_set <- c("CP:REACTOME", "CP:KEGG", "CP:WIKIPATHWAYS")
+
 choice_id <- "gene_symbol"
 
 gsList <- msigdbr_wrapper(
@@ -41,16 +43,36 @@ Hotgsva_O2 <- Hotgsva(
 
 # HotgeneSets -------------------------------------------------------------
 
-HotgeneSets_out <- HotgeneSets(
+HotgeneSets_out_1 <- HotgeneSets(
   Hotgenes = htgs,
   geneSets = gsList,
   kcdf = "Gaussian",
   method = "gsva",
   minSize = 5,
   maxSize = Inf,
+  use_weights = TRUE,
+  #use_vooma = FALSE,
   BPPARAM = BiocParallel::SerialParam(progressbar = FALSE)
 )
 
+
+HotgeneSets_out_2 <- HotgeneSets(
+  Hotgenes = htgs,
+  geneSets = gsList,
+  kcdf = "Gaussian",
+  method = "gsva",
+  minSize = 5,
+  maxSize = Inf,
+  use_weights = FALSE,
+ # use_vooma = TRUE,
+  BPPARAM = BiocParallel::SerialParam(progressbar = FALSE)
+)
+
+HotgeneSets_out_1
+HotgeneSets_out_2
+
+testthat::expect_false(identical(HotgeneSets_out_1,
+                                 HotgeneSets_out_2))
 
 # check names -------------------------------------------------------------
 

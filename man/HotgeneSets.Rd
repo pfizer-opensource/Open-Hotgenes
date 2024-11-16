@@ -15,6 +15,8 @@ HotgeneSets(
   MapperCol = "Feature",
   voomaGroup = NULL,
   contrast_matrix = NULL,
+  use_weights = TRUE,
+  use_vooma = FALSE,
   ...
 )
 }
@@ -51,10 +53,19 @@ mapping. By default, the maximum size is \code{Inf}.}
 Mapper_ function, default is "Feature".}
 
 \item{voomaGroup}{string indicating the column name to be
-passed to voomaByGroup(). Default is NULL.}
+passed to voomaByGroup(). Default is NULL. Ignored when
+use_vooma = FALSE.}
 
 \item{contrast_matrix}{an optional matrix with contrasts to be passed to
 \code{\link[limma]{contrasts.fit}}.}
+
+\item{use_weights}{logical, if TRUE (default) gene set sizes applied to 
+ebayes trend. If FALSE, trend set to FALSE}
+
+\item{use_vooma}{logical, if TRUE gsva matrix
+passed to vooma before lmFit. If FALSE (default),
+gsva matrix converted to EList object
+and directly passed lmFit.}
 
 \item{...}{Additional parameters for \code{\link[GSVA]{gsva}}.}
 }

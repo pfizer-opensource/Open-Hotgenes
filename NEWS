@@ -1,3 +1,7 @@
+# version 0.0.35:
+    - Added support for precision weights for geneset sizes
+    - Added use_weights and use_vooma args to HotgeneSets()
+
 # version 0.0.34:
     - Modularized HotgeneSets() function with internal Hotgsva()
     - Added wrap_fixed_names() to wrap names that have been cleaned
