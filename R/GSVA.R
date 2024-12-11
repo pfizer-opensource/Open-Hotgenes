@@ -46,7 +46,8 @@ method = method,
 kcdf = kcdf,
 minSize = minSize,
 maxSize = maxSize,
-MapperCol = MapperCol)
+MapperCol = MapperCol, 
+...)
 
 
 # converting
@@ -253,8 +254,8 @@ obj_names <- base::intersect(
 names(param_list), method_formalArgs)
 
 # creating method object
-gsva_es_method_obj <- base::do.call(method_list, 
-param_list[obj_names])
+gsva_es_method_obj <- base::do.call(what = method_list, 
+args = param_list[obj_names])
 
 # preparing gsva parameter list
 gsva_params <- list(expr = gsva_es_method_obj) %>% 
@@ -265,7 +266,10 @@ gsva_params_names <- base::intersect(
 names(gsva_params), methods::formalArgs(GSVA::gsva))
 
 # converting
-gsva_es <-  base::do.call(GSVA::gsva, gsva_params[gsva_params_names])
+gsva_params_list <- gsva_params[gsva_params_names] %>% 
+  append(list(...))
+
+gsva_es <-  base::do.call(what = GSVA::gsva, args = gsva_params_list)
 
 # making weights
 size_weights <-geneSets[rownames(gsva_es)] %>% 

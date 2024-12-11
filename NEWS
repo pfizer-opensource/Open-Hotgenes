@@ -1,3 +1,6 @@
+# version 0.0.36:
+    - Fixed ... arg bug for HotgeneSets()
+
 # version 0.0.35:
     - Added support for precision weights for geneset sizes
     - Added use_weights and use_vooma args to HotgeneSets()

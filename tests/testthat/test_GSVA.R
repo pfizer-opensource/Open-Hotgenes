@@ -43,6 +43,18 @@ Hotgsva_O2 <- Hotgsva(
 
 # HotgeneSets -------------------------------------------------------------
 
+HotgeneSets(
+  Hotgenes = htgs,
+  geneSets = gsList,
+  kcdf = "Gaussian",
+  method = "gsva",
+  minSize = 5,
+  maxSize = Inf,
+  use_weights = TRUE,
+  BPPARAM = BiocParallel::SnowParam(workers = 1)
+)
+
+
 HotgeneSets_out_1 <- HotgeneSets(
   Hotgenes = htgs,
   geneSets = gsList,
@@ -68,8 +80,8 @@ HotgeneSets_out_2 <- HotgeneSets(
   BPPARAM = BiocParallel::SerialParam(progressbar = FALSE)
 )
 
-HotgeneSets_out_1
-HotgeneSets_out_2
+# HotgeneSets_out_1
+# HotgeneSets_out_2
 
 testthat::expect_false(identical(HotgeneSets_out_1,
                                  HotgeneSets_out_2))
