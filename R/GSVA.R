@@ -229,12 +229,11 @@ dplyr::relocate("Feature", .before = 1)
 purrr::list_rbind()
 
 # GSVA building
-
-
 method_sel <- match.arg(method, 
 choices = c("gsva", "ssgsea", "zscore", "plage"))
 
-method_list <- list("gsva" = GSVA::gsvaParam, 
+method_list <- list(
+"gsva" = GSVA::gsvaParam, 
 "ssgsea" = GSVA::ssgseaParam,
 "zscore" = GSVA::zscoreParam, 
 "plage" = GSVA::plageParam)[[method_sel]]
@@ -243,7 +242,8 @@ method_formalArgs <- methods::formalArgs(method_list)
 
 
 # filter matching params
-param_list <-list(exprData = NormalizedData,
+param_list <-list(
+exprData = NormalizedData,
 geneSets = geneSets,
 minSize = minSize,
 maxSize = maxSize,
@@ -258,8 +258,11 @@ gsva_es_method_obj <- base::do.call(what = method_list,
 args = param_list[obj_names])
 
 # preparing gsva parameter list
-gsva_params <- list(expr = gsva_es_method_obj) %>% 
-append(param_list)
+gsva_params <- list(gsva_es_method_obj) %>% 
+  
+  # to allow for backwards compatibility
+  purrr::set_names(methods::formalArgs(GSVA::gsva)[1]) %>% 
+  append(param_list)
 
 # filtering parameter
 gsva_params_names <- base::intersect(

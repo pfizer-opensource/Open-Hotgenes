@@ -29,25 +29,29 @@ will be used.
 See HotgenesObj.}
 
 \item{geneSets}{The gene sets.  Must be one of the classes supported by
-\code{\linkS4class{GsvaGeneSets}}.}
+\code{\linkS4class{GsvaGeneSets}}.  For a list of these classes, see its help page using
+\code{help(GsvaGeneSets)}.}
 
 \item{method}{string for method to use for GSVA package. Options
 include: c("ssgsea","gsva", "zscore", "plage").}
 
 \item{kcdf}{Character vector of length 1 denoting the kernel to use during
-the non-parametric estimation of the cumulative distribution function of
-expression levels across samples.  By default, \code{kcdf="Gaussian"} which is
-suitable when input expression values are continuous, such as microarray
-fluorescent units in logarithmic scale, RNA-seq log-CPMs, log-RPKMs or
-log-TPMs.  When input expression values are integer counts, such as those
-derived from RNA-seq experiments, then this argument should be set to
-\code{kcdf="Poisson"}.}
+the non-parametric estimation of the empirical cumulative distribution
+function (ECDF) of expression levels across samples. The value \code{kcdf="auto"}
+will allow GSVA to automatically choose one of the possible values. The
+value \code{kcdf="Gaussian"} is suitable when input expression values are
+continuous, such as microarray fluorescent units in logarithmic scale,
+RNA-seq log-CPMs, log-RPKMs, or log-TPMs. When input expression values are
+integer counts, such as those derived from RNA-seq experiments, then this
+argument should be set to \code{kcdf="Poisson"}. When we do not want to use a
+kernel approach for the estimation of the ECDF, then we should set
+\code{kcdf="none"}.}
 
-\item{minSize}{Minimum size of the resulting gene sets after gene identifier
-mapping. By default, the minimum size is 1.}
+\item{minSize}{Numeric vector of length 1.  Minimum size of the resulting gene
+sets after gene identifier mapping. By default, the minimum size is 1.}
 
-\item{maxSize}{Maximum size of the resulting gene sets after gene identifier
-mapping. By default, the maximum size is \code{Inf}.}
+\item{maxSize}{Numeric vector of length 1.  Maximum size of the resulting gene
+sets after gene identifier mapping. By default, the maximum size is \code{Inf}.}
 
 \item{MapperCol}{String matching a column name returned by
 Mapper_ function, default is "Feature".}
