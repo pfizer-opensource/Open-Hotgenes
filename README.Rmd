@@ -99,55 +99,48 @@ For others platforms, check out the HotgenesUniversal() function.
 ## Convert DESeq2 analysis into a Hotgenes Object
 
 ```{r}
- require(Hotgenes)
 
-  # incase you wanted to include aliases for your genes
-  # requires a "Feature" column that contains gene names in expression matrix
-  dbCon <- org.Hs.eg.db::org.Hs.eg_dbconn()
-  sqlQuery <- "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
+library("airway")
+library("DESeq2")
+library(Hotgenes)
 
-  ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
-  dplyr::select(c("Feature" = "symbol", "ensembl_id"))
+# load the data
+data("airway")
+se <- airway
 
 
-  # HotgenesDEseq2 ----------------------------------------------------------
-  require(DESeq2)
+# in case you wanted to include aliases for your genes
+# requires a "Feature" column that contains gene names in expression matrix
+dbCon <- org.Hs.eg.db::org.Hs.eg_dbconn()
+sqlQuery <- "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
+
+ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
+  dplyr::select(c("Feature" = "ensembl_id", "symbol")) %>% 
+  tibble::tibble()
+
+ensembl_Symbol
+
+# prepare DESeq2 object and model -----------------------------------------
+ddsSE <- DESeq2::DESeqDataSet(se, design = ~ cell + dex)
+ddsSE
+
+# run DESeq2 analysis 
+dds <- DESeq2::DESeq(ddsSE)
+
+# Convert to Hotgenes object
+Hotgenes_airway <- Hotgenes::HotgenesDEseq2(
+  DEseq2_object = dds, 
+  lfcShrink_type = "apeglm", 
+  # optional
+  Mapper = ensembl_Symbol,
+  ExpressionData = "vsd" )
+
+# shiny Hotgenes ----------------------------------------------------------
+if(FALSE){
+# switch FALSE to TRUE   
+Hotgenes::Shiny_Hotgenes(Hotgenes_airway)
   
-  # loading example data
-  dds_con_dir <- system.file("extdata",
-    "dds_con.Rdata",
-    package = "Hotgenes",
-    mustWork = TRUE
-  )
-  load(dds_con_dir)
-
-  # Example Expression data and coldata
-  cts <- DESeq2::counts(dds_con) %>% as.data.frame()
-  Design <- SummarizedExperiment::colData(dds_con) %>%
-    base::as.data.frame() %>%
-    dplyr::select_if(is.factor) %>%
-    dplyr::mutate(Time = as.numeric(levels(.data$Hrs))[.data$Hrs])
-
-  # set up DESeq2
-  model_DESeq <- eval(~ sh * Hrs)
-
-  dds <- DESeq2::DESeqDataSetFromMatrix(
-    countData = cts,
-    colData = Design,
-    design = model_DESeq
-  )
-
-  dds <- DESeq2::DESeq(dds)
-
-  # Convert to Hotgenes Object
-
-  dds_Hotgenes <- HotgenesDEseq2(
-    DEseq2_object = dds,
-    lfcShrink_type = "apeglm",
-    contrasts = "sh_EWS_vs_Ctrl", 
-    ExpressionData = "vsd", 
-    Mapper = ensembl_Symbol
-  )
+}
 
   
 
@@ -518,7 +511,7 @@ DEphe(fit_Hotgenes,
 # get geneset
 H_paths <- msigdbr_wrapper(
     species = "human",
-    set = "CP:KEGG",
+    set = "CP:KEGG_MEDICUS",
     gene_col = "gene_symbol"
   )
 
@@ -526,7 +519,7 @@ H_paths <- msigdbr_wrapper(
   InputRanks <- fit_Hotgenes %>%
     DE(
       Report = "Ranks",
-      contrasts = "Hrs_2_vs_0",
+      contrasts = "Hrs_6_vs_0",
       Rank_name = "Feature",
       padj_cut = 0.1
     )
@@ -544,7 +537,7 @@ H_paths <- msigdbr_wrapper(
   # Get details for all
   Out_GSEA %>%
     fgsea_Results(
-      contrasts = "Hrs_2_vs_0",
+      contrasts = "Hrs_6_vs_0",
       padj_cut = 0.2,
       mode = "D"
     )
@@ -552,7 +545,7 @@ H_paths <- msigdbr_wrapper(
   # Or for one
   Out_GSEA %>%
     fgsea_Results(
-      contrasts = "Hrs_2_vs_0",
+      contrasts = "Hrs_6_vs_0",
       padj_cut = 0.2,
       mode = "leadingEdge"
     )
@@ -560,7 +553,7 @@ H_paths <- msigdbr_wrapper(
   # Generate a summary plot
   Out_GSEA %>%
     GSEA_Plots(
-      contrasts = "Hrs_2_vs_0",
+      contrasts = "Hrs_6_vs_0",
       padj_cut = 0.2,
       width = 30,
       Topn = 2
@@ -568,8 +561,8 @@ H_paths <- msigdbr_wrapper(
   
   # plotEnrichment_
   plotEnrichment_(
-    Out_GSEA, "Hrs_2_vs_0",
-    "kegg_nod_like_receptor_signaling_pathway"
+    Out_GSEA, "Hrs_6_vs_0",
+    "kegg_medicus_pathogen_sars_cov_2_s_to_angii_at1r_nox2_signaling_pathway"
   )
   
 ```
@@ -578,7 +571,7 @@ H_paths <- msigdbr_wrapper(
 
 ```{r hotgeneSets}
 
-choice_set <- "CP:KEGG"
+choice_set <- "CP:KEGG_MEDICUS"
 choice_id <- "gene_symbol"
   
 gsList <- msigdbr_wrapper(

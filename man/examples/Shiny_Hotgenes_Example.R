@@ -101,7 +101,7 @@ if(FALSE){
   # create custom genesets in long format
   source_genesets <- example_sigs %>% 
     dplyr::mutate(species = "human",
-                  set = .data$gs_cat,
+                  set = .data$gs_collection,
                   geneset_names = .data$gs_name) %>% 
     dplyr::select(c("species", "set", "geneset_names", 
                     "gene_symbol",  "entrez_gene", "ensembl_gene"

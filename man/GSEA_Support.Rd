@@ -182,8 +182,8 @@ in shiny app.}
 
 \item{species}{maps to the species argument of \link[msigdbr]{msigdbr}.}
 
-\item{set}{maps to the gs_subcat argument of \link[msigdbr]{msigdbr}, 
-when not an empty string. If gs_subcat is an empty string, uses gs_cat. 
+\item{set}{maps to the gs_subcollection argument of \link[msigdbr]{msigdbr}, 
+when not an empty string. If gs_subcollection is an empty string, uses gs_collection. 
 Multiple okay.}
 
 \item{gene_col}{string specifying id to use.

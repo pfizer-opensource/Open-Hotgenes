@@ -618,9 +618,17 @@ OntologyFunctions <- function(Methods = NULL,
 msigdbr_wrapper_choices <- function(){
   # set up choices
   df_choices <- msigdbr::msigdbr_collections() %>% 
+    # dplyr::rename(
+    #   dplyr::any_of(
+    #     c("gs_collection" ="gs_cat",
+    #       "gs_subcollection" = "gs_subcat"
+    #       )
+    #   )
+    # ) %>% 
+ 
     dplyr::mutate(set = dplyr::case_when(
-      .data$gs_subcat != "" ~ .data$gs_subcat,
-      TRUE ~ .data$gs_cat
+      .data$gs_subcollection != "" ~ .data$gs_subcollection,
+      TRUE ~ .data$gs_collection
     ))
   
   return(df_choices)
@@ -631,8 +639,8 @@ msigdbr_wrapper_choices <- function(){
 #' @rdname GSEA_Support
 #' @importFrom msigdbr msigdbr
 #' @param species maps to the species argument of \link[msigdbr]{msigdbr}.
-#' @param set maps to the gs_subcat argument of \link[msigdbr]{msigdbr}, 
-#' when not an empty string. If gs_subcat is an empty string, uses gs_cat. 
+#' @param set maps to the gs_subcollection argument of \link[msigdbr]{msigdbr}, 
+#' when not an empty string. If gs_subcollection is an empty string, uses gs_collection. 
 #' Multiple okay.
 #' @param gene_col string specifying id to use.
 #' Choices include "gene_symbol" (default),
@@ -670,11 +678,11 @@ msigdbr_wrapper <- function(species = "human",
     dplyr::filter(.data$set %in% matched_set)
   
   
-arg_list <- list(category = unique(df_subcats$gs_cat ),
+arg_list <- list(category = unique(df_subcats$gs_collection ),
                  species = species)
 
 final_sigs <- do.call(msigdbr::msigdbr, arg_list) %>% 
-  dplyr::filter(.data$gs_subcat %in% unique(df_subcats$gs_subcat)) %>% 
+  dplyr::filter(.data$gs_subcollection %in% unique(df_subcats$gs_subcollection)) %>% 
  
     dplyr::select(dplyr::all_of(c(Final_gene_col, "gs_name"))) %>%
     plyr::dlply("gs_name", identity) %>%

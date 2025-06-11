@@ -79,45 +79,55 @@ For others platforms, check out the HotgenesUniversal() function.
 ## Convert DESeq2 analysis into a Hotgenes Object
 
 ``` r
- require(Hotgenes)
+library("airway")
+library("DESeq2")
+library(Hotgenes)
 
-  # incase you wanted to include aliases for your genes
-  # requires a "Feature" column that contains gene names in expression matrix
-  dbCon <- org.Hs.eg.db::org.Hs.eg_dbconn()
-  sqlQuery <- "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
-
-  ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
-  dplyr::select(c("Feature" = "symbol", "ensembl_id"))
+# load the data
+data("airway")
+se <- airway
 
 
-  # HotgenesDEseq2 ----------------------------------------------------------
-  require(DESeq2)
-  
-  # loading example data
-  dds_con_dir <- system.file("extdata",
-    "dds_con.Rdata",
-    package = "Hotgenes",
-    mustWork = TRUE
-  )
-  load(dds_con_dir)
+# in case you wanted to include aliases for your genes
+# requires a "Feature" column that contains gene names in expression matrix
+dbCon <- org.Hs.eg.db::org.Hs.eg_dbconn()
+sqlQuery <- "SELECT * FROM ENSEMBL, gene_info WHERE ENSEMBL._id == gene_info._id;"
 
-  # Example Expression data and coldata
-  cts <- DESeq2::counts(dds_con) %>% as.data.frame()
-  Design <- SummarizedExperiment::colData(dds_con) %>%
-    base::as.data.frame() %>%
-    dplyr::select_if(is.factor) %>%
-    dplyr::mutate(Time = as.numeric(levels(.data$Hrs))[.data$Hrs])
+ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
+  dplyr::select(c("Feature" = "ensembl_id", "symbol")) %>% 
+  tibble::tibble()
 
-  # set up DESeq2
-  model_DESeq <- eval(~ sh * Hrs)
+ensembl_Symbol
+```
 
-  dds <- DESeq2::DESeqDataSetFromMatrix(
-    countData = cts,
-    colData = Design,
-    design = model_DESeq
-  )
+    ## # A tibble: 45,689 × 2
+    ##   Feature         symbol
+    ##   <chr>           <chr> 
+    ## 1 ENSG00000121410 A1BG  
+    ## 2 ENSG00000175899 A2M   
+    ## 3 ENSG00000291190 A2MP1 
+    ## 4 ENSG00000171428 NAT1  
+    ## 5 ENSG00000156006 NAT2  
+    ## # ℹ 45,684 more rows
 
-  dds <- DESeq2::DESeq(dds)
+``` r
+# prepare DESeq2 object and model -----------------------------------------
+ddsSE <- DESeq2::DESeqDataSet(se, design = ~ cell + dex)
+ddsSE
+```
+
+    ## class: DESeqDataSet 
+    ## dim: 63677 8 
+    ## metadata(2): '' version
+    ## assays(1): counts
+    ## rownames(63677): ENSG00000000003 ENSG00000000005 ... ENSG00000273492 ENSG00000273493
+    ## rowData names(10): gene_id gene_name ... seq_coord_system symbol
+    ## colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
+    ## colData names(9): SampleName cell ... Sample BioSample
+
+``` r
+# run DESeq2 analysis 
+dds <- DESeq2::DESeq(ddsSE)
 ```
 
     ## estimating size factors
@@ -133,21 +143,41 @@ For others platforms, check out the HotgenesUniversal() function.
     ## fitting model and testing
 
 ``` r
-  # Convert to Hotgenes Object
-
-  dds_Hotgenes <- HotgenesDEseq2(
-    DEseq2_object = dds,
-    lfcShrink_type = "apeglm",
-    contrasts = "sh_EWS_vs_Ctrl", 
-    ExpressionData = "vsd", 
-    Mapper = ensembl_Symbol
-  )
+# Convert to Hotgenes object
+Hotgenes_airway <- Hotgenes::HotgenesDEseq2(
+  DEseq2_object = dds, 
+  lfcShrink_type = "apeglm", 
+  # optional
+  Mapper = ensembl_Symbol,
+  ExpressionData = "vsd" )
 ```
 
     ## using 'apeglm' for LFC shrinkage. If used in published research, please cite:
     ##     Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
     ##     sequence count data: removing the noise and preserving large differences.
     ##     Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895
+
+    ## using 'apeglm' for LFC shrinkage. If used in published research, please cite:
+    ##     Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
+    ##     sequence count data: removing the noise and preserving large differences.
+    ##     Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895
+    ## using 'apeglm' for LFC shrinkage. If used in published research, please cite:
+    ##     Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
+    ##     sequence count data: removing the noise and preserving large differences.
+    ##     Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895
+    ## using 'apeglm' for LFC shrinkage. If used in published research, please cite:
+    ##     Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
+    ##     sequence count data: removing the noise and preserving large differences.
+    ##     Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895
+
+``` r
+# shiny Hotgenes ----------------------------------------------------------
+if(FALSE){
+# switch FALSE to TRUE   
+Hotgenes::Shiny_Hotgenes(Hotgenes_airway)
+  
+}
+```
 
 ## Convert limma DE analysis into Hotgenes Object
 
@@ -471,13 +501,12 @@ fit_Hotgenes %>%
     ## [1] "NFE2L2" "KEAP1"  "PDGFA"  "HDAC4"  "OXER1"  "GAPDH"  "MEF2C" 
     ## 
     ## $Intsect$Hrs_6_vs_0
-    ##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"   "BCL6"   "TLR3"  
-    ## [13] "GRB2"   "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2"  "IL1A"   "CCL20" 
-    ## [25] "PGK1"   "MAPK3" 
+    ##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"   "BCL6"   "TLR3"   "GRB2"  
+    ## [14] "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2"  "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
     ## 
     ## $Intsect$sh_EWS_vs_Ctrl
-    ##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"    "HMGN1"  "CLTC"  
-    ## [13] "GNAQ"   "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"   "LTB4R2"
+    ##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"    "HMGN1"  "CLTC"   "GNAQ"  
+    ## [14] "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"   "LTB4R2"
     ## 
     ## $Intsect$`Hrs_2_vs_0:Hrs_6_vs_0`
     ##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"    "CXCR4"   "MAFK"   
@@ -495,8 +524,8 @@ fit_Hotgenes %>%
     ## 
     ## 
     ## $Names
-    ## [1] "Hrs_2_vs_0:Hrs_6_vs_0"                "sh_EWS_vs_Ctrl:Hrs_2_vs_0"           
-    ## [3] "sh_EWS_vs_Ctrl:Hrs_6_vs_0"            "sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0"
+    ## [1] "Hrs_2_vs_0:Hrs_6_vs_0"                "sh_EWS_vs_Ctrl:Hrs_2_vs_0"            "sh_EWS_vs_Ctrl:Hrs_6_vs_0"           
+    ## [4] "sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0"
 
 ### Identify key features using PCA and clustering
 
@@ -598,6 +627,8 @@ DEphe(fit_Hotgenes,
       annotations = c("Hrs", "sh"))
 ```
 
+![](man/figures/README-heatmap_1-1.png)<!-- -->
+
 ``` r
 # change labels to ensembl_id
 DEphe(fit_Hotgenes,
@@ -610,13 +641,15 @@ DEphe(fit_Hotgenes,
       annotations = c("Hrs", "sh"))
 ```
 
+![](man/figures/README-heatmap_2-1.png)<!-- -->
+
 ### Run GSEA using msigdbr genesets
 
 ``` r
 # get geneset
 H_paths <- msigdbr_wrapper(
     species = "human",
-    set = "CP:KEGG",
+    set = "CP:KEGG_MEDICUS",
     gene_col = "gene_symbol"
   )
 
@@ -624,7 +657,7 @@ H_paths <- msigdbr_wrapper(
   InputRanks <- fit_Hotgenes %>%
     DE(
       Report = "Ranks",
-      contrasts = "Hrs_2_vs_0",
+      contrasts = "Hrs_6_vs_0",
       Rank_name = "Feature",
       padj_cut = 0.1
     )
@@ -640,88 +673,80 @@ H_paths <- msigdbr_wrapper(
   )
 ```
 
-    ## [1] "Hrs_2_vs_0"
-    ##   |                                                                                                                    |                                                                                                            |   0%  |                                                                                                                    |======================================================                                                      |  50%  |                                                                                                                    |============================================================================================================| 100%
+    ## [1] "Hrs_6_vs_0"
+    ##   |                                                                                                                         |                                                                                                                 |   0%  |                                                                                                                         |========================================================                                                         |  50%  |                                                                                                                         |=================================================================================================================| 100%
 
 ``` r
   # Get details for all
   Out_GSEA %>%
     fgsea_Results(
-      contrasts = "Hrs_2_vs_0",
+      contrasts = "Hrs_6_vs_0",
       padj_cut = 0.2,
       mode = "D"
     )
 ```
 
-    ## $Hrs_2_vs_0
-    ## # A tibble: 5 × 9
-    ##   pathway                                        pval   padj log2err    ES   NES  size leadingEdge sign_NES
-    ##   <chr>                                         <dbl>  <dbl>   <dbl> <dbl> <dbl> <int> <list>         <dbl>
-    ## 1 kegg_nod_like_receptor_signaling_pathway    0.00969 0.0737   0.381 0.770  1.58     9 <chr [6]>          1
-    ## 2 kegg_cytokine_cytokine_receptor_interaction 0.0184  0.0737   0.352 0.708  1.55    14 <chr [9]>          1
-    ## 3 kegg_chemokine_signaling_pathway            0.0517  0.135    0.219 0.734  1.44     7 <chr [7]>          1
-    ## 4 kegg_jak_stat_signaling_pathway             0.0779  0.135    0.181 0.748  1.39     5 <chr [2]>          1
-    ## 5 kegg_toll_like_receptor_signaling_pathway   0.0844  0.135    0.174 0.742  1.38     5 <chr [3]>          1
+    ## $Hrs_6_vs_0
+    ## # A tibble: 3 × 9
+    ##   pathway                                                        pval   padj log2err    ES   NES  size leadingEdge sign_NES
+    ##   <chr>                                                         <dbl>  <dbl>   <dbl> <dbl> <dbl> <int> <list>         <dbl>
+    ## 1 kegg_medicus_pathogen_sars_cov_2_s_to_angii_at1r_nox2_signa… 0.0116 0.0809   0.381 0.767  1.61     7 <chr [4]>          1
+    ## 2 kegg_medicus_pathogen_kshv_vgpcr_to_gnb_g_pi3k_jnk_signalin… 0.0412 0.128    0.322 0.776  1.50     5 <chr [4]>          1
+    ## 3 kegg_medicus_pathogen_hsv_gd_to_hvem_nfkb_signaling_pathway  0.0549 0.128    0.228 0.739  1.43     5 <chr [4]>          1
 
 ``` r
   # Or for one
   Out_GSEA %>%
     fgsea_Results(
-      contrasts = "Hrs_2_vs_0",
+      contrasts = "Hrs_6_vs_0",
       padj_cut = 0.2,
       mode = "leadingEdge"
     )
 ```
 
-    ## $Hrs_2_vs_0
-    ## $Hrs_2_vs_0$kegg_nod_like_receptor_signaling_pathway
-    ## [1] "IL6"     "CXCL8"   "TNFAIP3" "CXCL1"   "CCL2"    "CXCL2"  
+    ## $Hrs_6_vs_0
+    ## $Hrs_6_vs_0$kegg_medicus_pathogen_sars_cov_2_s_to_angii_at1r_nox2_signaling_pathway
+    ## [1] "CXCL8" "CCL2"  "IL6"   "NFKB1"
     ## 
-    ## $Hrs_2_vs_0$kegg_cytokine_cytokine_receptor_interaction
-    ## [1] "IL6"    "CXCL8"  "CXCL1"  "IL11"   "CCL2"   "CXCL3"  "CXCL2"  "TGFBR1" "CXCR4" 
+    ## $Hrs_6_vs_0$kegg_medicus_pathogen_kshv_vgpcr_to_gnb_g_pi3k_jnk_signaling_pathway
+    ## [1] "CXCL8" "IL6"   "NFKB1" "MAPK8"
     ## 
-    ## $Hrs_2_vs_0$kegg_chemokine_signaling_pathway
-    ## [1] "CXCL8" "CXCL1" "CCL2"  "CXCL3" "CXCL2" "CXCR4" "NFKB1"
-    ## 
-    ## $Hrs_2_vs_0$kegg_jak_stat_signaling_pathway
-    ## [1] "IL6"  "IL11"
-    ## 
-    ## $Hrs_2_vs_0$kegg_toll_like_receptor_signaling_pathway
-    ## [1] "IL6"   "CXCL8" "JUN"
+    ## $Hrs_6_vs_0$kegg_medicus_pathogen_hsv_gd_to_hvem_nfkb_signaling_pathway
+    ## [1] "CCL2"  "NFKB1" "BIRC2" "TRAF2"
 
 ``` r
   # Generate a summary plot
   Out_GSEA %>%
     GSEA_Plots(
-      contrasts = "Hrs_2_vs_0",
+      contrasts = "Hrs_6_vs_0",
       padj_cut = 0.2,
       width = 30,
       Topn = 2
     )
 ```
 
-    ## $Hrs_2_vs_0
+    ## $Hrs_6_vs_0
 
 ![](man/figures/README-GSEA_1-1.png)<!-- -->
 
 ``` r
   # plotEnrichment_
   plotEnrichment_(
-    Out_GSEA, "Hrs_2_vs_0",
-    "kegg_nod_like_receptor_signaling_pathway"
+    Out_GSEA, "Hrs_6_vs_0",
+    "kegg_medicus_pathogen_sars_cov_2_s_to_angii_at1r_nox2_signaling_pathway"
   )
 ```
 
-    ## leading edge genes for kegg_nod_like_receptor_signaling_pathway
+    ## leading edge genes for kegg_medicus_pathogen_sars_cov_2_s_to_angii_at1r_nox2_signaling_pathway
 
-    ## c("IL6", "CXCL8", "TNFAIP3", "CXCL1", "CCL2", "CXCL2")
+    ## c("CXCL8", "CCL2", "IL6", "NFKB1")
 
 ![](man/figures/README-GSEA_1-2.png)<!-- -->
 
 ### Or use the HotgeneSets() function for gsva
 
 ``` r
-choice_set <- "CP:KEGG"
+choice_set <- "CP:KEGG_MEDICUS"
 choice_id <- "gene_symbol"
   
 gsList <- msigdbr_wrapper(
@@ -744,12 +769,14 @@ gsList <- msigdbr_wrapper(
 
     ## [1] "using Feature col"
     ## [1] "building mapper"
-    ## Estimating ssGSEA scores for 93 gene sets.
+    ## Estimating ssGSEA scores for 235 gene sets.
     ## [1] "Calculating ranks..."
     ## [1] "Calculating absolute values from ranks..."
-    ##   |                                                                                                                    |                                                                                                            |   0%  |                                                                                                                    |=========                                                                                                   |   8%  |                                                                                                                    |==================                                                                                          |  17%  |                                                                                                                    |===========================                                                                                 |  25%  |                                                                                                                    |====================================                                                                        |  33%  |                                                                                                                    |=============================================                                                               |  42%  |                                                                                                                    |======================================================                                                      |  50%  |                                                                                                                    |===============================================================                                             |  58%  |                                                                                                                    |========================================================================                                    |  67%  |                                                                                                                    |=================================================================================                           |  75%  |                                                                                                                    |==========================================================================================                  |  83%  |                                                                                                                    |===================================================================================================         |  92%  |                                                                                                                    |============================================================================================================| 100%
+    ##   |                                                                                                                         |                                                                                                                 |   0%  |                                                                                                                         |=========                                                                                                        |   8%  |                                                                                                                         |===================                                                                                              |  17%  |                                                                                                                         |============================                                                                                     |  25%  |                                                                                                                         |======================================                                                                           |  33%  |                                                                                                                         |===============================================                                                                  |  42%  |                                                                                                                         |========================================================                                                         |  50%  |                                                                                                                         |==================================================================                                               |  58%  |                                                                                                                         |===========================================================================                                      |  67%  |                                                                                                                         |=====================================================================================                            |  75%  |                                                                                                                         |==============================================================================================                   |  83%  |                                                                                                                         |========================================================================================================         |  92%  |                                                                                                                         |=================================================================================================================| 100%
     ## 
     ## [1] "Normalizing..."
+
+    ## using geneset weights
 
 ``` r
   HotgeneSets_out
@@ -761,11 +788,11 @@ gsList <- msigdbr_wrapper(
     ## Differential expression (default thresholds): 
     ## |contrast       | total|
     ## |:--------------|-----:|
-    ## |Hrs_2_vs_0     |    45|
-    ## |Hrs_6_vs_0     |    54|
-    ## |sh_EWS_vs_Ctrl |    29|
-    ## |shEWS.Hrs2     |     0|
-    ## |shEWS.Hrs6     |     0|
+    ## |Hrs_2_vs_0     |   151|
+    ## |Hrs_6_vs_0     |   181|
+    ## |sh_EWS_vs_Ctrl |    43|
+    ## |shEWS.Hrs2     |    54|
+    ## |shEWS.Hrs6     |    42|
     ## 
     ## Available feature mapping:  Feature, original_features, size 
     ## ExpressionSlots:  ssgsea 

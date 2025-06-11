@@ -1,8 +1,8 @@
 
 
 # msigdbr_wrapper ---------------------------------------------------------
-#choice_set <- "CP:KEGG"
-choice_set <- c("CP:REACTOME", "CP:KEGG", "CP:WIKIPATHWAYS")
+#choice_set <- "CP:KEGG_MEDICUS"
+choice_set <- c("CP:REACTOME", "CP:KEGG_MEDICUS", "CP:WIKIPATHWAYS")
 
 choice_id <- "gene_symbol"
 

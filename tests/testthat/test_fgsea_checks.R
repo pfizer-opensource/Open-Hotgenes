@@ -113,7 +113,7 @@ testthat::expect_no_message(
 H_paths <- msigdbr::msigdbr(
   species = "Homo sapiens",
   # category = "C5", subcategory = "BP"
-  subcategory = "CP:KEGG"
+  subcategory = "CP:KEGG_MEDICUS"
 ) %>%
   # options for ids include: gene_symbol, entrez_gene, ensembl_gene
 
@@ -124,7 +124,7 @@ H_paths <- msigdbr::msigdbr(
 
 
 # msigdbr_wrapper ---------------------------------------------------------
-choice_set <- "CP:KEGG"
+choice_set <- "CP:KEGG_MEDICUS"
 choice_id <- "gene_symbol"
 
 gsList <- msigdbr_wrapper(
@@ -142,7 +142,7 @@ OutMe <- OntologyMethods(
   Ontology_Function = list(
     "msigdbr" = msigdbr_wrapper),
   InputChoices = list(
-    "msigdbr" = c("CP:REACTOME", "CP:KEGG")),
+    "msigdbr" = c("CP:REACTOME", "CP:KEGG_MEDICUS")),
   gene_col_choices = list(
     "msigdbr" = c("gene_symbol", "entrez_gene", "ensembl_gene")),
   
@@ -177,7 +177,7 @@ example_sigs <- msigdbr::msigdbr( species = "human", category = "H") %>%
   
 source_genesets <- example_sigs %>% 
   dplyr::mutate(species = "human",
-                set = .data$gs_cat,
+                set = .data$gs_collection,
                 geneset_names = .data$gs_name) %>% 
   dplyr::select(c("species", "set", "geneset_names", 
                   "gene_symbol",  "entrez_gene", "ensembl_gene"

@@ -1,3 +1,6 @@
+# version 0.0.38:
+    - Updated to work with latest version of msigdbr
+
 # version 0.0.37:
     - Updated HotgeneSets() methods for GSVA (>= 1.50.0)
 
