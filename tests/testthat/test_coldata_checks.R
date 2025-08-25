@@ -3,7 +3,26 @@
 # load package
 library(Hotgenes)
 
+# min level set
+htgs_mod <- htgs
+coldata_(htgs_mod)$New_character <- "value"
+coldata_(htgs_mod)$New_factor <- factor("value")
 
+
+df_coldata_min_all <- coldata_(htgs_mod, mode = "all")
+df_coldata_min_factor <- coldata_(htgs_mod, mode = "quali")
+
+testthat::expect_true(all(c("New_character", "New_factor") %in% 
+                            names(df_coldata_min_all)) )
+
+testthat::expect_true(
+  all(c("New_factor") %in% names(df_coldata_min_factor),
+                          
+!"New_character" %in% names(df_coldata_min_factor)) )
+
+# set min = 2 should only be "Hrs"
+df_coldata_min_2 <- coldata_(htgs, mode = "quali", min_col_levels = 2)
+testthat::expect_true(names(df_coldata_min_2) == "Hrs" )
 
 # valid_factors -----------------------------------------------------------
 # removes invalid factors

@@ -631,6 +631,8 @@ O_ <- function(Hotgenes = NULL) {
 #' @export
 #' @md
 #' @param Hotgenes Hotgenes object.
+#' @param min_col_levels numeric value used to exclude
+#' columns that do not contain unique values greater than this.
 #' @param coldata_ids Variable(s) stored in coldata slot can be selected
 #' by column name, using a vector strings. Default is [coldata_names()]. If
 #' set to "", an empty data.frame is returned.
@@ -644,6 +646,7 @@ O_ <- function(Hotgenes = NULL) {
 #' dropped.
 coldata_ <- function(Hotgenes = NULL,
                      coldata_ids = coldata_names(Hotgenes),
+                     min_col_levels = 0,
                      mode = "all") {
   # Check object
   stopifnot(is(Hotgenes, "Hotgenes"))
@@ -661,11 +664,15 @@ coldata_ <- function(Hotgenes = NULL,
   
   if (selected_mode == "quanti") {
     coldata_Out <- coldata_Out %>%
-      dplyr::select_if(~ dplyr::n_distinct(na.omit(.x)) > 1) %>%
+      dplyr::select_if(~ dplyr::n_distinct(.x,
+                                           na.rm = TRUE
+      ) > min_col_levels) %>%
       dplyr::select_if(is.numeric)
   } else if (selected_mode == "quali") {
     coldata_Out <- coldata_Out %>%
-      dplyr::select_if(~ dplyr::n_distinct(na.omit(.x)) > 1) %>%
+      dplyr::select_if(~ dplyr::n_distinct(.x,
+                                           na.rm = TRUE
+      ) > min_col_levels) %>%
       dplyr::select_if(is.factor)
   }
   

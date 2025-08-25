@@ -40,7 +40,12 @@ auxiliary_assays_(object) <- value
 
 O_(Hotgenes = NULL)
 
-coldata_(Hotgenes = NULL, coldata_ids = coldata_names(Hotgenes), mode = "all")
+coldata_(
+  Hotgenes = NULL,
+  coldata_ids = coldata_names(Hotgenes),
+  min_col_levels = 0,
+  mode = "all"
+)
 
 coldata_names(Hotgenes = NULL)
 
@@ -103,6 +108,9 @@ qualitative coldata will be returned.}
 
 \item{value}{a data.frame containing a "Feature"
 for alias mapping.}
+
+\item{min_col_levels}{numeric value used to exclude
+columns that do not contain unique values greater than this.}
 
 \item{slot}{Single name of expression data.frame in
 Normalized_Expression slot to be returned. Default is
