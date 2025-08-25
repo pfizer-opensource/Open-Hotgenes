@@ -678,7 +678,7 @@ msigdbr_wrapper <- function(species = "human",
     dplyr::filter(.data$set %in% matched_set)
   
   
-arg_list <- list(category = unique(df_subcats$gs_collection ),
+arg_list <- list(collection = unique(df_subcats$gs_collection ),
                  species = species)
 
 final_sigs <- do.call(msigdbr::msigdbr, arg_list) %>% 

@@ -244,7 +244,8 @@ empty_plot <- function(
 
 #' @noMd
 df_coldata_handler <- function(Hotgenes = NULL,
-                               max_col_levels = Inf){
+                               max_col_levels = Inf,
+                               min_col_levels = 0){
   
   if(is.null(max_col_levels)){
     stop("max_col_levels must be provided")
@@ -256,7 +257,7 @@ df_coldata_handler <- function(Hotgenes = NULL,
     quali_distinct_raw <- coldata_(Hotgenes, mode = "quali") %>%
       dplyr::select_if(~ dplyr::n_distinct(.x,
                                            na.rm = TRUE
-      ) > 1) %>%
+      ) > min_col_levels) %>%
       dplyr::select_if(~ dplyr::n_distinct(.x,
                                            na.rm = TRUE
       ) <= max_col_levels)
