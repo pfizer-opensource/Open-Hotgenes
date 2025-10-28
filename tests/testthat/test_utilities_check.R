@@ -39,12 +39,56 @@ fit_Hotgenes %>%
 fit_Hotgenes %>%
   ExpsPlot(
     yVar = "IL6",
-    xVar = "sh"
+    xVar = "sh", 
+    group = "Hrs"
   ) +
+
   ggplot2::facet_wrap("Hrs",
     labeller = ggplot2::label_both
   )
 
+
+
+# all hotList items must be truthy ----------------------------------------
+
+example_1 <-fit_Hotgenes %>%
+  Output_DE_(
+    
+    hotList = character(0)
+    
+  )
+
+
+example_2 <-fit_Hotgenes %>%
+  Output_DE_(
+    
+    hotList = c("IL6", "CSF2", "")
+    
+  )
+
+
+example_3 <-fit_Hotgenes %>%
+  Output_DE_(
+    
+    hotList = c( "")
+    
+  )
+
+testthat::expect_identical(example_1, example_2)
+
+testthat::expect_identical(example_2, example_3)
+
+
+exp_4_q <- c("IL6", "CSF2")
+
+example_4 <-fit_Hotgenes %>%
+  Output_DE_(
+    
+    hotList = exp_4_q
+    
+  )
+
+testthat::expect_true(all(example_4$Feature %in% exp_4_q))
 # DECoefs ---------------------------------------------
 DECoefs(fit_Hotgenes) %>% head()
 

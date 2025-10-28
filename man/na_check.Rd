@@ -2,7 +2,7 @@
 % Please edit documentation in R/MethodsHotgenes.R
 \name{na_check}
 \alias{na_check}
-\title{checks a vector for missing strings}
+\title{checks a vector for empty strings, NA, and "NA"}
 \usage{
 na_check(string = NULL)
 }
@@ -11,7 +11,7 @@ na_check(string = NULL)
 coercible to one.}
 }
 \description{
-checks a vector for missing strings
+checks a vector for empty strings, NA, and "NA"
 }
 \details{
 The string is first passed to the

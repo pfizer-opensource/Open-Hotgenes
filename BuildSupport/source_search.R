@@ -26,13 +26,14 @@ sRead <- Source_FullPath %>%
 
 # dplyr::select(c("Feature" = "symbol", "ensembl_id")) 
 
+string_search <- "isTruthy"
 sd_out<- sRead$All %>%
-  purrr::imap(~ .x %>% stringr::str_subset(stringr::regex("tidyverse",
+  purrr::imap(~ .x %>% stringr::str_subset(stringr::regex(string_search,
                                                           ignore_case = FALSE))) %>%
   purrr::compact()
 
 sd_out
 
 # open all files
-sd_out %>% names() %>% file.edit()
-
+sd_out  %>% names() %>% file.edit()
+shiny::isTruthy(list(NULL))

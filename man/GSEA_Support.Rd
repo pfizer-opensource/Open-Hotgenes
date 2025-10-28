@@ -323,14 +323,14 @@ if(interactive()){
   # plotEnrichment_
   plotEnrichment_(
     Out_GSEA, "Hrs_2_vs_0",
-    "kegg_nod_like_receptor_signaling_pathway"
+    "reactome_interleukin_10_signaling"
   )
   
   
   # leadingGenes
   leadingGenes(
     Out_GSEA, "Hrs_2_vs_0",
-    "kegg_nod_like_receptor_signaling_pathway"
+    "reactome_interleukin_10_signaling"
   )
   
 }

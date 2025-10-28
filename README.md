@@ -100,7 +100,7 @@ ensembl_Symbol <- DBI::dbGetQuery(dbCon, sqlQuery) %>%
 ensembl_Symbol
 ```
 
-    ## # A tibble: 45,689 × 2
+    ## # A tibble: 46,112 × 2
     ##   Feature         symbol
     ##   <chr>           <chr> 
     ## 1 ENSG00000121410 A1BG  
@@ -108,7 +108,7 @@ ensembl_Symbol
     ## 3 ENSG00000291190 A2MP1 
     ## 4 ENSG00000171428 NAT1  
     ## 5 ENSG00000156006 NAT2  
-    ## # ℹ 45,684 more rows
+    ## # ℹ 46,107 more rows
 
 ``` r
 # prepare DESeq2 object and model -----------------------------------------
@@ -411,46 +411,41 @@ DE(fit_Hotgenes, Topn = 3)
 
     ## $Hrs_2_vs_0
     ## # A tibble: 3 × 11
-    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj     t     B
-    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <dbl>
-    ## 1 IL6     Hrs_2_vs_0_up     10.6           2.52  5.72  31.1 4.06e-24 1.04e-21  31.1  45.1
-    ## 2 CXCL8   Hrs_2_vs_0_up     10.9           3.51 11.4   26.0 6.99e-22 8.92e-20  26.0  40.0
-    ## 3 TNFAIP3 Hrs_2_vs_0_up     10.5           2.14  4.42  24.9 2.21e-21 1.88e-19  24.9  38.8
-    ## # ℹ 1 more variable: ensembl_id <chr>
+    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj     t     B ensembl_id     
+    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <dbl> <chr>          
+    ## 1 IL6     Hrs_2_vs_0_up     10.6           2.52  5.72  31.1 4.06e-24 1.04e-21  31.1  45.1 ENSG00000136244
+    ## 2 CXCL8   Hrs_2_vs_0_up     10.9           3.51 11.4   26.0 6.99e-22 8.92e-20  26.0  40.0 ENSG00000169429
+    ## 3 TNFAIP3 Hrs_2_vs_0_up     10.5           2.14  4.42  24.9 2.21e-21 1.88e-19  24.9  38.8 ENSG00000118503
     ## 
     ## $Hrs_6_vs_0
     ## # A tibble: 3 × 11
-    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj     t     B
-    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <dbl>
-    ## 1 CXCL8   Hrs_6_vs_0_up     10.9           3.56 11.8   26.4 4.21e-22 1.07e-19  26.4  40.5
-    ## 2 CXCL1   Hrs_6_vs_0_up     11.3           2.35  5.09  24.5 3.71e-21 4.73e-19  24.5  38.2
-    ## 3 CCL2    Hrs_6_vs_0_up     12.5           1.25  2.37  23.0 2.14e-20 1.56e-18  23.0  36.3
-    ## # ℹ 1 more variable: ensembl_id <chr>
+    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj     t     B ensembl_id     
+    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <dbl> <chr>          
+    ## 1 CXCL8   Hrs_6_vs_0_up     10.9           3.56 11.8   26.4 4.21e-22 1.07e-19  26.4  40.5 ENSG00000169429
+    ## 2 CXCL1   Hrs_6_vs_0_up     11.3           2.35  5.09  24.5 3.71e-21 4.73e-19  24.5  38.2 ENSG00000163739
+    ## 3 CCL2    Hrs_6_vs_0_up     12.5           1.25  2.37  23.0 2.14e-20 1.56e-18  23.0  36.3 ENSG00000108691
     ## 
     ## $sh_EWS_vs_Ctrl
     ## # A tibble: 3 × 11
-    ##   Feature contrast_dir        baseMean log2FoldChange    FC  stat   pvalue     padj     t     B
-    ##   <chr>   <chr>                  <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <dbl>
-    ## 1 C1R     sh_EWS_vs_Ctrl_down     13.5         -0.856 0.553 -16.7 1.33e-16 3.39e-14 -16.7  27.7
-    ## 2 C1R     sh_EWS_vs_Ctrl_down     13.5         -0.856 0.553 -16.7 1.33e-16 3.39e-14 -16.7  27.7
-    ## 3 CCL2    sh_EWS_vs_Ctrl_down     12.5         -1.00  0.500 -15.8 5.92e-16 7.55e-14 -15.8  26.4
-    ## # ℹ 1 more variable: ensembl_id <chr>
+    ##   Feature contrast_dir        baseMean log2FoldChange    FC  stat   pvalue     padj     t     B ensembl_id     
+    ##   <chr>   <chr>                  <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <dbl> <chr>          
+    ## 1 C1R     sh_EWS_vs_Ctrl_down     13.5         -0.856 0.553 -16.7 1.33e-16 3.39e-14 -16.7  27.7 ENSG00000159403
+    ## 2 C1R     sh_EWS_vs_Ctrl_down     13.5         -0.856 0.553 -16.7 1.33e-16 3.39e-14 -16.7  27.7 ENSG00000288512
+    ## 3 CCL2    sh_EWS_vs_Ctrl_down     12.5         -1.00  0.500 -15.8 5.92e-16 7.55e-14 -15.8  26.4 ENSG00000108691
     ## 
     ## $shEWS.Hrs2
     ## # A tibble: 3 × 11
-    ##   Feature contrast_dir    baseMean log2FoldChange    FC  stat    pvalue   padj     t       B
-    ##   <chr>   <chr>              <dbl>          <dbl> <dbl> <dbl>     <dbl>  <dbl> <dbl>   <dbl>
-    ## 1 TNFAIP3 shEWS.Hrs2_down    10.5          -0.565 0.676 -4.69 0.0000584 0.0149 -4.69  1.77  
-    ## 2 CXCL3   shEWS.Hrs2_down     7.90         -1.05  0.482 -3.94 0.000457  0.0233 -3.94 -0.0744
-    ## 3 FOS     shEWS.Hrs2_up       8.98          0.645 1.56   4.14 0.000267  0.0233  4.14  0.398 
-    ## # ℹ 1 more variable: ensembl_id <chr>
+    ##   Feature contrast_dir    baseMean log2FoldChange    FC  stat    pvalue   padj     t       B ensembl_id     
+    ##   <chr>   <chr>              <dbl>          <dbl> <dbl> <dbl>     <dbl>  <dbl> <dbl>   <dbl> <chr>          
+    ## 1 TNFAIP3 shEWS.Hrs2_down    10.5          -0.565 0.676 -4.69 0.0000584 0.0149 -4.69  1.77   ENSG00000118503
+    ## 2 CXCL3   shEWS.Hrs2_down     7.90         -1.05  0.482 -3.94 0.000457  0.0233 -3.94 -0.0744 ENSG00000163734
+    ## 3 FOS     shEWS.Hrs2_up       8.98          0.645 1.56   4.14 0.000267  0.0233  4.14  0.398  ENSG00000170345
     ## 
     ## $shEWS.Hrs6
     ## # A tibble: 1 × 11
-    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat    pvalue   padj     t     B
-    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>     <dbl>  <dbl> <dbl> <dbl>
-    ## 1 FOS     shEWS.Hrs6_up     8.98          0.826  1.77  4.53 0.0000892 0.0227  4.53  1.12
-    ## # ℹ 1 more variable: ensembl_id <chr>
+    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat    pvalue   padj     t     B ensembl_id     
+    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>     <dbl>  <dbl> <dbl> <dbl> <chr>          
+    ## 1 FOS     shEWS.Hrs6_up     8.98          0.826  1.77  4.53 0.0000892 0.0227  4.53  1.12 ENSG00000170345
 
 ### Summary plot of contrasts
 
@@ -494,8 +489,8 @@ fit_Hotgenes %>%
     Venn_Report()
 ```
 
-    ## Coordinate system already present. Adding new coordinate system, which will replace the
-    ## existing one.
+    ## Coordinate system already present.
+    ## ℹ Adding new coordinate system, which will replace the existing one.
 
     ## $vennD
 
@@ -507,19 +502,16 @@ fit_Hotgenes %>%
     ## [1] "NFE2L2" "KEAP1"  "PDGFA"  "HDAC4"  "OXER1"  "GAPDH"  "MEF2C" 
     ## 
     ## $Intsect$Hrs_6_vs_0
-    ##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"  
-    ## [11] "BCL6"   "TLR3"   "GRB2"   "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5"
-    ## [21] "TGFB3"  "TGFB2"  "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
+    ##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"   "BCL6"   "TLR3"   "GRB2"  
+    ## [14] "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2"  "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
     ## 
     ## $Intsect$sh_EWS_vs_Ctrl
-    ##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"   
-    ## [11] "HMGN1"  "CLTC"   "GNAQ"   "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"  
-    ## [21] "MX1"    "OAS2"   "LTB4R2"
+    ##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"    "HMGN1"  "CLTC"   "GNAQ"  
+    ## [14] "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"   "LTB4R2"
     ## 
     ## $Intsect$`Hrs_2_vs_0:Hrs_6_vs_0`
-    ##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"   
-    ## [10] "CXCR4"   "MAFK"    "PTGFR"   "FOS"     "MYC"     "RIPK2"   "IL2"     "MAFG"    "CSF2"   
-    ## [19] "TWIST2"  "IFIT1"   "FLT1"   
+    ##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"    "CXCR4"   "MAFK"   
+    ## [12] "PTGFR"   "FOS"     "MYC"     "RIPK2"   "IL2"     "MAFG"    "CSF2"    "TWIST2"  "IFIT1"   "FLT1"   
     ## 
     ## $Intsect$`sh_EWS_vs_Ctrl:Hrs_2_vs_0`
     ## [1] "HMGB2"  "MAP3K9" "CEBPB"  "IRF1"  
@@ -528,13 +520,13 @@ fit_Hotgenes %>%
     ##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2" "IFI44" "CCL7" 
     ## 
     ## $Intsect$`sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0`
-    ##  [1] "CCL2"     "IL1R1"    "MEF2D"    "JUN"      "BIRC2"    "CXCL3"    "MEF2A"    "CXCL2"   
-    ##  [9] "IL6"      "NFKB1"    "SMAD7"    "MAPKAPK2" "RELB"    
+    ##  [1] "CCL2"     "IL1R1"    "MEF2D"    "JUN"      "BIRC2"    "CXCL3"    "MEF2A"    "CXCL2"    "IL6"      "NFKB1"   
+    ## [11] "SMAD7"    "MAPKAPK2" "RELB"    
     ## 
     ## 
     ## $Names
-    ## [1] "Hrs_2_vs_0:Hrs_6_vs_0"                "sh_EWS_vs_Ctrl:Hrs_2_vs_0"           
-    ## [3] "sh_EWS_vs_Ctrl:Hrs_6_vs_0"            "sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0"
+    ## [1] "Hrs_2_vs_0:Hrs_6_vs_0"                "sh_EWS_vs_Ctrl:Hrs_2_vs_0"            "sh_EWS_vs_Ctrl:Hrs_6_vs_0"           
+    ## [4] "sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0"
 
 ### Identify key features using PCA and clustering
 
@@ -561,15 +553,14 @@ FactoOutput$TopTibble # Feature
 ```
 
     ## # A tibble: 88 × 9
-    ##   Cluster Interpretation      Feature v.test `Mean in category` `Overall mean` `sd in category`
-    ##   <fct>   <fct>               <chr>    <dbl>              <dbl>          <dbl>            <dbl>
-    ## 1 1       Cluster has elevat… IFIT2     2.91               10.3           9.89           0.100 
-    ## 2 1       Cluster has elevat… DDIT3     2.75               10.4          10.1            0.0402
-    ## 3 1       Cluster has elevat… MAP3K1    2.72               10.0           9.75           0.0537
-    ## 4 1       Cluster has elevat… PTGFR     2.65               10.4          10.1            0.0489
-    ## 5 1       Cluster has elevat… PGK1      2.63               15.3          15.2            0.0224
+    ##   Cluster Interpretation       Feature v.test `Mean in category` `Overall mean` `sd in category` `Overall sd` p.value
+    ##   <fct>   <fct>                <chr>    <dbl>              <dbl>          <dbl>            <dbl>        <dbl>   <dbl>
+    ## 1 1       Cluster has elevated IFIT2     2.91              10.3            9.89           0.100        0.339  0.00362
+    ## 2 1       Cluster has elevated DDIT3     2.75              10.4           10.1            0.0402       0.231  0.00593
+    ## 3 1       Cluster has elevated MAP3K1    2.72              10.00           9.75           0.0537       0.216  0.00660
+    ## 4 1       Cluster has elevated PTGFR     2.65              10.4           10.1            0.0489       0.285  0.00797
+    ## 5 1       Cluster has elevated PGK1      2.63              15.3           15.2            0.0224       0.0484 0.00851
     ## # ℹ 83 more rows
-    ## # ℹ 2 more variables: `Overall sd` <dbl>, p.value <dbl>
 
 ``` r
 FactoOutput$TopGroups # TopGroups
@@ -684,7 +675,7 @@ H_paths <- msigdbr_wrapper(
 ```
 
     ## [1] "Hrs_6_vs_0"
-    ##   |                                                                                             |                                                                                     |   0%  |                                                                                             |==========================================                                           |  50%  |                                                                                             |=====================================================================================| 100%
+    ##   |                                                                                                                       |                                                                                                               |   0%  |                                                                                                                       |========================================================                                                       |  50%  |                                                                                                                       |===============================================================================================================| 100%
 
 ``` r
   # Get details for all
@@ -698,11 +689,11 @@ H_paths <- msigdbr_wrapper(
 
     ## $Hrs_6_vs_0
     ## # A tibble: 3 × 9
-    ##   pathway                            pval   padj log2err    ES   NES  size leadingEdge sign_NES
-    ##   <chr>                             <dbl>  <dbl>   <dbl> <dbl> <dbl> <int> <list>         <dbl>
-    ## 1 kegg_medicus_pathogen_sars_cov_… 0.0116 0.0809   0.381 0.767  1.61     7 <chr [4]>          1
-    ## 2 kegg_medicus_pathogen_kshv_vgpc… 0.0412 0.128    0.322 0.776  1.50     5 <chr [4]>          1
-    ## 3 kegg_medicus_pathogen_hsv_gd_to… 0.0549 0.128    0.228 0.739  1.43     5 <chr [4]>          1
+    ##   pathway                                                      pval   padj log2err    ES   NES  size leadingEdge sign_NES
+    ##   <chr>                                                       <dbl>  <dbl>   <dbl> <dbl> <dbl> <int> <list>         <dbl>
+    ## 1 kegg_medicus_pathogen_sars_cov_2_s_to_angii_at1r_nox2_sig… 0.0116 0.0809   0.381 0.767  1.61     7 <chr [4]>          1
+    ## 2 kegg_medicus_pathogen_kshv_vgpcr_to_gnb_g_pi3k_jnk_signal… 0.0412 0.128    0.322 0.776  1.50     5 <chr [3]>          1
+    ## 3 kegg_medicus_pathogen_hsv_gd_to_hvem_nfkb_signaling_pathw… 0.0549 0.128    0.228 0.739  1.43     5 <chr [4]>          1
 
 ``` r
   # Or for one
@@ -719,7 +710,7 @@ H_paths <- msigdbr_wrapper(
     ## [1] "CXCL8" "CCL2"  "IL6"   "NFKB1"
     ## 
     ## $Hrs_6_vs_0$kegg_medicus_pathogen_kshv_vgpcr_to_gnb_g_pi3k_jnk_signaling_pathway
-    ## [1] "CXCL8" "IL6"   "NFKB1" "MAPK8"
+    ## [1] "CXCL8" "IL6"   "NFKB1"
     ## 
     ## $Hrs_6_vs_0$kegg_medicus_pathogen_hsv_gd_to_hvem_nfkb_signaling_pathway
     ## [1] "CCL2"  "NFKB1" "BIRC2" "TRAF2"
@@ -779,12 +770,18 @@ gsList <- msigdbr_wrapper(
 
     ## [1] "using Feature col"
     ## [1] "building mapper"
-    ## Estimating ssGSEA scores for 235 gene sets.
-    ## [1] "Calculating ranks..."
-    ## [1] "Calculating absolute values from ranks..."
-    ##   |                                                                                             |                                                                                     |   0%  |                                                                                             |=======                                                                              |   8%  |                                                                                             |==============                                                                       |  17%  |                                                                                             |=====================                                                                |  25%  |                                                                                             |============================                                                         |  33%  |                                                                                             |===================================                                                  |  42%  |                                                                                             |==========================================                                           |  50%  |                                                                                             |==================================================                                   |  58%  |                                                                                             |=========================================================                            |  67%  |                                                                                             |================================================================                     |  75%  |                                                                                             |=======================================================================              |  83%  |                                                                                             |==============================================================================       |  92%  |                                                                                             |=====================================================================================| 100%
-    ## 
-    ## [1] "Normalizing..."
+
+    ## ℹ GSVA version 2.0.3
+
+    ## ℹ Calculating  ssGSEA scores for 235 gene sets
+
+    ## ℹ Calculating ranks
+
+    ## ℹ Calculating rank weights
+
+    ## ℹ Normalizing ssGSEA scores
+
+    ## ✔ Calculations finished
 
     ## using geneset weights
 

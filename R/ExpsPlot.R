@@ -52,7 +52,7 @@ ExpsPlot <- function(
     value_col = "value",
     scales = "fixed",
     facets = NULL,
-    filter_eval = NULL,
+    filter_eval,
     named_levels = NULL,
     ...) {
   # Check object
@@ -85,11 +85,15 @@ ExpsPlot <- function(
   )
 
  # parsing variables
+  
+  all_varbles<-c(xVar, yVar, "SampleIDs",
+    color, linevar,
+    group, fill, facets)
+  
+  all_varbles <- all_varbles[!detected_missingness(all_varbles)]
  
   parsed_features <- parse_features(Hotgenes,
-                                features = c(xVar, yVar, "SampleIDs",
-                                             color, linevar,
-                                             group, fill, facets))
+                                features = all_varbles)
  
   
   yVar_parsed <- parsed_features[c("aux_features",

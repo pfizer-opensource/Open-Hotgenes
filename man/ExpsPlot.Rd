@@ -21,7 +21,7 @@ ExpsPlot(
   value_col = "value",
   scales = "fixed",
   facets = NULL,
-  filter_eval = NULL,
+  filter_eval,
   named_levels = NULL,
   ...
 )

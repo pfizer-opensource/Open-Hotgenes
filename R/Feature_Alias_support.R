@@ -74,7 +74,7 @@ parse_mapper_aliases <- function(Hotgenes = NULL,
 hotList_mapper <- function(Hotgenes = NULL,
                           hotList = NULL){
   mapper_df <- Mapper_(Hotgenes)
-  if(shiny::isTruthy(hotList)){
+  if(all_truthy(hotList)){
     
     mapper_col<- names(mapper_df)
     
@@ -105,7 +105,7 @@ hotList_mapper <- function(Hotgenes = NULL,
 hotList_Feature <- function(Hotgenes = NULL,
     hotList = NULL){
   
-  if(shiny::isTruthy(hotList)){
+  if(all_truthy(hotList)){
     out <- hotList_mapper(Hotgenes = Hotgenes,
                           hotList = hotList)$Feature
     

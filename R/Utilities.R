@@ -261,7 +261,7 @@ DEPlot <- function(
     hotList = NULL) {
   # Check hotList
 
-  if (!shiny::isTruthy(hotList)) {
+  if (!all_truthy(hotList)) {
     # make df
     Summary_df <- Hotgenes %>%
       Output_DE_df( 
@@ -298,7 +298,7 @@ DEPlot <- function(
         ),
         ggplot2::xlab(""),
         ggplot2::ylab("Count"),
-        ggplot2::coord_trans(y = "sqrt"),
+        ggplot2::coord_transform(y = "sqrt"),
         ggplot2::ggtitle( # "Total DE counts by contrast",
           label = glue::glue(
             "Total DE by contrast"
@@ -630,9 +630,9 @@ BoxPlot <- function(
   )
 
   # Get SampleIDs
-  if (!shiny::isTruthy(SampleIDs)) {
+  if (!all_truthy(SampleIDs)) {
     Out_SampleIDs <- names(Initial_stats)
-  } else if (shiny::isTruthy(SampleIDs)) {
+  } else if (all_truthy(SampleIDs)) {
     Initial_stats <- Initial_stats %>%
       dplyr::select(dplyr::any_of(SampleIDs))
 

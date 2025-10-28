@@ -288,9 +288,9 @@ Features_check <- function(Hotgenes = NULL) {
         sort()
       
       # Check for empty spaces
-      if (any(grepl("^[[:space:]]*$", Features_names))) {
+      if (any_missingness(Features_names)) {
         stop("Empty name detected! Check your expression matrix rownames")
-      } else if (!any(grepl("^[[:space:]]*$", Features_names))) {
+      } else {
         return(Features_names)
       }
     })
@@ -378,7 +378,7 @@ Output_DE_check <- function(Hotgenes = NULL) {
   DE_Check_blanks <- Hotgenes@Output_DE %>%
     purrr::map_dfr(function(x) {
       x %>%
-        dplyr::filter(grepl("^[[:space:]]*$", .data$Feature))
+        dplyr::filter(detected_missingness(.data$Feature))
     }) %>%
     nrow()
   
@@ -919,7 +919,7 @@ Output_DE_ <- function(Hotgenes = NULL,
     dplyr::group_by(.data$contrast)
 
 
-  if (shiny::isTruthy(hotList)) {
+  if (all_truthy(hotList)) {
     updateDetails <- TRUE
 
     # DF version
@@ -1001,7 +1001,7 @@ Output_DE_df <- function(Hotgenes = NULL,
   }
  
   
-  if (shiny::isTruthy(hotList)) {
+  if (all_truthy(hotList)) {
     
     Output_DE <- Output_DE %>%
       dplyr::filter(.data$Feature %in% hotList, .preserve = TRUE)  
@@ -1135,7 +1135,12 @@ Background_ <- function(Hotgenes = NULL,
     unique()
 }
 
-#' checks a vector for missing strings
+
+
+# missing feature names check ---------------------------------------------
+
+
+#' checks a vector for empty strings, NA, and "NA"
 #' @export
 #' @importFrom stringr str_replace_na str_detect
 #' @inheritParams stringr::str_detect
@@ -1152,6 +1157,111 @@ Background_ <- function(Hotgenes = NULL,
 #' na_check(this_string)
 na_check <- function(string = NULL) {
   string %>%
-    stringr::str_replace_na(replacement = "") %>%
+    stringr::str_replace_na(replacement = "NA") %>%
+    trimws() %>% 
     stringr::str_detect("^[[:space:]]*$|^NA$")
+}
+
+
+
+# missingness_checks ------------------------------------------------------
+
+
+#' Vector-aware missingness detection
+#' @name missingness_checks
+#' @title Check for missing or empty values in vectors
+NULL
+
+#' [detected_missingness()] checks for non-whitespace values in specified vector
+#' @description
+#' Use [detected_missingness()] if you want logical values for each element in
+#' a vector.
+#' 
+#' Use [any_missingness()] if you want a single logical value returned for 
+#' a vector. This is the equivalent to ```any(detected_missingness(x))```.
+#' 
+#' @param x vector to check
+#' @return [detected_missingness()] returns vector of logical values
+#' indicating the presence of empty values TRUE 
+#' or non-empty values FALSE.
+#' @export
+#' @rdname missingness_checks
+#' @md
+detected_missingness <- function(x = NULL) {
+  
+  # Handle NULL input - return single TRUE
+  if (is.null(x)) {
+    return(TRUE)
+  }
+  
+  # Handle empty vector - return single TRUE
+  if (length(x) == 0) {
+    return(TRUE)
+  }
+  
+  # grepl returns FALSE for NA values (they don't match the pattern)
+  # !grepl returns TRUE for empty strings, whitespace-only, and NA
+  vector_out <- !grepl(x = x, pattern = "\\S")
+  
+  return(vector_out)
+}
+
+
+#' [any_missingness()] checks if any element has missingness
+#' 
+#' @param x vector to check
+#' @return [any_missingness()] returns a single logical value indicating 
+#' the presence of any empty values TRUE, otherwise FALSE
+#' @export
+#' @rdname missingness_checks
+#' @md
+any_missingness <- function(x = NULL) {
+  
+  vector_out <- any(detected_missingness(x = x))
+  
+  return(vector_out)
+}
+
+
+#' [all_truthy()] checks if all elements in a vector are truthy
+#' @description
+#' Vector-aware equivalent to checking if all elements would pass 
+#' shiny::isTruthy(). Returns FALSE if any element is NA, NULL, "", 
+#' or whitespace-only.
+#' 
+#' @param x vector to check
+#' @return Single logical value: TRUE if all elements are truthy, FALSE otherwise
+#' @export
+#' @rdname missingness_checks
+#' @md
+all_truthy <- function(x = NULL) {
+  
+  # NULL or empty vector is not truthy
+  if (is.null(x) || length(x) == 0) {
+    return(FALSE)
+  }
+  
+  # Check if any elements are missing/empty
+  !any_missingness(x)
+}
+
+
+#' [any_truthy()] checks if any element in a vector is truthy
+#' @description
+#' Vector-aware check for at least one truthy element.
+#' 
+#' @param x vector to check
+#' @return Single logical value: TRUE if any element is truthy, FALSE otherwise
+#' @export
+#' @rdname missingness_checks
+#' @md
+any_truthy <- function(x = NULL) {
+  
+  # NULL or empty vector has no truthy values
+  if (is.null(x) || length(x) == 0) {
+    return(FALSE)
+  }
+  
+  # Inverse of all elements being missing
+  !all(detected_missingness(x))
 }
