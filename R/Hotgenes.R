@@ -461,3 +461,166 @@ Hotgeneslimma <- function(limmafit = NULL,
   
   return(Hotgenes_Object)
 }
+
+
+#' Exports DRomics DE analysis to Hotgenes
+#' 
+#' @description
+#' This function converts DRomics benchmark dose modeling results into a 
+#' Hotgenes object for downstream analysis and visualization.
+#' 
+#' @export
+#' @param bmdcalc object returned by [DRomics::bmdcalc()]
+#' @param auxiliary_assays Additional assays to include in the 
+#' Hotgenes object (optional)
+#' @param Expression_name Character string naming the expression
+#'  data assay (default: "Normalized_data")
+#' @param pseudocount Numeric value (default is 1e-6) 
+#' used to calculate max/extreme dose and baseline
+#' @param Mapper Optional mapper object for feature annotation
+#' 
+#' @return A Hotgenes object containing: 
+#'   \itemize{
+#'     \item Output_DE: Differential expression results formatted for Hotgenes
+#'     \item Normalized_Expression:  Expression data matrix
+#'     \item coldata: Column metadata including dose information
+#'     \item designMatrix: Model design matrix
+#'     \item Original_Object: The original bmdcalc object
+#'   }
+#'   
+#' @details 
+#' This function processes DRomics benchmark dose calculation results 
+#' and reformats them for use with Hotgenes. It handles both count-based
+#' (e.g., RNA-seq) and continuous 
+#' (e.g., metabolomics) data types.
+#' 
+#' For log2 fold change calculation: 
+#' \itemize{
+#'   \item Count data: Uses log2 ratio with 
+#'   pseudocount (1e-6) between max/extreme dose and baseline
+#'   \item Continuous data: Uses direct difference 
+#'   between max/extreme dose and baseline
+#'   \item Trends "bell" and "U": Uses extreme value (yextrem)
+#'   \item Other trends: Uses value at maximum dose (yatdosemax)
+#' }
+#' 
+#' The stat column is calculated as:  -log10(padj) * sign(log2FoldChange)
+#'
+#' @example man/examples/HotgenesDRomics_Example.R
+#' 
+#' @importFrom dplyr mutate case_when rename any_of relocate
+#' @importFrom tibble as_tibble column_to_rownames
+#' @importFrom plyr dlply
+#' @importFrom purrr imap
+#' @importFrom cli cli_alert_warning
+#' @importFrom DRomics RNAseqdata continuousomicdata itemselect drcfit bmdcalc
+HotgenesDRomics <- function(
+    bmdcalc = NULL,
+    auxiliary_assays = NULL,
+    Expression_name = "Normalized_data",
+    Mapper = NULL,
+    pseudocount = 1e-6) {
+  
+  # Input validation --------------------------------------------------------
+  if (is.null(bmdcalc)) {
+    stop("bmdcalc parameter is required and cannot be NULL")
+  }
+  
+  if (! inherits(bmdcalc, "bmdcalc")) {
+    stop("bmdcalc must be an object returned by DRomics::bmdcalc()")
+  }
+  
+  if (is.null(bmdcalc$omicdata) || is.null(bmdcalc$res)) {
+    stop("bmdcalc object must contain omicdata and res slots")
+  }
+  
+  if(any_missingness(pseudocount)) {
+    
+    pseudocount <-  1e-6
+    cli::cli_alert_warning(
+    text = "pseudocount is missing. Setting to {pseudocount}")
+  }
+  
+  # Prepare column data -----------------------------------------------------
+  coldata <- data.frame(dose = bmdcalc$omicdata$dose) %>% 
+    dplyr::mutate(
+      dose = factor(.data$dose),
+      rowname = colnames(bmdcalc$omicdata$data)
+    ) %>% 
+    tibble::column_to_rownames()
+  
+  # Create design matrix ----------------------------------------------------
+  modelMatrix <- model.matrix(~ dose, data = coldata)
+  
+  # Column name mapping for output ------------------------------------------
+  renamer_ <- c(
+    "Feature" = "Feature",
+    "baseMean" = "baseMean",
+    "log2FoldChange" = "log2FoldChange", 
+    "stat" = "stat",
+    "pvalue" = "pvalue",
+    "padj" = "padj"
+  )
+  
+  # Determine data type (count vs continuous) ------------------------------
+  is_count_method <- !is.null(bmdcalc$omicdata$raw.counts)
+  
+  # Calculate log2 fold changes ---------------------------------------------
+  if (is_count_method) {
+    # For count data (e.g., RNA-seq), use log2 ratio with pseudocount
+    ini_Output_DE <- bmdcalc$res %>% 
+      dplyr:: mutate(log2FoldChange = dplyr::case_when(
+        # For monotonic trends, use max dose value
+        !.data$trend %in% c("bell", "U") ~ 
+          log2((.data$yatdosemax + .env$pseudocount) / (.data$y0 + .env$pseudocount)),
+        # For bell/U-shaped curves, use extreme value
+        TRUE ~  
+          log2((.data$yextrem + .env$pseudocount) / (.data$y0 + .env$pseudocount))
+      ))
+  } else {
+    # For continuous data (e.g., metabolomics), use direct difference
+    ini_Output_DE <- bmdcalc$res %>% 
+      dplyr::mutate(log2FoldChange = dplyr::case_when(
+        # For monotonic trends, use max dose value
+        !.data$trend %in% c("bell", "U") ~ (.data$yatdosemax - .data$y0),
+        # For bell/U-shaped curves, use extreme value
+        TRUE ~ (.data$yextrem - .data$y0)
+      ))
+  }
+  
+  # Format output for Hotgenes ----------------------------------------------
+  Output_DE <- ini_Output_DE %>% 
+    dplyr::mutate(contrast = "DRomics") %>% 
+    plyr:: dlply("contrast", identity) %>% 
+    purrr:: imap(~ .x %>%
+                   tibble::as_tibble() %>% 
+                   dplyr:: mutate(
+                     Feature = .data$id,
+                     baseMean = .data$y0,
+                     padj = .data$adjpvalue,
+                     pvalue = NA_real_,  # Changed from NA_integer_ to NA_real_
+                     # Stat combines magnitude (via padj) and direction (via sign)
+                     stat = (-log10(.data$padj) * sign(.data$log2FoldChange))
+                   ) %>% 
+                   dplyr::rename(dplyr::any_of(renamer_)) %>% 
+                   dplyr::relocate(dplyr::any_of(names(renamer_)), .before = 1)
+    ) 
+  
+  # Prepare normalized expression data --------------------------------------
+  Normalized_Expression <- list(data.matrix(bmdcalc$omicdata$data))
+  names(Normalized_Expression) <- Expression_name
+  
+  # Create Hotgenes object --------------------------------------------------
+  Hotgenes_Object <- Hotgenes::HotgenesUniversal(
+    Output_DE = Output_DE,
+    Normalized_Expression = Normalized_Expression,
+    auxiliary_assays = auxiliary_assays,
+    coldata = coldata,
+    designMatrix = modelMatrix,
+    contrastMatrix = NULL,
+    Original_Object = bmdcalc,
+    Mapper = Mapper
+  )
+  
+  return(Hotgenes_Object)
+}

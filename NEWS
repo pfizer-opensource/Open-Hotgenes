@@ -1,3 +1,6 @@
+# version 0.0.42:
+    - Added HotgenesDRomics()
+
 # version 0.0.41:
     - Added improved missing data checks with all_truthy(),
       any_missingness(), any_truthy(), and detected_missingness().

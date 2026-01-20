@@ -1,7 +1,7 @@
 Package: Hotgenes
 Type: Package
 Title: Tools to simplify Omics DE analysis
-Version: 0.0.41
+Version: 0.0.42
 Author: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
 Maintainer: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
 Description: Converts outputs from DESeq2, limma, or a method of your
@@ -15,10 +15,12 @@ RoxygenNote: 7.3.3
 Imports: 
     BiocParallel,
     BiocGenerics,
+    cli,
     factoextra,
     FactoMineR,
     fgsea (>= 1.16.0),
     forcats,
+    DRomics,
     DT,
     DESeq2,
     dplyr,
@@ -65,6 +67,7 @@ Suggests:
     testthat,
     httr,
     org.Hs.eg.db,
+    org.Mm.eg.db,
     DelayedArray (>= 0.24.0),
     DBI,
     rmarkdown
