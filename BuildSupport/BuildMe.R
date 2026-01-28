@@ -51,8 +51,8 @@ devtools::check_man()
 # check -------------------------------------------------------------------
 
 # check complete package
-devtools::check(vignettes = TRUE )
-# devtools::check(vignettes = FALSE )
+# devtools::check(vignettes = TRUE )
+devtools::check(vignettes = FALSE )
 
 # install
 devtools::install(upgrade = "never")

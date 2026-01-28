@@ -33,6 +33,10 @@ NULL
 #' @param Rank_name String matching a column name returned by
 #' Mapper_ function, default is "Feature". This parameter is only valid when
 #' Report = "Ranks" or "FC" and mapFeatures = TRUE.
+#' @param impute_finite_ranks logical, if TRUE (default) 
+#' any detected infinite values will be imputed (see details) 
+#' following a warning. 
+#' If FALSE, you'll still get a warning, but no imputation will occur.
 #' @details By default, DE results are sorted by padj (increasing). Filtering by padj
 #' or log2FoldChange only applies when hotList = NULL.
 #'
@@ -46,7 +50,18 @@ NULL
 #' is not set to "Feature", due to mapping issues, non-unique names
 #' may be produced. In this case, the rank with the highest absolute
 #' value is returned via \code{\link[dplyr]{slice_max}}, with Rank_name
-#' set as group.
+#' set as group. 
+#' 
+#' 
+#' Imputation of any infinite rank values will use the following process:
+#' \preformatted{
+#'  max_finite <- max(x[is.finite(x)])
+#'  x[x > max_finite] <- max_finite + 1
+#'  
+#'  min_finite <- min(x[is.finite(x)])
+#'  x[x < min_finite] <- min_finite + -1
+#' }
+#' 
 #'
 #' The dataframe supplied to mapFeatures must contain a "Feature" column,
 #' which will be used for mapping to results. When Report is set to "FC"
@@ -68,6 +83,8 @@ DE <- function(
     Topn = Inf,
     signif_ = NULL,
     Rank_name = "Feature",
+    impute_finite_ranks = TRUE,
+    keep_na_padj = FALSE,
     annotateSig = TRUE) {
   # Check object
   stopifnot(is(Hotgenes, "Hotgenes"))
@@ -86,6 +103,7 @@ DE <- function(
     hotList = hotList,
     .log2FoldChange = .log2FoldChange,
     padj_cut = padj_cut,
+    keep_na_padj = keep_na_padj,
     annotateSig = annotateSig
   )
 
@@ -199,7 +217,7 @@ DE <- function(
       dplyr::group_map(~.x) %>%
       purrr::set_names(levels(Output_DE[[dplyr::group_vars(Output_DE)]])) %>%
       purrr::map(function(x) {
-        x %>%
+        x <- x %>%
           head(n = Topn) %>%
          
           dplyr::select(dplyr::all_of(c(Rank_name_Final, "stat"))) %>%
@@ -216,6 +234,65 @@ DE <- function(
           dplyr::arrange(dplyr::desc(.data$stat)) %>%
           unique() %>%
           tibble::deframe()
+
+
+        
+  if(any(is.infinite(x))){
+    
+    detection_warning <- glue::glue(
+    "Infinite ranks detected for 
+    {length(x[is.infinite(x)])} features."    )
+    
+    
+  if(impute_finite_ranks) {
+  imputation_handling <- "Inputing max with:
+  
+  max_finite <- max(x[is.finite(x)])
+   
+  x[x > max_finite] <- max_finite + 1
+  
+  
+  Inputing min with:  
+  
+  min_finite <- min(x[is.finite(x)])
+   
+  x[x < min_finite] <- min_finite + -1"
+      
+      
+      # assigning new finites
+      max_finite <- max(x[is.finite(x)])
+      x[x > max_finite] <- max_finite + 1
+      
+      min_finite <- min(x[is.finite(x)])
+      x[x < min_finite] <- min_finite + -1
+      
+      x <- sort(x = x, decreasing = TRUE)    
+      
+    } else {
+      imputation_handling <- "No imputation."
+    }  
+    
+    
+  cli::cli_warn(
+  "
+  
+  {detection_warning}
+
+        
+  {imputation_handling}
+  ")
+    
+   
+          
+  }
+        
+        
+      
+        
+return(x)
+        
+        
+        
       })
     return(ReportOut)
   }
@@ -256,6 +333,7 @@ DEPlot <- function(
     Hotgenes = NULL,
     contrasts = NULL,
     padj_cut = 0.1,
+    keep_na_padj = FALSE,
     .log2FoldChange = 0,
     ncol = NULL,
     hotList = NULL) {
@@ -268,6 +346,7 @@ DEPlot <- function(
        
         contrasts = contrasts,
         padj_cut = padj_cut,
+        keep_na_padj = keep_na_padj,
         .log2FoldChange = .log2FoldChange
       ) %>%
 
@@ -400,6 +479,7 @@ DECoefs <- function(
     coef_ids = c("log2FoldChange", "stat"),
     .baseMean = NULL,
     padj_cut = 0.1,
+    keep_na_padj = FALSE,
     .log2FoldChange = 0,
     Topn = Inf,
     split_names = FALSE) {
@@ -409,6 +489,7 @@ DECoefs <- function(
       hotList = hotList,
       contrasts = contrasts,
       padj_cut = padj_cut,
+      keep_na_padj = keep_na_padj,
       .log2FoldChange = .log2FoldChange,
       Topn = Topn,
       Report = "Features"
@@ -500,6 +581,7 @@ DExps <- function(
     aux_features = "",
     contrasts = NULL,
     padj_cut = 0.1,
+    keep_na_padj = FALSE,
     .log2FoldChange = 0,
     Topn = Inf,
     Query_set = FALSE,
@@ -535,6 +617,7 @@ DExps <- function(
      # Report = "Features",
       #mapFeatures = FALSE,
       padj_cut = padj_cut,
+     keep_na_padj = keep_na_padj,
       .log2FoldChange = .log2FoldChange
     ) %>% 
       dplyr::slice_head(n=Topn) %>% 

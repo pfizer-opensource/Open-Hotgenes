@@ -23,6 +23,7 @@ DEphe <- function(
     hotList = NULL,
     contrasts = NULL,
     padj_cut = 0.1,
+    keep_na_padj = FALSE,
     .log2FoldChange = 0,
     Topn = Inf,
     annotations = NULL,
@@ -46,6 +47,7 @@ DEphe <- function(
     ExpressionSlots = ExpressionSlots,
     contrasts = contrasts,
     padj_cut = padj_cut,
+    keep_na_padj = keep_na_padj,
     .log2FoldChange = .log2FoldChange
   )
 

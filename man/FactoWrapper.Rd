@@ -24,6 +24,7 @@ FactoWrapper(
   contrasts = NULL,
   hotList = NULL,
   padj_cut = 0.1,
+  keep_na_padj = FALSE,
   signif_ = NULL,
   .log2FoldChange = 0,
   SampleIDs = NULL
@@ -109,6 +110,11 @@ See ?contrasts_. If NULL (default), all contrasts used.}
 all cut offs.}
 
 \item{padj_cut}{numeric value for padj limit (0.1 is Default).}
+
+\item{keep_na_padj}{logical, if TRUE
+any features with NA padj will be included with features that
+meet padj_cut. If FALSE (default), only features that meet the padj_cut
+threshold will be returned.}
 
 \item{signif_}{integer indicating the number of significant digits (signif)
 to be used. If NULL (NULL), original values returned.}

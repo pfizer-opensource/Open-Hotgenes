@@ -73,7 +73,8 @@ Output_DE_(
   padj_cut = 0.1,
   .log2FoldChange = 0,
   annotateSig = TRUE,
-  as_list = FALSE
+  as_list = FALSE,
+  keep_na_padj = FALSE
 )
 
 contrasts_(Hotgenes = NULL)
@@ -136,6 +137,11 @@ to show significance for any hotList feature (based on cut offs).}
 
 \item{as_list}{logical, default is FALSE. If true, results returned
 as a named list other object with be a dataframe grouped by "contrast".}
+
+\item{keep_na_padj}{logical, if TRUE
+any features with NA padj will be included with features that
+meet padj_cut. If FALSE (default), only features that meet the padj_cut
+threshold will be returned.}
 
 \item{min_n}{numeric, sets the minimum number of unique values
 a column can have, default is 1.}

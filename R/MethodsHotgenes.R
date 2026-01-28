@@ -861,6 +861,10 @@ ExpressionData_ <- function(Hotgenes = NULL,
 #' as a named list other object with be a dataframe grouped by "contrast".
 #' @param annotateSig logical, if TRUE (default), a column is added
 #' to show significance for any hotList feature (based on cut offs).
+#' @param keep_na_padj logical, if TRUE
+#' any features with NA padj will be included with features that
+#' meet padj_cut. If FALSE (default), only features that meet the padj_cut
+#' threshold will be returned.
 #' @return Output_DE_ Returns complete unfiltered Output_DE slot object.
 Output_DE_ <- function(Hotgenes = NULL,
                        contrasts = NULL,
@@ -869,10 +873,16 @@ Output_DE_ <- function(Hotgenes = NULL,
                        padj_cut = 0.1,
                        .log2FoldChange = 0,
                        annotateSig = TRUE,
-                       as_list = FALSE) {
+                       as_list = FALSE,
+                       keep_na_padj = FALSE) {
   # Check object
   stopifnot(is(Hotgenes, "Hotgenes"))
-
+  
+  
+  # Build padj filter condition based on keep_na_padj
+  padj_condition <- internal_padj_handling(padj_cut = padj_cut,
+                                           keep_na_padj = keep_na_padj)
+  
   # check mapFeatures
 
   if (isTRUE(mapFeatures)) {
@@ -932,7 +942,7 @@ Output_DE_ <- function(Hotgenes = NULL,
     if (isTRUE(annotateSig)) {
       Output_DE <- Output_DE %>%
         dplyr::mutate(significant = dplyr::case_when(
-          .data$padj < padj_cut &
+           eval(padj_condition) &
             abs(.data$log2FoldChange) >= .log2FoldChange ~ "*",
           TRUE ~ ""
         ))
@@ -946,7 +956,7 @@ Output_DE_ <- function(Hotgenes = NULL,
       dplyr::filter(abs(.data$log2FoldChange) >= .log2FoldChange,
         .preserve = TRUE
       ) %>%
-      dplyr::filter(.data$padj < padj_cut, .preserve = TRUE) 
+      dplyr::filter( eval(padj_condition), .preserve = TRUE) 
 
   }
 
@@ -965,16 +975,23 @@ Output_DE_ <- function(Hotgenes = NULL,
   return(Output_DE)
 }
 
+  
 # internal
 # returns DE results with minimal modification for faster performance
 Output_DE_df <- function(Hotgenes = NULL,
                        contrasts = NULL,
                        hotList = NULL,
                        padj_cut = 0.1,
-                       .log2FoldChange = 0) {
+                       .log2FoldChange = 0,
+                       keep_na_padj = FALSE) {
   # Check object
   stopifnot(is(Hotgenes, "Hotgenes"))
   
+  
+  # Build padj filter condition based on keep_na_padj
+  padj_condition <- internal_padj_handling(padj_cut = padj_cut,
+                                           keep_na_padj = keep_na_padj)
+
   
   # getting available contrasts, excluding Intercept
   available_contrasts <- contrasts_(Hotgenes)
@@ -1012,7 +1029,7 @@ Output_DE_df <- function(Hotgenes = NULL,
       dplyr::filter(abs(.data$log2FoldChange) >= .log2FoldChange,
                     .preserve = TRUE
       ) %>%
-      dplyr::filter(.data$padj < padj_cut, .preserve = TRUE) 
+      dplyr::filter( eval(padj_condition), .preserve = TRUE) 
     
     
   }
@@ -1033,6 +1050,19 @@ contrasts_ <- function(Hotgenes = NULL) {
     stop("Output_DE elements must be named")
   }
   return(names(Hotgenes@Output_DE))
+}
+
+#' @noRd
+internal_padj_handling <- function(padj_cut = 0.1,
+                                   keep_na_padj = FALSE){
+  # Build padj filter condition based on keep_na_padj
+  if (keep_na_padj) {
+    padj_condition <- quote(
+      detected_missingness(.data$padj) | .data$padj < padj_cut)
+  } else {
+    padj_condition <- quote( .data$padj < padj_cut)
+  }
+  return(padj_condition)
 }
 
 

@@ -2801,7 +2801,8 @@ Server_download_file(
     
     # Complete unfiltered
     # Also removing name, which may be too long
-  out_file  <- Output_DE_(Hotgenes, padj_cut = 1
+  out_file  <- Output_DE_(Hotgenes, padj_cut = 1,
+                          keep_na_padj = TRUE
     ) %>%
       plyr::dlply("contrast", identity) %>% 
       

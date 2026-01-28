@@ -23,6 +23,8 @@ DE(
   Topn = Inf,
   signif_ = NULL,
   Rank_name = "Feature",
+  impute_finite_ranks = TRUE,
+  keep_na_padj = FALSE,
   annotateSig = TRUE
 )
 
@@ -30,6 +32,7 @@ DEPlot(
   Hotgenes = NULL,
   contrasts = NULL,
   padj_cut = 0.1,
+  keep_na_padj = FALSE,
   .log2FoldChange = 0,
   ncol = NULL,
   hotList = NULL
@@ -42,6 +45,7 @@ DECoefs(
   coef_ids = c("log2FoldChange", "stat"),
   .baseMean = NULL,
   padj_cut = 0.1,
+  keep_na_padj = FALSE,
   .log2FoldChange = 0,
   Topn = Inf,
   split_names = FALSE
@@ -55,6 +59,7 @@ DExps(
   aux_features = "",
   contrasts = NULL,
   padj_cut = 0.1,
+  keep_na_padj = FALSE,
   .log2FoldChange = 0,
   Topn = Inf,
   Query_set = FALSE,
@@ -108,6 +113,16 @@ to be used. If NULL (NULL), original values returned.}
 \item{Rank_name}{String matching a column name returned by
 Mapper_ function, default is "Feature". This parameter is only valid when
 Report = "Ranks" or "FC" and mapFeatures = TRUE.}
+
+\item{impute_finite_ranks}{logical, if TRUE (default) 
+any detected infinite values will be imputed (see details) 
+following a warning. 
+If FALSE, you'll still get a warning, but no imputation will occur.}
+
+\item{keep_na_padj}{logical, if TRUE
+any features with NA padj will be included with features that
+meet padj_cut. If FALSE (default), only features that meet the padj_cut
+threshold will be returned.}
 
 \item{annotateSig}{logical, if TRUE (default), a column is added
 to show significance for any hotList feature (based on cut offs).}
@@ -185,7 +200,18 @@ column (see Hotgenes class). When mapFeatures = TRUE and Rank_name
 is not set to "Feature", due to mapping issues, non-unique names
 may be produced. In this case, the rank with the highest absolute
 value is returned via \code{\link[dplyr]{slice_max}}, with Rank_name
-set as group.
+set as group. 
+
+
+Imputation of any infinite rank values will use the following process:
+\preformatted{
+ max_finite <- max(x[is.finite(x)])
+ x[x > max_finite] <- max_finite + 1
+ 
+ min_finite <- min(x[is.finite(x)])
+ x[x < min_finite] <- min_finite + -1
+}
+
 
 The dataframe supplied to mapFeatures must contain a "Feature" column,
 which will be used for mapping to results. When Report is set to "FC"
