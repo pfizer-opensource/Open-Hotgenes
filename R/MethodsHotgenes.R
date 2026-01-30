@@ -1204,23 +1204,6 @@ na_check <- function(string = NULL) {
 #' These functions provide vector-aware detection of missing or empty values.
 #' Unlike \code{na_check()}, these functions treat the string "NA" as valid data.
 #' 
-#' **What is detected as missing:**
-#' \itemize{
-#'   \item \code{NA} values
-#'   \item \code{NaN} values (in numeric vectors only)
-#'   \item Empty strings \code{""}
-#'   \item Whitespace-only strings (spaces, tabs, newlines)
-#'   \item \code{NULL} (treated as missing)
-#'   \item Empty vectors
-#' }
-#' 
-#' **What is NOT detected as missing:**
-#' \itemize{
-#'   \item String "NA", "N/A", "null", etc. (treated as valid data)
-#'   \item \code{Inf} or \code{-Inf}
-#'   \item Numeric placeholder values (0, -999, etc.)
-#'   \item \code{NaN} in character vectors (coerced to string "NaN")
-#' }
 NULL
 
 #' [detected_missingness()] checks for non-whitespace values in specified vector
@@ -1252,7 +1235,7 @@ detected_missingness <- function(x = NULL) {
   
   # grepl returns FALSE for NA values (they don't match the pattern)
   # !grepl returns TRUE for empty strings, whitespace-only, and NA
-  vector_out <- !grepl(x = x, pattern = "\\S") | is.nan(x)
+  vector_out <- !grepl(x = x, pattern = "\\S") 
   
   return(vector_out)
 }
