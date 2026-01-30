@@ -32,7 +32,26 @@ Single logical value: TRUE if all elements are truthy, FALSE otherwise
 Single logical value: TRUE if any element is truthy, FALSE otherwise
 }
 \description{
-Vector-aware missingness detection
+These functions provide vector-aware detection of missing or empty values.
+Unlike \code{na_check()}, these functions treat the string "NA" as valid data.
+
+**What is detected as missing:**
+\itemize{
+  \item \code{NA} values
+  \item \code{NaN} values (in numeric vectors only)
+  \item Empty strings \code{""}
+  \item Whitespace-only strings (spaces, tabs, newlines)
+  \item \code{NULL} (treated as missing)
+  \item Empty vectors
+}
+
+**What is NOT detected as missing:**
+\itemize{
+  \item String "NA", "N/A", "null", etc. (treated as valid data)
+  \item \code{Inf} or \code{-Inf}
+  \item Numeric placeholder values (0, -999, etc.)
+  \item \code{NaN} in character vectors (coerced to string "NaN")
+}
 
 Use \code{\link[=detected_missingness]{detected_missingness()}} if you want logical values for each element in
 a vector.
@@ -45,4 +64,7 @@ shiny::isTruthy(). Returns FALSE if any element is NA, NULL, "",
 or whitespace-only.
 
 Vector-aware check for at least one truthy element.
+}
+\details{
+Vector-aware missingness detection
 }

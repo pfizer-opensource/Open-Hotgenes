@@ -1,3 +1,6 @@
+# version 0.0.44_
+    - Added NaN detection to detected_missinginess and related functions.
+
 # version 0.0.43:
     - Added support for imputing rank values for gsea
     - Added keep_na_padj arg to utilities for supporting the export of 

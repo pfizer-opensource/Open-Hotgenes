@@ -144,6 +144,7 @@ test_that("all_truthy() handles single NA value", {
 test_that("all_truthy() handles numeric vectors", {
   expect_true(all_truthy(c(1, 2, 3)))
   expect_false(all_truthy(c(1, NA, 3)))
+  
 })
 
 test_that("all_truthy() handles factor vectors", {
@@ -293,4 +294,30 @@ test_that("all_truthy() is vector-aware unlike shiny::isTruthy()", {
   
   # This is the key difference - all_truthy is vector-aware
   # Solves the problem from: if(!all(shiny::isTruthy(species)))
+})
+
+
+# Test NaN handling ----------------------------------------------------
+
+test_that("detected_missingness() detects NaN in numeric vectors", {
+  x <- c(1, NA, 3, NaN)
+  result <- detected_missingness(x)
+  expect_equal(result, c(FALSE, TRUE, FALSE, TRUE))
+})
+
+test_that("detected_missingness() handles NaN coerced to character", {
+  # When NaN is in character vector, it becomes "NaN" string (valid data)
+  x <- c("1", NA, "3", NaN)
+  result <- detected_missingness(x)
+  expect_equal(result, c(FALSE, TRUE, FALSE, FALSE))
+})
+
+test_that("all_truthy() returns FALSE when NaN present in numeric", {
+  expect_false(all_truthy(c(1, 2, NaN)))
+  expect_false(all_truthy(c(NaN, NA, 3)))
+})
+
+test_that("any_missingness() returns TRUE when NaN present in numeric", {
+  expect_true(any_missingness(c(1, 2, NaN)))
+  expect_true(any_missingness(c(NaN)))
 })
