@@ -533,6 +533,13 @@ inputId = "label_size" %>% ns(),
 label = "label size:", value = 0,
 min = 0, max = 10, step = 1
 ),
+
+shiny::sliderInput(
+  inputId = "legend_text_size" %>% ns(),
+  label = "label text size:", 
+  value = 0,
+  min = 0, max = 50, step = 1
+),
 shiny::sliderInput(
 inputId = "ellipse.level" %>% ns(),
 label = "ellipse level:", value = 0.5,
@@ -878,7 +885,8 @@ ellipse.level = input$ellipse.level,
 habillage_id = input$habillage_id,
 habillage_shape_id = input$habillage_shape_id,
 point_size = input$point_size,
-label_size = input$label_size
+label_size = input$label_size, 
+legend_text_size = input$legend_text_size
 )
 
 return(Final_PCA_OUT)

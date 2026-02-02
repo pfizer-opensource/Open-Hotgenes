@@ -56,6 +56,7 @@ factoExtra_DFs(
   habillage_shape_id = "clust",
   point_size = 3,
   label_size = 3,
+  legend_text_size = 12,
   ...
 )
 }
@@ -144,6 +145,8 @@ to use for individual shapes. Default is "clust".}
 \item{point_size}{numeric value. Default is 3.}
 
 \item{label_size}{numeric value. Default is 3.}
+
+\item{legend_text_size}{numeric value. Default is 12.}
 
 \item{...}{additional parameter to pass to \code{\link[factoextra:fviz_pca]{factoextra::fviz_pca_ind()}}}
 }
@@ -314,7 +317,10 @@ if(interactive()){
   PC$res_PPI_pa_1
   
   # with more plotting options
-  factoExtra_DFs(PCA_obj = PC, repel = TRUE)
+  factoExtra_DFs(PCA_obj = PC, 
+                 habillage_shape_id = "Hrs",
+                 legend_text_size = 10,
+                 repel = TRUE)
   
 }
 }

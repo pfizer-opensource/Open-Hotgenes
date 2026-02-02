@@ -148,6 +148,9 @@ if(interactive()){
   PC$res_PPI_pa_1
   
   # with more plotting options
-  factoExtra_DFs(PCA_obj = PC, repel = TRUE)
+  factoExtra_DFs(PCA_obj = PC, 
+                 habillage_shape_id = "Hrs",
+                 legend_text_size = 10,
+                 repel = TRUE)
   
 }

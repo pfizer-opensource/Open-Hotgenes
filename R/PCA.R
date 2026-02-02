@@ -398,6 +398,7 @@ FactoWrapper_DFs <- function(ExpressionDat = NULL,
 #' to use for individual shapes. Default is "clust".
 #' @param point_size numeric value. Default is 3.
 #' @param label_size numeric value. Default is 3.
+#' @param legend_text_size numeric value. Default is 12.
 #' @param ... additional parameter to pass to [factoextra::fviz_pca_ind()]
 #' @rdname FactoWrapper
 #' @export
@@ -409,6 +410,7 @@ factoExtra_DFs <- function(PCA_obj = NULL,
                            habillage_shape_id = "clust",
                            point_size = 3,
                            label_size = 3,
+                           legend_text_size = 12,
                            ...) {
   # getting all quali IDs + clust
   quali_IDs <- c(colnames(PCA_obj$coldata_dat), "clust")
@@ -484,6 +486,9 @@ factoExtra_DFs <- function(PCA_obj = NULL,
                                     title.position = "top"),
       color = ggplot2::guide_legend(title = habillage_id,
                                     title.position = "top")
+    ) +
+    ggplot2::theme(
+      legend.text = ggplot2::element_text(size = legend_text_size)
     )
   
   

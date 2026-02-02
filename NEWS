@@ -1,3 +1,6 @@
+# version 0.0.46:
+    - Added legend_text_size to factoExtra_DFs() and to shiny app
+
 # version 0.0.45:
     - Dropped NaN detection
 
