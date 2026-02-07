@@ -949,6 +949,7 @@ tibble::as_tibble() %>%
 dplyr::slice(selected_rows) %>%
 dplyr::select(dplyr::any_of(c("clust"="Cluster", 
       "Feature"))) %>% 
+  dplyr::distinct() %>% 
 tibble::column_to_rownames("Feature") %>% 
 droplevels()
 })
@@ -957,8 +958,10 @@ droplevels()
 pca_out <- shiny::reactive({
 if(shiny::isTruthy(input$pca_to_gsea)){
 
-out_ranks <- shiny::req(output_temp()[["Ranks"]])
-return(out_ranks)
+out_TopTibble <- shiny::req(output_temp()[["TopTibble"]]) %>% 
+  dplyr::mutate(Cluster = paste0("clust_", as.character(.data$Cluster)))
+ 
+return(out_TopTibble)
 } else {
 NULL
 }
@@ -1143,6 +1146,14 @@ label = "Sort by:", multiple = TRUE,
 choices = ""
 ),
 
+shiny::selectInput(
+  inputId = "Var_levels" %>% ns(),
+  label = "Set levels:",
+  choices = "",
+  selected = "",
+  multiple = TRUE
+),
+
 
 shiny::h4("Clustering"),
 # Cut rows
@@ -1278,6 +1289,25 @@ choices = input$annotations
 )
 })
 
+shiny::observeEvent(input$arrangeby, {
+  
+level_choices <- input$arrangeby
+  
+  
+shiny::updateSelectInput(session,
+inputId = "Var_levels",
+choices = DF_coldata()$quali_distinct[level_choices] %>%
+# getting levels
+purrr::imap(function(x, y) {
+level_raw <- x %>% levels()
+level_names <- paste(y, level_raw, sep = "_")
+
+purrr::set_names(level_names, level_raw)
+})
+)  
+  
+})
+
 # rclipbutton -------------------------------------------------------------
 
 output$topFeatures <- shiny::renderUI({
@@ -1349,24 +1379,60 @@ MainTitle <- paste0("Expression: ", ExpressionSlots())
 MainTitle <- paste0(chr_Subtitle, "\nExpression: ", ExpressionSlots())
 }
 
-if(!is.null(annotation_row())){
-clust_col <- coldata_palettes(annotation_row())
 
-annotation_colors = coldata_palettes(Hotgenes,
-             brewer.pals = input$coldata_pal,
-             SampleIDs = SampleIDs()
-) %>% append(clust_col)
+
+
+# reordering xVar
+if (isTruthy(input$Var_levels)) {
+  print("reactive_input_vars")
+  level_choices <- shiny::req(input$arrangeby)
+  
+  newMeta <- DF_coldata()$quali_distinct[level_choices] %>%
+    # getting levels
+    purrr::imap(function(x, y) {
+      # To ensure correct mapping between factor levels,
+      # a name must be assigned
+      
+      level_raw <- x %>% levels()
+      level_names <- paste(y, level_raw, sep = "_")
+      
+      # inverse format as the UI, since UI shows names and
+      # returns values
+      
+      New_IDs <- purrr::set_names(level_raw, level_names)
+      
+      # New output
+      New_IDs[input$Var_levels] %>% as.character()
+    }) %>%
+    purrr::compact()
 } else {
-annotation_colors = coldata_palettes(Hotgenes,
-             brewer.pals = input$coldata_pal,
-             SampleIDs = SampleIDs()
-)
+  newMeta <- NULL
 }
+
+
+
+if(!is.null(annotation_row())){
+  clust_col <- coldata_palettes(annotation_row())
+  
+  annotation_colors = coldata_palettes(Hotgenes,
+                                       brewer.pals = input$coldata_pal,
+                                       named_levels = newMeta,
+                                       SampleIDs = SampleIDs()
+  ) %>% append(clust_col)
+} else {
+  annotation_colors = coldata_palettes(Hotgenes,
+                                       brewer.pals = input$coldata_pal,
+                                       named_levels = newMeta,
+                                       SampleIDs = SampleIDs()
+  )
+}
+
 
 Hotgenes %>%
 DEphe(
 SampleIDs = SampleIDs(),
 Topn = input$TopLength,
+named_levels = newMeta,
 breaks = seq(-rg, rg, length.out = 100),
 hotList = hotList(),
 ExpressionSlots = ExpressionSlots(),
@@ -1628,7 +1694,8 @@ shiny::plotOutput("enrichmentPlot" %>% ns())
 #' A named vector may be used, as well.
 #' @param parallel.sz Number of threads of execution
 #' to use when doing the calculations in parallel.
-#' @param PCA_ranks reactive object goinging named list of ranks from
+#' @param PCA_TopTibble reactive object containing the TopTibble slots returned
+#' by PCA.
 #' generated from PCA tab. 
 #' @rdname Shiny_Tabs
 fgsea_Server_module <- function(
@@ -1637,7 +1704,7 @@ input = NULL,
 output = NULL,
 session = NULL,
 Hotgenes = NULL,
-PCA_ranks = shiny::reactive(NULL),
+PCA_TopTibble = shiny::reactive(NULL),
 ExpressionSlots = shiny::reactive(NULL),
 SampleIDs = shiny::reactive(NULL),
 OntologyMethods = OntologyMethods(),
@@ -1647,11 +1714,6 @@ shiny::moduleServer(
 id,
 function(input, output, session) {
 
-# Getting PCA ranks
-PCA_ranks_reactive <- shiny::reactive({
-rnks <- PCA_ranks()
-return(rnks)
-})
 
 
 con_choices <- shiny::reactive({
@@ -1667,8 +1729,11 @@ choices <- list(contrasts = choices_con)
 
 
 
-if(shiny::isTruthy(PCA_ranks_reactive())){
-choices$from_pca_tab <- names(PCA_ranks_reactive())
+if(shiny::isTruthy(PCA_TopTibble())){
+  
+  choices$from_pca_tab <- PCA_TopTibble()[["Cluster"]] %>% 
+    unique()
+  
 
 }
 
@@ -1779,6 +1844,30 @@ spin = "cube-grid",
 text = "Processing..."
 )
 
+# Getting PCA ranks
+PCA_ranks_reactive <- shiny::reactive({
+  
+  if(shiny::isTruthy(PCA_TopTibble() )) {
+    
+  
+  rnks <- PCA_TopTibble() %>% 
+    plyr::dlply("Cluster", identity) %>% 
+    purrr::imap(function(x,y){
+      x %>% 
+        df_to_ranks(
+          Rank_name_Final = input$input_MapperCol,
+          Rank_values_Final = "v.test", 
+          Topn = Inf,
+          impute_finite_ranks = FALSE)
+    }) 
+  
+  } else {
+    rnks <- list()
+  }
+  return(rnks)
+})# %>% 
+  #shiny::bindEvent()
+
 # converts uploaded data to InputRanks, which is required for analysis
 list_Ranks <- Hotgenes %>%
 DE(
@@ -1786,7 +1875,7 @@ Report = "Ranks",
 Rank_name = input$input_MapperCol, # see above
 padj_cut = 1
 ) %>% 
-append(PCA_ranks_reactive())
+append(PCA_ranks_reactive()) 
 
 list_Ranks <- list_Ranks[input$fgsea_Contrasts]
 

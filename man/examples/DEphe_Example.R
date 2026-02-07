@@ -25,6 +25,7 @@ if(interactive()) {
       annotation_colors = coldata_palettes(htgs),
       arrangeby = c("Hrs", "sh"),
       annotations = c("Hrs", "sh"),
+      named_levels = list(sh = c("EWS")),
       cellheight = 10,
       cellwidth = 8
     )

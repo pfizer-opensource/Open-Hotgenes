@@ -10,6 +10,7 @@ coldata_palettes(
   BinaryColorScheme = c("lightgrey", "black"),
   coldata_ids = NULL,
   mode = "all",
+  named_levels = NULL,
   SampleIDs = NULL
 )
 }
@@ -33,6 +34,10 @@ Choices include: "all", "quanti", "quali". If "all", the
 default, all columns will be returned. If "quanti", only
 numeric coldata will be returned. If "quali", only
 qualitative coldata will be returned.}
+
+\item{named_levels}{a named list containing the
+levels to set as reference via
+\code{\link[forcats]{fct_relevel}}}
 
 \item{SampleIDs}{vector of sample ids to select}
 }

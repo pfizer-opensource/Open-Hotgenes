@@ -2,6 +2,7 @@
 % Please edit documentation in R/Feature_Alias_support.R, R/Utilities.R
 \name{parse_features}
 \alias{parse_features}
+\alias{set_missing_alias_default}
 \alias{utilities}
 \alias{DE}
 \alias{DEPlot}
@@ -11,6 +12,12 @@
 \title{Returns a named list showing where the features are found}
 \usage{
 parse_features(Hotgenes = NULL, features = NULL)
+
+set_missing_alias_default(
+  df = NULL,
+  default_alias = "Feature",
+  preferred_alias = NULL
+)
 
 DE(
   Hotgenes = NULL,
@@ -79,6 +86,16 @@ BoxPlot(
 \item{Hotgenes}{Hotgenes object.}
 
 \item{features}{strings to check}
+
+\item{df}{a dataframe with Features and aliases}
+
+\item{default_alias}{string for column name (default is "Feature") to 
+supply aliases when the preferred_alias is missing.}
+
+\item{preferred_alias}{string (required) for column names 
+to populate with aliases from default_alias when 
+rows contain missing data. The default is NULL, will return
+the unmodifed dataframe.}
 
 \item{contrasts}{vector for DE data.frames in Output_DE slot to return.
 See ?contrasts_. If NULL (default), all contrasts used.}

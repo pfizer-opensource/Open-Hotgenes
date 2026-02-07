@@ -1,3 +1,9 @@
+# version 0.0.47:
+    - Added alias mapping support for cluster passed from PCA tab to fgsea
+      tab in app. 
+    - Aliases now included in TopTibble slot from PCA output  
+    - Added the ability to set levels for heatmap annotations
+
 # version 0.0.46:
     - Added legend_text_size to factoExtra_DFs() and to shiny app
 

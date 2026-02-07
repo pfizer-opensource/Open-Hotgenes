@@ -102,18 +102,51 @@ FactoWrapper <- function(Hotgenes = NULL,
     labelsize = labelsize
   )
   
-  
+  #output_PCA$TopTibble
   
   # Setting decimal points --------------------------------------------------
   summary_ids <- c("TopTibble", "TopGroups", "TopTibble_sup")
+  
+  available <- Mapper_aliases(Hotgenes)
+  
+  if(all(length(available) > 0,
+     nrow(output_PCA$TopTibble)> 0)) {
+    
+    
+    cli::cli_inform(
+      "Appending TopTibble with available aliases: {available}")
+  
+  
+  output_PCA["TopTibble"] <- output_PCA["TopTibble"] %>%
+    purrr::imap(function(x,y) {
+      
+    
+      x <-  df_append_mapperDF(
+        df = x,
+        mapperDF = Mapper_(Hotgenes), 
+        by = "Feature",
+        relationship = "many-to-many")
+      
+      return(x)
+      
+    })
+  
+  } 
+  
   if (!is.null(signif_)) {
     output_PCA[summary_ids] <- output_PCA[summary_ids] %>%
-      purrr::map(function(x) {
-        x %>%
-          dplyr::mutate(dplyr::across(dplyr::where(is.numeric),
-                                      ~ signif(.x, signif_)))
+      purrr::imap(function(x,y) {
+        
+ 
+  
+  out_x <- x %>%
+    dplyr::mutate(dplyr::across(dplyr::where(is.numeric),
+                                ~ signif(.x, signif_)))
+  
+        
       })
   }
+  
   
   
   return(output_PCA)
@@ -236,8 +269,9 @@ FactoWrapper_DFs <- function(ExpressionDat = NULL,
       nbelements = 100,
       nbind = 100,
       ncp = 3,
-      file = ""
+      file = nullfile()
     )
+    
     
     
     # Functions

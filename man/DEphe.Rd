@@ -22,6 +22,7 @@ DEphe(
   cluster_cols = FALSE,
   arrangeby = NULL,
   label_by = "Feature",
+  named_levels = NULL,
   ...
 )
 }
@@ -80,6 +81,10 @@ coldata_. Samples in the heatmap will be sorted by this variable.}
 \item{label_by}{String matching a column name returned by
 Mapper_ function, default is "Feature".}
 
+\item{named_levels}{a named list containing the
+levels to set as reference via
+\code{\link[forcats]{fct_relevel}}}
+
 \item{...}{Additional parameters for
 \code{\link[pheatmap]{pheatmap}}.}
 }
@@ -118,6 +123,7 @@ if(interactive()) {
       annotation_colors = coldata_palettes(htgs),
       arrangeby = c("Hrs", "sh"),
       annotations = c("Hrs", "sh"),
+      named_levels = list(sh = c("EWS")),
       cellheight = 10,
       cellwidth = 8
     )

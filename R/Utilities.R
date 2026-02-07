@@ -844,3 +844,118 @@ BoxPlot <- function(
   }
 }
 
+
+
+#' @noRd
+df_append_mapperDF <- function(
+  df = NULL,
+  mapperDF = NULL, 
+  by = "Feature",
+  relationship = "many-to-many"){
+  
+  df_out <- dplyr::left_join(
+    x = df,
+    y = mapperDF,
+    by = by,
+    relationship =  relationship
+  ) %>% 
+    set_missing_alias_default(
+      default_alias = by,
+      preferred_alias = c(names(mapperDF)))
+  
+  return(df_out)
+}
+
+
+# internal ranks funs -----------------------------------------------------
+
+#' @noRd
+df_to_ranks <- function(
+    x = NULL, 
+    Rank_name_Final = "Feature", 
+    Rank_values_Final = "stat", 
+    Topn = Inf,
+    with_ties = FALSE,
+    impute_finite_ranks = FALSE){
+
+
+x <- x %>%
+head(n = Topn) %>%
+
+dplyr::select(dplyr::all_of(c(Rank_name_Final, Rank_values_Final))) %>%
+
+dplyr::filter(
+dplyr::if_any(
+.cols = dplyr::any_of(Rank_name_Final),
+.fns = ~ !na_check(.x)
+)
+) %>%
+dplyr::group_by(across(dplyr::any_of(Rank_name_Final))) %>%
+dplyr::slice_max(abs(.data[[Rank_values_Final]]), n = 1, with_ties = with_ties) %>%
+dplyr::ungroup() %>%
+dplyr::arrange(dplyr::desc(.data[[Rank_values_Final]])) %>%
+unique() %>%
+tibble::deframe()
+
+
+
+if(any(is.infinite(x))){
+
+detection_warning <- glue::glue(
+"Infinite ranks detected for 
+{length(x[is.infinite(x)])} features."    )
+
+
+if(impute_finite_ranks) {
+imputation_handling <- "Inputing max with:
+
+max_finite <- max(x[is.finite(x)])
+
+x[x > max_finite] <- max_finite + 1
+
+
+Inputing min with:  
+
+min_finite <- min(x[is.finite(x)])
+
+x[x < min_finite] <- min_finite + -1"
+
+
+# assigning new finites
+max_finite <- max(x[is.finite(x)])
+x[x > max_finite] <- max_finite + 1
+
+min_finite <- min(x[is.finite(x)])
+x[x < min_finite] <- min_finite + -1
+
+x <- sort(x = x, decreasing = TRUE)    
+
+} else {
+imputation_handling <- "No imputation."
+}  
+
+
+cli::cli_warn(
+"
+
+{detection_warning}
+
+
+{imputation_handling}
+")
+
+
+
+}
+
+
+
+
+return(x)
+
+
+
+#})
+#return(ReportOut)
+
+}

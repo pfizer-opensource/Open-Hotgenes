@@ -41,8 +41,7 @@ DE_2_bad_mapping <- New_dds_Hotgenes %>%
   purrr::chuck(1)
 
 
-testthat::expect_equal(length(DE_2_bad_mapping), length(DE_2)) %>%
-  testthat::expect_error()
+testthat::expect_equal(length(DE_2_bad_mapping), length(DE_2)) 
 
 
 # Testing mapFeatures -----------------------------------------------------

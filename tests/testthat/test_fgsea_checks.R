@@ -133,8 +133,8 @@ gsList <- msigdbr_wrapper(
   gene_col = choice_id
 )
 
-class(gsList)
-names(gsList)
+# class(gsList)
+# names(gsList)
 
 # OntologyMethods ---------------------------------------------------------
 

@@ -58,6 +58,13 @@ ExpsPlot <- function(
   # Check object
   stopifnot(is(Hotgenes, "Hotgenes"))
 
+  
+  mapper_choices <- names(Mapper_(Hotgenes))
+  
+  matched_name_col <- match.arg(
+    arg = name_col,
+    choices = mapper_choices, several.ok = FALSE)
+  
   # color pal
 
   if (!shiny::isTruthy(fill)) {
@@ -77,7 +84,7 @@ ExpsPlot <- function(
   }
 
 
-
+  
   # Prep to building long expression data
   Matched_ExpSel <- match.arg(
     ExpressionSlots,
@@ -115,7 +122,7 @@ ExpsPlot <- function(
     ExpDat <- NULL
   } else if (!is.null(yVar_parsed) && !is.null(xVar)) {
     # expression data
-    ExpDat <- Hotgenes %>%
+    init_ExpDat <- Hotgenes %>%
       DExps(
         Query_set = TRUE,
         hotList = parsed_features$exps_features,
@@ -126,30 +133,39 @@ ExpsPlot <- function(
       ) %>%
       dplyr::arrange(dplyr::across(dplyr::any_of(xVar)))# %>%
       
-    
-    if(name_col != "Feature"){
-      # label_by
-      label_aliases <- hotList_mapper(Hotgenes,
-                                      hotList = parsed_features$exps_features)%>%
-        dplyr::select(dplyr::any_of(c("Feature", name_col))) 
+   
+    if(matched_name_col != "Feature"){
       
-      ExpDat <- ExpDat %>% 
+      # label_by
+      label_aliases <- hotList_mapper(
+        Hotgenes,
+        hotList = parsed_features$exps_features ) %>%
+        dplyr::select(dplyr::any_of(c("Feature", matched_name_col))) 
+      
+      ExpDat <- init_ExpDat %>% 
         tidyr::pivot_longer(
           cols = dplyr::any_of(c(yVar_parsed)),
           names_to = "Feature",
           values_to = value_col
         ) %>% 
-        dplyr::left_join(label_aliases, by = "Feature")
+        dplyr::left_join(label_aliases, by = "Feature") %>% 
+        
+        set_missing_alias_default(default_alias = "Feature",
+                                  preferred_alias = matched_name_col)
+      
+      
     } else {
       
       
-      ExpDat <- ExpDat %>% 
+      ExpDat <- init_ExpDat %>% 
       # converting to long format
       tidyr::pivot_longer(
         cols = dplyr::any_of(c(yVar_parsed)),
-        names_to = name_col,
+        names_to = matched_name_col,
         values_to = value_col
       ) 
+      
+      
     }
     
     
@@ -221,7 +237,7 @@ ExpsPlot <- function(
           title = ggplot2::element_text(hjust = 0.5),
           plot.margin = ggplot2::unit(c(1, 1, 1, 1), "cm")
         ),
-        ggplot2::facet_wrap(c(name_col, facets), # labeller = labeller ,
+        ggplot2::facet_wrap(c(matched_name_col, facets), # labeller = labeller ,
           scales = scales, ...
         )
       )
@@ -230,7 +246,7 @@ ExpsPlot <- function(
     if (isTRUE(basemean)) {
       # by Feature
       baseMean <- ExpDat %>%
-        dplyr::group_by(.data[[name_col]]) %>%
+        dplyr::group_by(.data[[matched_name_col]]) %>%
         dplyr::summarise(baseMean = mean(.data[[value_col]]))
 
       gplot <- gplot +
@@ -271,6 +287,7 @@ ExpsPlot_Table <- function(
     facets = NULL,
     name_col = "Feature",
     value_col = "value") {
+  
   data <- ggplot_obj$data
   # preparing to reformat data
   xx_vars <- c(facets, xVar)
@@ -282,7 +299,7 @@ ExpsPlot_Table <- function(
       value_col
     )))
 
-
+  
   # adding column name as prefix
   D2[xx_vars] <- D2[xx_vars] %>%
     purrr::imap(function(x, y) {
@@ -296,12 +313,12 @@ ExpsPlot_Table <- function(
     dplyr::ungroup() %>%
     dplyr::arrange(dplyr::across(dplyr::any_of(xx_vars))) %>%
     tidyr::pivot_wider(
-      id_cols = c(name_col, "Uniq_id"),
+      id_cols = dplyr::all_of(c(name_col, "Uniq_id")),
       names_from = dplyr::any_of(xx_vars),
       values_from = dplyr::any_of(value_col)
     ) %>%
     dplyr::select(-dplyr::any_of("Uniq_id")) %>%
-    dplyr::rename(yVar = .data[[name_col]]) %>%
+    dplyr::rename("yVar" = .env$name_col) %>%
     dplyr::relocate(dplyr::any_of(c("yVar")), .before = 1) %>%
     dplyr::arrange(.data$yVar)
 

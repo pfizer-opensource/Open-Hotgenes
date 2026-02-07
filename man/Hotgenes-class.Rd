@@ -23,6 +23,7 @@
 \alias{contrasts_}
 \alias{Features_}
 \alias{Mapper_}
+\alias{Mapper_aliases}
 \alias{Mapper_<-}
 \alias{Mapper_<-,Hotgenes-method}
 \alias{Background_}
@@ -82,6 +83,8 @@ contrasts_(Hotgenes = NULL)
 Features_(Hotgenes = NULL)
 
 Mapper_(Hotgenes = NULL, min_n = 1)
+
+Mapper_aliases(Hotgenes = NULL, min_n = 1)
 
 Mapper_(object) <- value
 
@@ -200,6 +203,9 @@ a last check before returning a hotgenes object during generation.
 Mapper_ Returns Mapper containing
 aliases mapped to Features. Only aliases in 
 expression data are returned
+
+Mapper_aliases Returns a vector of Mapper column names other
+than "Feature"
 
 Background_ Returns a vector of
 all Features in the expression data.

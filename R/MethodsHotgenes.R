@@ -883,14 +883,7 @@ Output_DE_ <- function(Hotgenes = NULL,
   padj_condition <- internal_padj_handling(padj_cut = padj_cut,
                                            keep_na_padj = keep_na_padj)
   
-  # check mapFeatures
-
-  if (isTRUE(mapFeatures)) {
-    # mappingDF <- Mapper_(Hotgenes)
-    # let's see if this is faster
-    mappingDF <- hotList_mapper(Hotgenes,
-                                hotList = hotList)
-  }
+ 
 
   # sets required cols
   DE_Reqs <- required_DE_cols()
@@ -911,13 +904,26 @@ Output_DE_ <- function(Hotgenes = NULL,
   Output_DE <- Hotgenes@Output_DE[all_contrasts] %>% 
     purrr::list_rbind(names_to = "contrast") 
 
+ 
+  # check mapFeatures
+  
   if (isTRUE(mapFeatures)) {
-    Output_DE <- dplyr::left_join(
-      x = Output_DE,
-      y = mappingDF,
-      by = "Feature",
-      relationship = "many-to-many"
-    )
+    
+    mapped_check <- Mapper_aliases(Hotgenes)
+    
+    if(length(mapped_check) > 0 ) {
+      
+    
+    mappingDF <- hotList_mapper(Hotgenes,
+                                hotList = hotList)
+    
+    Output_DE <-  df_append_mapperDF(
+        df = Output_DE,
+        mapperDF = mappingDF, 
+        by = "Feature",
+        relationship = "many-to-many")
+    }
+    
   }
 
   Output_DE <- Output_DE %>%
@@ -1113,6 +1119,23 @@ Mapper_ <- function(Hotgenes = NULL, min_n = 1) {
  
 }
 
+#' @rdname Hotgenes-class
+#' @export
+#' @return Mapper_aliases Returns a vector of Mapper column names other
+#' than "Feature"
+Mapper_aliases <- function(Hotgenes = NULL, min_n = 1) {
+  # Check object
+  stopifnot(is(Hotgenes, "Hotgenes"))
+  
+  Mapperfeatures <-  Mapper_(Hotgenes, min_n = min_n) %>% 
+    dplyr::select(-dplyr::any_of(c("Feature"))) %>% 
+    colnames()
+  
+  
+  return(Mapperfeatures)
+  
+}
+
 
 
 #' @rdname Hotgenes-class
@@ -1130,7 +1153,10 @@ setGeneric("Mapper_<-")
 setMethod(
   "Mapper_<-", signature(object = "Hotgenes"),
   function(object, value) {
-    object@Mapper <- value
+    
+    
+    object@Mapper <- value %>% 
+      dplyr::mutate_all(as.character)
 
     validObject(object)
 

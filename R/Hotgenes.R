@@ -65,7 +65,8 @@ if(is.null(Mapper)){
     unique() %>% sort()
   
   Mapper <- data.frame(Feature = Mapper) %>%
-    tibble::as_tibble()
+    tibble::tibble() %>% 
+    dplyr::mutate_all(as.character)
   
 }
   
@@ -79,7 +80,7 @@ if(is.null(Mapper)){
     Original_Object = Original_Object,
     designMatrix = designMatrix,
     contrastMatrix = contrastMatrix,
-    Mapper = tibble::as_tibble(Mapper)
+    Mapper = tibble::tibble(Mapper)
   )
   
   
@@ -550,7 +551,7 @@ HotgenesDRomics <- function(
     tibble::column_to_rownames()
   
   # Create design matrix ----------------------------------------------------
-  modelMatrix <- model.matrix(~ dose, data = coldata)
+  designMatrix <- model.matrix(~ dose, data = coldata)
   
   # Column name mapping for output ------------------------------------------
   renamer_ <- c(
@@ -616,7 +617,7 @@ HotgenesDRomics <- function(
     Normalized_Expression = Normalized_Expression,
     auxiliary_assays = auxiliary_assays,
     coldata = coldata,
-    designMatrix = modelMatrix,
+    designMatrix = designMatrix,
     contrastMatrix = NULL,
     Original_Object = bmdcalc,
     Mapper = Mapper

@@ -4,6 +4,7 @@
 #' @inheritParams DExps
 #' @inheritParams coldata_
 #' @inheritParams pheatmap::pheatmap
+#' @inheritParams UpdateLevelsbyList
 #' @param ... Additional parameters for
 #' \code{\link[pheatmap]{pheatmap}}.
 #' @param arrangeby String mapping to a column name returned by
@@ -34,6 +35,7 @@ DEphe <- function(
     cluster_cols = FALSE,
     arrangeby = NULL,
     label_by = "Feature",
+    named_levels = NULL,
     ...) {
   # Check object
   stopifnot(is(Hotgenes, "Hotgenes"))
@@ -51,6 +53,8 @@ DEphe <- function(
     .log2FoldChange = .log2FoldChange
   )
 
+  
+  
  
   
   Top_Features <- rank_hotList(Hotgenes = Hotgenes, 
@@ -74,6 +78,13 @@ DEphe <- function(
       annot_input <- Hotgenes %>%
         coldata_(coldata_ids = annotations, mode = mode) %>%
         dplyr::arrange_at(arrangeby)
+      
+      # updating levels
+      if (!is.null(named_levels)) {
+        annot_input <- annot_input %>%
+          UpdateLevelsbyList(named_levels = named_levels ) %>%
+          dplyr::arrange_at(arrangeby)
+      }
     }
 
     # checking if DM needs to be sorted
@@ -94,11 +105,8 @@ DEphe <- function(
 
     if (Matched_FeatureID != "Feature") {
       de_annot <- mappingDF %>%
-        select(any_of(c("Feature", Matched_FeatureID))) %>%
+        dplyr::select(dplyr::any_of(c("Feature", Matched_FeatureID))) %>%
         tibble::deframe()
-
-
-      # DM[rownames(dSubdat)]
 
       labels_row <- de_annot[rownames(DM)]
     } else if (Matched_FeatureID == "Feature") {
@@ -106,6 +114,8 @@ DEphe <- function(
     }
 
 
+   
+    
     # pheatmap
     pheat_p <- pheatmap::pheatmap(DM,
       annotation_col = annot_input,
@@ -147,6 +157,7 @@ coldata_palettes <- function(
     BinaryColorScheme = c("lightgrey", "black"),
     coldata_ids = NULL,
     mode = "all",
+    named_levels = NULL,
     SampleIDs = NULL) {
   if (is(Input_Object, "Hotgenes")) {
     # Get SampleIDs
@@ -157,6 +168,7 @@ coldata_palettes <- function(
     }
     
     
+    #if(!)
     coldata_df <- Input_Object %>%
       coldata_( # coldata_ids=coldata_ids,
         mode = mode
@@ -179,6 +191,7 @@ coldata_palettes <- function(
   
   coldata_df %>%
     dplyr::select_all(factor) %>%
+    UpdateLevelsbyList(named_levels = named_levels) %>% 
     purrr::imap(function(x, y) {
       # getting levels
       Factor_levels <- x %>%

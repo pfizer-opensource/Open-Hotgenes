@@ -106,7 +106,7 @@ fgsea_Server_module(
   output = NULL,
   session = NULL,
   Hotgenes = NULL,
-  PCA_ranks = shiny::reactive(NULL),
+  PCA_TopTibble = shiny::reactive(NULL),
   ExpressionSlots = shiny::reactive(NULL),
   SampleIDs = shiny::reactive(NULL),
   OntologyMethods = OntologyMethods(),
@@ -235,7 +235,8 @@ rows in the data and in the annotation are matched using corresponding row
  names. Note that color schemes takes into account if variable is continuous
  or discrete.}
 
-\item{PCA_ranks}{reactive object goinging named list of ranks from
+\item{PCA_TopTibble}{reactive object containing the TopTibble slots returned
+by PCA.
 generated from PCA tab.}
 
 \item{OntologyMethods}{output of OntologyMethods function.}
