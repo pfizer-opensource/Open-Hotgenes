@@ -1,3 +1,8 @@
+# version 0.0.48:
+    - Updated Heatmap with default aliases
+    - Changed behavior of annotateSig for DE(), which now always annotates
+      significance when TRUE and not just when a hot list is provided.
+
 # version 0.0.47:
     - Added alias mapping support for cluster passed from PCA tab to fgsea
       tab in app. 

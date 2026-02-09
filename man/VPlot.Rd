@@ -25,7 +25,7 @@ VPlot(
 \item{contrasts}{vector for DE data.frames in Output_DE slot to return.
 See ?contrasts_. If NULL (default), all contrasts used.}
 
-\item{hotList}{vector of Features to select. This will overide
+\item{hotList}{vector of Features to select. This will override
 all cut offs.}
 
 \item{padj_cut}{numeric value for padj limit (0.1 is Default).}

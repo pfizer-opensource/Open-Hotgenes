@@ -96,7 +96,7 @@ DEphe <- function(
     }
 
     # checking Features
-    mappingDF <- Hotgenes %>% Mapper_()
+    mappingDF <- Mapper_(Hotgenes, use_default_aliases = TRUE)
     Feature_Ids <- colnames(mappingDF)
 
     Matched_FeatureID <- match.arg(label_by,

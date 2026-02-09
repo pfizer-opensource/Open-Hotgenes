@@ -219,7 +219,7 @@ See ?contrasts_. If NULL (default), all contrasts used.}
 
 \item{padj_cut}{numeric value for padj limit (0.1 is Default).}
 
-\item{hotList}{vector of Features to select. This will overide
+\item{hotList}{vector of Features to select. This will override
 all cut offs.}
 
 \item{.log2FoldChange}{absolute log2FoldChange for filtering.

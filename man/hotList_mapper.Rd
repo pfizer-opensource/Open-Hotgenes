@@ -12,7 +12,7 @@ hotList_Feature(Hotgenes = NULL, hotList = NULL)
 \arguments{
 \item{Hotgenes}{Hotgenes object.}
 
-\item{hotList}{vector of Features to select. This will overide
+\item{hotList}{vector of Features to select. This will override
 all cut offs.}
 }
 \description{

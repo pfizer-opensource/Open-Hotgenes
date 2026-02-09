@@ -82,7 +82,7 @@ contrasts_(Hotgenes = NULL)
 
 Features_(Hotgenes = NULL)
 
-Mapper_(Hotgenes = NULL, min_n = 1)
+Mapper_(Hotgenes = NULL, min_n = 1, use_default_aliases = FALSE)
 
 Mapper_aliases(Hotgenes = NULL, min_n = 1)
 
@@ -127,7 +127,7 @@ See ?contrasts_. If NULL (default), all contrasts used.}
 features will be mapped to information provided in the mapper slot.
 See details below and  \code{\link[Hotgenes]{Mapper_}}.}
 
-\item{hotList}{vector of Features to select. This will overide
+\item{hotList}{vector of Features to select. This will override
 all cut offs.}
 
 \item{padj_cut}{numeric value for padj limit (0.1 is Default).}
@@ -148,6 +148,10 @@ threshold will be returned.}
 
 \item{min_n}{numeric, sets the minimum number of unique values
 a column can have, default is 1.}
+
+\item{use_default_aliases}{logical, if TRUE, 
+uses [set_missing_alias_default(]). If FALSE (Default), 
+Mapper returened without modification.}
 
 \item{Col}{String matching the column id from Mapper
 slot to pull. Default is "Feature".}

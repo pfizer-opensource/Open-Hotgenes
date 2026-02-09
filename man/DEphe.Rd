@@ -36,7 +36,7 @@ See HotgenesObj.}
 
 \item{SampleIDs}{vector of sample ids to select}
 
-\item{hotList}{vector of Features to select. This will overide
+\item{hotList}{vector of Features to select. This will override
 all cut offs.}
 
 \item{contrasts}{vector for DE data.frames in Output_DE slot to return.

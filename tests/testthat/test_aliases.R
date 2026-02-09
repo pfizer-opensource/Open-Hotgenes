@@ -94,6 +94,9 @@ Out_df_3 <-  df_append_mapperDF(
   df = Out_df_1,
   mapperDF = main_Mapper, 
   by = "Feature",
-  relationship = "many-to-many")
+  relationship = "many-to-many") %>% 
+  
+  # ensures correct order
+  dplyr::relocate(dplyr::all_of(names(Out_df_2)), .before = 1)
 
 testthat::expect_identical(Out_df_3, Out_df_2)

@@ -104,7 +104,7 @@ See ?contrasts_. If NULL (default), all contrasts used.}
 features will be mapped to information provided in the mapper slot.
 See details below and  \code{\link[Hotgenes]{Mapper_}}.}
 
-\item{hotList}{vector of Features to select. This will overide
+\item{hotList}{vector of Features to select. This will override
 all cut offs.}
 
 \item{Report}{vector indicating the details to return.

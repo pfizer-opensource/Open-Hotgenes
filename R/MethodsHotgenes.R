@@ -852,7 +852,7 @@ ExpressionData_ <- function(Hotgenes = NULL,
 #' @param mapFeatures If FALSE, no changes will be made. If TRUE (default),
 #' features will be mapped to information provided in the mapper slot.
 #' See details below and  \code{\link[Hotgenes]{Mapper_}}.
-#' @param hotList vector of Features to select. This will overide
+#' @param hotList vector of Features to select. This will override
 #' all cut offs.
 #' @param padj_cut numeric value for padj limit (0.1 is Default).
 #' @param .log2FoldChange absolute log2FoldChange for filtering.
@@ -933,10 +933,20 @@ Output_DE_ <- function(Hotgenes = NULL,
       all_contrasts
     )) %>%
     dplyr::group_by(.data$contrast)
+  
+  
+  if (isTRUE(annotateSig)) {
+    Output_DE <- Output_DE %>%
+      dplyr::mutate(significant = dplyr::case_when(
+        eval(padj_condition) &
+          abs(.data$log2FoldChange) >= .log2FoldChange ~ "*",
+        TRUE ~ ""
+      ))
+  }
 
 
   if (all_truthy(hotList)) {
-    updateDetails <- TRUE
+    #updateDetails <- TRUE
 
     # DF version
 
@@ -945,17 +955,17 @@ Output_DE_ <- function(Hotgenes = NULL,
        dplyr::filter(.data$Feature %in% hotList, .preserve = TRUE) 
     # tibble::as_tibble()
 
-    if (isTRUE(annotateSig)) {
-      Output_DE <- Output_DE %>%
-        dplyr::mutate(significant = dplyr::case_when(
-           eval(padj_condition) &
-            abs(.data$log2FoldChange) >= .log2FoldChange ~ "*",
-          TRUE ~ ""
-        ))
-    }
+    # if (isTRUE(annotateSig)) {
+    #   Output_DE <- Output_DE %>%
+    #     dplyr::mutate(significant = dplyr::case_when(
+    #        eval(padj_condition) &
+    #         abs(.data$log2FoldChange) >= .log2FoldChange ~ "*",
+    #       TRUE ~ ""
+    #     ))
+    # }
    
   } else {
-    updateDetails <- FALSE
+   # updateDetails <- FALSE
 
 
     Output_DE <- Output_DE %>%
@@ -1100,11 +1110,15 @@ Features_ <- function(Hotgenes = NULL) {
 #' @param Hotgenes Hotgenes object.
 #' @param min_n numeric, sets the minimum number of unique values
 #' a column can have, default is 1. 
+#' @param use_default_aliases logical, if TRUE, 
+#' uses [set_missing_alias_default(]). If FALSE (Default), 
+#' Mapper returened without modification.
 #' @return Mapper_ Returns Mapper containing
 #' aliases mapped to Features. Only aliases in 
 #' expression data are returned
 #'
-Mapper_ <- function(Hotgenes = NULL, min_n = 1) {
+Mapper_ <- function(Hotgenes = NULL, min_n = 1, 
+                    use_default_aliases = FALSE) {
   # Check object
   stopifnot(is(Hotgenes, "Hotgenes"))
 
@@ -1115,6 +1129,17 @@ Mapper_ <- function(Hotgenes = NULL, min_n = 1) {
   
   dplyr::select_if(~ dplyr::n_distinct(.x, na.rm = TRUE) > min_n) 
 
+  if(use_default_aliases) {
+    choices_aliases <- Mapper_aliases(Hotgenes)
+    
+    MapperSlot <- MapperSlot  %>% 
+      set_missing_alias_default(
+        default_alias = "Feature",
+        preferred_alias = choices_aliases)
+  }
+    
+   
+  
   return(MapperSlot)
  
 }
