@@ -4,6 +4,7 @@
 \alias{GSEA_Support}
 \alias{fgsea_}
 \alias{fgsea_Results}
+\alias{length_gs_overlap}
 \alias{wrap_fixed_names}
 \alias{GSEA_Plots}
 \alias{leadingGenes}
@@ -32,6 +33,8 @@ fgsea_Results(
   mode = "Details"
 )
 
+length_gs_overlap(Ranks = NULL, pathways = NULL)
+
 wrap_fixed_names(
   string,
   width = 80,
@@ -56,7 +59,7 @@ plotEnrichment_(fgseaRes = NULL, contrast = NULL, genesetName = NULL)
 OntologyMethods(
   Ontology_Function = list(msigdbr = msigdbr_wrapper),
   InputChoices = list(msigdbr = msigdbr_wrapper_choices()$set),
-  gene_col_choices = list(msigdbr = c("gene_symbol", "entrez_gene", "ensembl_gene")),
+  gene_col_choices = list(msigdbr = c("gene_symbol", "ensembl_gene")),
   species_choices = list(msigdbr = c("human", "mouse", "rat", "dog")),
   versions = list(msigdbr = packageVersion("msigdbr"))
 )
@@ -208,6 +211,9 @@ input requirements. Must include:
 'species_choices', 'InputChoices', and 'gene_col_choices', 
 popluated with vector choices for species, geneset categories, 
 and gene alias categories (respectively).}
+}
+\value{
+number of overlapping features
 }
 \description{
 `OntologyMethods()` and `OntologyFunctions()` work together

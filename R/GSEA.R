@@ -13,6 +13,7 @@ NULL
 #' @details `fgsea_()` detects for ranks that are all positive or
 #' all negative and then switches to "pos" or "neg", depending on the outcome.
 #' Otherwise scoreType is "std"
+#' @importFrom cli cli_inform cli_abort cli_warn
 #' @example man/examples/GSEA_tools_Example.R
 fgsea_ <- function(
     Ranks = NULL,
@@ -23,16 +24,17 @@ fgsea_ <- function(
     ...) {
   # Check if Ranks is a list
   if (!is(Ranks, "list")) {
-    stop("Ranks is not a list")
+    cli::cli_abort("Ranks is not a list")
   }
 
   # Check if all elements in Ranks are numeric
   Ranks %>%
     purrr::imap(function(x, y) {
       if (!is(x, "numeric")) {
-        stop(paste0(y, " ranks are not numeric"))
+        cli::cli_abort("{y} ranks are not numeric")
       }
     })
+
 
   # Check if any ranks have missing names
   Ranks %>%
@@ -42,11 +44,24 @@ fgsea_ <- function(
         any()
 
       if (empty_check) {
-        stop(paste0(y, " has empty names"))
+        
+        cli::cli_abort("{y} has empty names")
+        
       }
     })
 
 
+  intersect_length <- length_gs_overlap(
+    Ranks = Ranks,
+    pathways = pathways
+  )
+  
+  if(intersect_length == 0) {
+    
+    cli::cli_warn(
+  c("number of features overlapping between gs and ranks:",
+  i = "{intersect_length} "))
+  }
 
   # fsgea for list
   List_fgsea_Out <- Ranks %>%
@@ -54,21 +69,23 @@ fgsea_ <- function(
       print(y)
 
 
-      allSigns <- sign(x)# %>%
-        #unique() %>%
-        #sum()
-
+      allSigns <- sign(x)
 
       if (all(allSigns == 1)) {
-        "allSigns == 1, switching to scoreType <-'pos' " %>%
-          message()
-
+       
         scoreType <- "pos"
+        
+        cli::cli_inform(c("allSigns == 1:", 
+        i = "switching to scoreType <- {scoreType}"))
+        
       } else if (all(allSigns == -1)) {
-        "allSigns == -1, switching to scoreType <-'neg' " %>%
-          message()
-
+        
         scoreType <- "neg"
+        
+        cli::cli_inform(
+        c("allSigns == -1:", 
+        i = "switching to scoreType <- {scoreType}"))
+        
       } else {
         scoreType <- "std"
       }
@@ -95,8 +112,6 @@ fgsea_ <- function(
 
   return(GSEA_Out)
 }
-
-
 
 
 #' Support functions for GSEA
@@ -201,6 +216,33 @@ fgsea_Results <- function(
   return(ReportOut)
 }
 
+
+
+#' length_gs_overlap() checks for overlap between gs and ranks
+#' @rdname GSEA_Support
+#' @export
+#' @returns number of overlapping features
+length_gs_overlap <- function(
+    Ranks = NULL,
+    pathways = NULL){
+  
+  # checking intersection
+  all_ranks_features <- Ranks |> 
+    purrr::imap(~names(.x)) |> 
+    unlist(use.names = FALSE)
+  
+  all_gs_features <- pathways |> 
+    purrr::imap(~.x) |> 
+    unlist(use.names = FALSE) |> 
+    unique()
+  
+  intersect_length <- intersect(all_ranks_features, 
+                                all_gs_features) |> 
+    length()
+  
+  return(intersect_length)
+  
+}
 
 #' `wrap_fixed_names()` supports wrapping gene set names that
 #' have '_' instead of ' '
@@ -500,7 +542,7 @@ OntologyMethods <- function(
     InputChoices = list("msigdbr" = msigdbr_wrapper_choices()$set),
     gene_col_choices = list("msigdbr" = c(
       "gene_symbol",
-      "entrez_gene", "ensembl_gene"
+      "ensembl_gene"
     )),
     species_choices = list("msigdbr" = c("human", "mouse", "rat", "dog")),
     versions = list("msigdbr" = packageVersion("msigdbr"))) {
@@ -659,7 +701,7 @@ msigdbr_wrapper <- function(species = "human",
   # check cols
   Final_gene_col <- match.arg(gene_col,
     choices = c(
-      "gene_symbol", "entrez_gene",
+      "gene_symbol", 
       "ensembl_gene"
     ),
     several.ok = FALSE
@@ -678,11 +720,17 @@ msigdbr_wrapper <- function(species = "human",
     dplyr::filter(.data$set %in% matched_set)
   
   
-arg_list <- list(collection = unique(df_subcats$gs_collection ),
-                 species = species)
+# arg_list <- list(collection = unique(df_subcats$gs_collection ),
+#                  species = species)
 
-final_sigs <- do.call(msigdbr::msigdbr, arg_list) %>% 
-  dplyr::filter(.data$gs_subcollection %in% unique(df_subcats$gs_subcollection)) %>% 
+final_sigs <- purrr::imap(unique(df_subcats$gs_collection),
+                          
+                          ~msigdbr::msigdbr(
+                            collection = .x,
+                            species = species)) |> 
+  purrr::list_rbind() |> 
+  dplyr::filter(.data$gs_subcollection %in% 
+                  unique(df_subcats$gs_subcollection)) %>% 
  
     dplyr::select(dplyr::all_of(c(Final_gene_col, "gs_name"))) %>%
     plyr::dlply("gs_name", identity) %>%

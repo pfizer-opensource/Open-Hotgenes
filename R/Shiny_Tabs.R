@@ -1889,6 +1889,26 @@ set = input$ontology_sets
 )
 
 
+gs_check <- length_gs_overlap(
+  Ranks = list_Ranks,
+  pathways = pthyways ) 
+
+
+if(gs_check == 0) {
+  
+  
+  shiny::showModal(shiny::modalDialog(
+    title = "number of features overlapping between gs and ranks: 0",
+    "make sure that you've selected the correct geneset parameters",
+    easyClose = TRUE,
+    footer = NULL
+  ))
+  
+}
+
+shiny::req(gs_check > 0)
+
+
 shinybusy::update_modal_spinner(
 paste0(
 "Checking ",

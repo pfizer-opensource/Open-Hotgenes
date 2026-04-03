@@ -101,7 +101,7 @@ testthat::expect_message(
 
 # expect_no_message since std
 testthat::expect_no_message(
-  fgsea_(
+ no_show<- fgsea_(
     Ranks = InputRanks["sh_EWS_vs_Ctrl"],
     pathways = H_paths,
     minSize = 5,
@@ -110,10 +110,32 @@ testthat::expect_no_message(
   )
 
 
+# warning if no overlap between ranks and features
+wrong_gsList <- msigdbr_wrapper(
+  species = "human",
+  set = "CP:KEGG_MEDICUS",
+  gene_col = "ensembl_gene"
+)
+
+testthat::expect_warning(
+  no_show<- fgsea_(
+    Ranks = InputRanks["sh_EWS_vs_Ctrl"],
+    pathways = wrong_gsList,
+    minSize = 5,
+    maxSize = Inf
+  ), regexp = "0"
+)
+
+testthat::expect_all_true(
+  length_gs_overlap(
+    Ranks = InputRanks["sh_EWS_vs_Ctrl"],
+    pathways = wrong_gsList ) == 0
+)
+
 H_paths <- msigdbr::msigdbr(
   species = "Homo sapiens",
   # category = "C5", subcategory = "BP"
-  subcategory = "CP:KEGG_MEDICUS"
+  subcollection = "CP:KEGG_MEDICUS"
 ) %>%
   # options for ids include: gene_symbol, entrez_gene, ensembl_gene
 
@@ -133,8 +155,39 @@ gsList <- msigdbr_wrapper(
   gene_col = choice_id
 )
 
-# class(gsList)
-# names(gsList)
+
+# multi set value support
+multi_set_gsList <- msigdbr_wrapper(
+  species = "human",
+  set = c("CP:KEGG_MEDICUS", "H"),
+  gene_col = "ensembl_gene"
+)
+
+h_set_gsList <- msigdbr_wrapper(
+  species = "human",
+  set = c( "H"),
+  gene_col = "ensembl_gene"
+)
+
+kegg_set_gsList <- msigdbr_wrapper(
+  species = "human",
+  set = c( "CP:KEGG_MEDICUS"),
+  gene_col = "ensembl_gene"
+)
+
+check_hallmark <- names(multi_set_gsList) |> 
+  stringr::str_detect("^hallmark") |> sum()
+
+testthat::expect_true(check_hallmark > 0)
+testthat::expect_true(check_hallmark == length(h_set_gsList))
+
+
+check_KEGG <- names(multi_set_gsList) |> 
+  stringr::str_detect("^kegg") |> sum()
+
+testthat::expect_true(check_KEGG > 0)
+testthat::expect_true(check_KEGG == length(kegg_set_gsList))
+
 
 # OntologyMethods ---------------------------------------------------------
 

@@ -18,7 +18,7 @@ Venn_Report(
 
 \item{show_percentage}{Show percentage for each set.}
 
-\item{fill_alpha}{Transparency for filling circles.}
+\item{fill_alpha}{Transparency for filling circles. Can be a single value or a vector for each set.}
 
 \item{set_name_size}{Text size for set names.}
 
