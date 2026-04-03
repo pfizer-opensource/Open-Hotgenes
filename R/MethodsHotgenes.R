@@ -915,7 +915,7 @@ Output_DE_ <- function(Hotgenes = NULL,
       
     
     mappingDF <- hotList_mapper(Hotgenes,
-                                hotList = hotList)
+                                hotList = hotList) 
     
     Output_DE <-  df_append_mapperDF(
         df = Output_DE,
@@ -1127,7 +1127,8 @@ Mapper_ <- function(Hotgenes = NULL, min_n = 1,
     tibble::as_tibble() %>%
     dplyr::left_join(Hotgenes@Mapper, by = "Feature") %>% 
   
-  dplyr::select_if(~ dplyr::n_distinct(.x, na.rm = TRUE) > min_n) 
+  dplyr::select_if(~ dplyr::n_distinct(.x, na.rm = TRUE) > min_n) %>% 
+    dplyr::mutate_all(as.character)
 
   if(use_default_aliases) {
     choices_aliases <- Mapper_aliases(Hotgenes)

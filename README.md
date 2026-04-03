@@ -120,7 +120,8 @@ ddsSE
     ## dim: 63677 8 
     ## metadata(2): '' version
     ## assays(1): counts
-    ## rownames(63677): ENSG00000000003 ENSG00000000005 ... ENSG00000273492 ENSG00000273493
+    ## rownames(63677): ENSG00000000003 ENSG00000000005 ... ENSG00000273492
+    ##   ENSG00000273493
     ## rowData names(10): gene_id gene_name ... seq_coord_system symbol
     ## colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
     ## colData names(9): SampleName cell ... Sample BioSample
@@ -265,8 +266,8 @@ o <- DRomics::RNAseqdata(datafilename, check = TRUE, transfo.method = "vst")
     ## converting counts to integer mode
 
     ## Warning in DRomics::RNAseqdata(datafilename, check = TRUE, transfo.method = "vst"): 
-    ## To optimize the dose-response modelling, it is recommended to use a dose-response design with at
-    ## least six different tested doses.
+    ## To optimize the dose-response modelling, it is recommended to use a
+    ## dose-response design with at least six different tested doses.
 
 ``` r
 s_quad <- DRomics::itemselect(o, select.method = "quadratic", FDR = 0.05)
@@ -301,7 +302,7 @@ f <- DRomics::drcfit(itemselect = s_quad, parallel = "no")
 ```
 
     ## The fitting may be long if the number of selected items is high.
-    ##   |                                                                                                          |                                                                                                  |   0%  |                                                                                                          |==                                                                                                |   2%  |                                                                                                          |=====                                                                                             |   5%  |                                                                                                          |=======                                                                                           |   7%  |                                                                                                          |=========                                                                                         |   9%  |                                                                                                          |===========                                                                                       |  12%  |                                                                                                          |==============                                                                                    |  14%  |                                                                                                          |================                                                                                  |  16%  |                                                                                                          |==================                                                                                |  19%  |                                                                                                          |=====================                                                                             |  21%  |                                                                                                          |=======================                                                                           |  23%  |                                                                                                          |=========================                                                                         |  26%  |                                                                                                          |===========================                                                                       |  28%  |                                                                                                          |==============================                                                                    |  30%  |                                                                                                          |================================                                                                  |  33%  |                                                                                                          |==================================                                                                |  35%  |                                                                                                          |====================================                                                              |  37%  |                                                                                                          |=======================================                                                           |  40%  |                                                                                                          |=========================================                                                         |  42%  |                                                                                                          |===========================================                                                       |  44%  |                                                                                                          |==============================================                                                    |  47%  |                                                                                                          |================================================                                                  |  49%  |                                                                                                          |==================================================                                                |  51%  |                                                                                                          |====================================================                                              |  53%  |                                                                                                          |=======================================================                                           |  56%  |                                                                                                          |=========================================================                                         |  58%  |                                                                                                          |===========================================================                                       |  60%  |                                                                                                          |==============================================================                                    |  63%  |                                                                                                          |================================================================                                  |  65%  |                                                                                                          |==================================================================                                |  67%  |                                                                                                          |====================================================================                              |  70%  |                                                                                                          |=======================================================================                           |  72%  |                                                                                                          |=========================================================================                         |  74%  |                                                                                                          |===========================================================================                       |  77%  |                                                                                                          |=============================================================================                     |  79%  |                                                                                                          |================================================================================                  |  81%  |                                                                                                          |==================================================================================                |  84%  |                                                                                                          |====================================================================================              |  86%  |                                                                                                          |=======================================================================================           |  88%  |                                                                                                          |=========================================================================================         |  91%  |                                                                                                          |===========================================================================================       |  93%  |                                                                                                          |=============================================================================================     |  95%  |                                                                                                          |================================================================================================  |  98%  |                                                                                                          |==================================================================================================| 100%
+    ##   |                                                                                    |                                                                            |   0%  |                                                                                    |==                                                                          |   2%  |                                                                                    |====                                                                        |   5%  |                                                                                    |=====                                                                       |   7%  |                                                                                    |=======                                                                     |   9%  |                                                                                    |=========                                                                   |  12%  |                                                                                    |===========                                                                 |  14%  |                                                                                    |============                                                                |  16%  |                                                                                    |==============                                                              |  19%  |                                                                                    |================                                                            |  21%  |                                                                                    |==================                                                          |  23%  |                                                                                    |===================                                                         |  26%  |                                                                                    |=====================                                                       |  28%  |                                                                                    |=======================                                                     |  30%  |                                                                                    |=========================                                                   |  33%  |                                                                                    |===========================                                                 |  35%  |                                                                                    |============================                                                |  37%  |                                                                                    |==============================                                              |  40%  |                                                                                    |================================                                            |  42%  |                                                                                    |==================================                                          |  44%  |                                                                                    |===================================                                         |  47%  |                                                                                    |=====================================                                       |  49%  |                                                                                    |=======================================                                     |  51%  |                                                                                    |=========================================                                   |  53%  |                                                                                    |==========================================                                  |  56%  |                                                                                    |============================================                                |  58%  |                                                                                    |==============================================                              |  60%  |                                                                                    |================================================                            |  63%  |                                                                                    |=================================================                           |  65%  |                                                                                    |===================================================                         |  67%  |                                                                                    |=====================================================                       |  70%  |                                                                                    |=======================================================                     |  72%  |                                                                                    |=========================================================                   |  74%  |                                                                                    |==========================================================                  |  77%  |                                                                                    |============================================================                |  79%  |                                                                                    |==============================================================              |  81%  |                                                                                    |================================================================            |  84%  |                                                                                    |=================================================================           |  86%  |                                                                                    |===================================================================         |  88%  |                                                                                    |=====================================================================       |  91%  |                                                                                    |=======================================================================     |  93%  |                                                                                    |========================================================================    |  95%  |                                                                                    |==========================================================================  |  98%  |                                                                                    |============================================================================| 100%
 
 ``` r
 bmdcalc_out <- DRomics::bmdcalc(f)
@@ -450,10 +451,10 @@ Mapper_(fit_Hotgenes) %>% head()
     ##   Feature ensembl_id     
     ##   <chr>   <chr>          
     ## 1 AGER    ENSG00000204305
-    ## 2 AGER    ENSG00000230514
+    ## 2 AGER    ENSG00000231268
     ## 3 AGER    ENSG00000229058
-    ## 4 AGER    ENSG00000231268
-    ## 5 AGER    ENSG00000237405
+    ## 4 AGER    ENSG00000237405
+    ## 5 AGER    ENSG00000234729
     ## # ℹ 1 more row
 
 Available auxiliary_assays
@@ -485,42 +486,47 @@ DE(fit_Hotgenes, Topn = 3)
 ```
 
     ## $Hrs_2_vs_0
-    ## # A tibble: 3 × 11
-    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj     t     B ensembl_id     
-    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <dbl> <chr>          
-    ## 1 IL6     Hrs_2_vs_0_up     10.6           2.52  5.72  31.1 4.06e-24 1.04e-21  31.1  45.1 ENSG00000136244
-    ## 2 CXCL8   Hrs_2_vs_0_up     10.9           3.51 11.4   26.0 6.99e-22 8.92e-20  26.0  40.0 ENSG00000169429
-    ## 3 TNFAIP3 Hrs_2_vs_0_up     10.5           2.14  4.42  24.9 2.21e-21 1.88e-19  24.9  38.8 ENSG00000118503
+    ## # A tibble: 3 × 12
+    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj     t
+    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl>
+    ## 1 IL6     Hrs_2_vs_0_up     10.6           2.52  5.72  31.1 4.06e-24 1.04e-21  31.1
+    ## 2 CXCL8   Hrs_2_vs_0_up     10.9           3.51 11.4   26.0 6.99e-22 8.92e-20  26.0
+    ## 3 TNFAIP3 Hrs_2_vs_0_up     10.5           2.14  4.42  24.9 2.21e-21 1.88e-19  24.9
+    ## # ℹ 3 more variables: B <dbl>, ensembl_id <chr>, significant <chr>
     ## 
     ## $Hrs_6_vs_0
-    ## # A tibble: 3 × 11
-    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj     t     B ensembl_id     
-    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <dbl> <chr>          
-    ## 1 CXCL8   Hrs_6_vs_0_up     10.9           3.56 11.8   26.4 4.21e-22 1.07e-19  26.4  40.5 ENSG00000169429
-    ## 2 CXCL1   Hrs_6_vs_0_up     11.3           2.35  5.09  24.5 3.71e-21 4.73e-19  24.5  38.2 ENSG00000163739
-    ## 3 CCL2    Hrs_6_vs_0_up     12.5           1.25  2.37  23.0 2.14e-20 1.56e-18  23.0  36.3 ENSG00000108691
+    ## # A tibble: 3 × 12
+    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj     t
+    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl>
+    ## 1 CXCL8   Hrs_6_vs_0_up     10.9           3.56 11.8   26.4 4.21e-22 1.07e-19  26.4
+    ## 2 CXCL1   Hrs_6_vs_0_up     11.3           2.35  5.09  24.5 3.71e-21 4.73e-19  24.5
+    ## 3 CCL2    Hrs_6_vs_0_up     12.5           1.25  2.37  23.0 2.14e-20 1.56e-18  23.0
+    ## # ℹ 3 more variables: B <dbl>, ensembl_id <chr>, significant <chr>
     ## 
     ## $sh_EWS_vs_Ctrl
-    ## # A tibble: 3 × 11
-    ##   Feature contrast_dir        baseMean log2FoldChange    FC  stat   pvalue     padj     t     B ensembl_id  
-    ##   <chr>   <chr>                  <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <dbl> <chr>       
-    ## 1 C1R     sh_EWS_vs_Ctrl_down     13.5         -0.856 0.553 -16.7 1.33e-16 3.39e-14 -16.7  27.7 ENSG0000015…
-    ## 2 C1R     sh_EWS_vs_Ctrl_down     13.5         -0.856 0.553 -16.7 1.33e-16 3.39e-14 -16.7  27.7 ENSG0000028…
-    ## 3 CCL2    sh_EWS_vs_Ctrl_down     12.5         -1.00  0.500 -15.8 5.92e-16 7.55e-14 -15.8  26.4 ENSG0000010…
+    ## # A tibble: 3 × 12
+    ##   Feature contrast_dir     baseMean log2FoldChange    FC  stat   pvalue     padj     t
+    ##   <chr>   <chr>               <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl>
+    ## 1 C1R     sh_EWS_vs_Ctrl_…     13.5         -0.856 0.553 -16.7 1.33e-16 3.39e-14 -16.7
+    ## 2 C1R     sh_EWS_vs_Ctrl_…     13.5         -0.856 0.553 -16.7 1.33e-16 3.39e-14 -16.7
+    ## 3 CCL2    sh_EWS_vs_Ctrl_…     12.5         -1.00  0.500 -15.8 5.92e-16 7.55e-14 -15.8
+    ## # ℹ 3 more variables: B <dbl>, ensembl_id <chr>, significant <chr>
     ## 
     ## $shEWS.Hrs2
-    ## # A tibble: 3 × 11
-    ##   Feature contrast_dir    baseMean log2FoldChange    FC  stat    pvalue   padj     t       B ensembl_id     
-    ##   <chr>   <chr>              <dbl>          <dbl> <dbl> <dbl>     <dbl>  <dbl> <dbl>   <dbl> <chr>          
-    ## 1 TNFAIP3 shEWS.Hrs2_down    10.5          -0.565 0.676 -4.69 0.0000584 0.0149 -4.69  1.77   ENSG00000118503
-    ## 2 CXCL3   shEWS.Hrs2_down     7.90         -1.05  0.482 -3.94 0.000457  0.0233 -3.94 -0.0744 ENSG00000163734
-    ## 3 FOS     shEWS.Hrs2_up       8.98          0.645 1.56   4.14 0.000267  0.0233  4.14  0.398  ENSG00000170345
+    ## # A tibble: 3 × 12
+    ##   Feature contrast_dir    baseMean log2FoldChange    FC  stat    pvalue   padj     t
+    ##   <chr>   <chr>              <dbl>          <dbl> <dbl> <dbl>     <dbl>  <dbl> <dbl>
+    ## 1 TNFAIP3 shEWS.Hrs2_down    10.5          -0.565 0.676 -4.69 0.0000584 0.0149 -4.69
+    ## 2 CXCL3   shEWS.Hrs2_down     7.90         -1.05  0.482 -3.94 0.000457  0.0233 -3.94
+    ## 3 FOS     shEWS.Hrs2_up       8.98          0.645 1.56   4.14 0.000267  0.0233  4.14
+    ## # ℹ 3 more variables: B <dbl>, ensembl_id <chr>, significant <chr>
     ## 
     ## $shEWS.Hrs6
-    ## # A tibble: 1 × 11
-    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat    pvalue   padj     t     B ensembl_id     
-    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>     <dbl>  <dbl> <dbl> <dbl> <chr>          
-    ## 1 FOS     shEWS.Hrs6_up     8.98          0.826  1.77  4.53 0.0000892 0.0227  4.53  1.12 ENSG00000170345
+    ## # A tibble: 1 × 12
+    ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat  pvalue   padj     t     B
+    ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>   <dbl>  <dbl> <dbl> <dbl>
+    ## 1 FOS     shEWS.Hrs6_up     8.98          0.826  1.77  4.53 8.92e-5 0.0227  4.53  1.12
+    ## # ℹ 2 more variables: ensembl_id <chr>, significant <chr>
 
 ### Summary plot of contrasts
 
@@ -577,29 +583,30 @@ fit_Hotgenes %>%
     ## [1] "NFE2L2" "KEAP1"  "PDGFA"  "HDAC4"  "OXER1"  "GAPDH"  "MEF2C" 
     ## 
     ## $Intsect$Hrs_6_vs_0
-    ##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"   "BCL6"  
-    ## [12] "TLR3"   "GRB2"   "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2" 
-    ## [23] "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
+    ##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6"
+    ## [10] "IL1B"   "BCL6"   "TLR3"   "GRB2"   "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"  
+    ## [19] "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2"  "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
     ## 
     ## $Intsect$sh_EWS_vs_Ctrl
-    ##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"    "HMGN1" 
-    ## [12] "CLTC"   "GNAQ"   "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"  
-    ## [23] "LTB4R2"
+    ##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2" 
+    ## [10] "MX2"    "HMGN1"  "CLTC"   "GNAQ"   "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"  
+    ## [19] "HPRT1"  "TCF4"   "MX1"    "OAS2"   "LTB4R2"
     ## 
     ## $Intsect$`Hrs_2_vs_0:Hrs_6_vs_0`
-    ##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"    "CXCR4"  
-    ## [11] "MAFK"    "PTGFR"   "FOS"     "MYC"     "RIPK2"   "IL2"     "MAFG"    "CSF2"    "TWIST2"  "IFIT1"  
-    ## [21] "FLT1"   
+    ##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1" 
+    ##  [9] "MAFF"    "CXCR4"   "MAFK"    "PTGFR"   "FOS"     "MYC"     "RIPK2"   "IL2"    
+    ## [17] "MAFG"    "CSF2"    "TWIST2"  "IFIT1"   "FLT1"   
     ## 
     ## $Intsect$`sh_EWS_vs_Ctrl:Hrs_2_vs_0`
     ## [1] "HMGB2"  "MAP3K9" "CEBPB"  "IRF1"  
     ## 
     ## $Intsect$`sh_EWS_vs_Ctrl:Hrs_6_vs_0`
-    ##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2" "IFI44" "CCL7" 
+    ##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2" "IFI44"
+    ## [11] "CCL7" 
     ## 
     ## $Intsect$`sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0`
-    ##  [1] "CCL2"     "IL1R1"    "MEF2D"    "JUN"      "BIRC2"    "CXCL3"    "MEF2A"    "CXCL2"    "IL6"     
-    ## [10] "NFKB1"    "SMAD7"    "MAPKAPK2" "RELB"    
+    ##  [1] "CCL2"     "IL1R1"    "MEF2D"    "JUN"      "BIRC2"    "CXCL3"    "MEF2A"   
+    ##  [8] "CXCL2"    "IL6"      "NFKB1"    "SMAD7"    "MAPKAPK2" "RELB"    
     ## 
     ## 
     ## $Names
@@ -618,6 +625,8 @@ FactoOutput <- FactoWrapper(fit_Hotgenes,
 )
 ```
 
+    ## Appending TopTibble with available aliases: ensembl_id
+
 ``` r
 # plot
 FactoOutput$res_PPI_pa_1
@@ -630,16 +639,17 @@ FactoOutput$res_PPI_pa_1
 FactoOutput$TopTibble # Feature
 ```
 
-    ## # A tibble: 88 × 9
-    ##   Cluster Interpretation      Feature v.test `Mean in category` `Overall mean` `sd in category` `Overall sd`
-    ##   <fct>   <fct>               <chr>    <dbl>              <dbl>          <dbl>            <dbl>        <dbl>
-    ## 1 1       Cluster has elevat… IFIT2     2.91              10.3            9.89           0.100        0.339 
-    ## 2 1       Cluster has elevat… DDIT3     2.75              10.4           10.1            0.0402       0.231 
-    ## 3 1       Cluster has elevat… MAP3K1    2.72              10.00           9.75           0.0537       0.216 
-    ## 4 1       Cluster has elevat… PTGFR     2.65              10.4           10.1            0.0489       0.285 
-    ## 5 1       Cluster has elevat… PGK1      2.63              15.3           15.2            0.0224       0.0484
-    ## # ℹ 83 more rows
-    ## # ℹ 1 more variable: p.value <dbl>
+    ## # A tibble: 102 × 10
+    ##   Cluster Interpretation       Feature v.test `Mean in category` `Overall mean`
+    ##   <fct>   <fct>                <chr>    <dbl>              <dbl>          <dbl>
+    ## 1 1       Cluster has elevated IFIT2     2.91              10.3            9.89
+    ## 2 1       Cluster has elevated DDIT3     2.75              10.4           10.1 
+    ## 3 1       Cluster has elevated MAP3K1    2.72              10.00           9.75
+    ## 4 1       Cluster has elevated PTGFR     2.65              10.4           10.1 
+    ## 5 1       Cluster has elevated PGK1      2.63              15.3           15.2 
+    ## # ℹ 97 more rows
+    ## # ℹ 4 more variables: `sd in category` <dbl>, `Overall sd` <dbl>, p.value <dbl>,
+    ## #   ensembl_id <chr>
 
 ``` r
 FactoOutput$TopGroups # TopGroups
@@ -707,6 +717,8 @@ DEphe(fit_Hotgenes,
       annotations = c("Hrs", "sh"))
 ```
 
+![](man/figures/README-heatmap_1-1.png)<!-- -->
+
 ``` r
 # change labels to ensembl_id
 DEphe(fit_Hotgenes,
@@ -718,6 +730,8 @@ DEphe(fit_Hotgenes,
       annotation_colors = coldata_palettes(fit_Hotgenes),
       annotations = c("Hrs", "sh"))
 ```
+
+![](man/figures/README-heatmap_2-1.png)<!-- -->
 
 ### Run GSEA using msigdbr genesets
 
@@ -752,7 +766,7 @@ H_paths <- msigdbr_wrapper(
 ```
 
     ## [1] "Hrs_6_vs_0"
-    ##   |                                                                                                          |                                                                                                  |   0%  |                                                                                                          |========================                                                                          |  25%  |                                                                                                          |=================================================                                                 |  50%  |                                                                                                          |==========================================================================                        |  75%  |                                                                                                          |==================================================================================================| 100%
+    ##   |                                                                                    |                                                                            |   0%  |                                                                                    |===================                                                         |  25%  |                                                                                    |======================================                                      |  50%  |                                                                                    |=========================================================                   |  75%  |                                                                                    |============================================================================| 100%
 
 ``` r
   # Get details for all
@@ -766,9 +780,9 @@ H_paths <- msigdbr_wrapper(
 
     ## $Hrs_6_vs_0
     ## # A tibble: 1 × 9
-    ##   pathway                                        pval    padj log2err    ES   NES  size leadingEdge sign_NES
-    ##   <chr>                                         <dbl>   <dbl>   <dbl> <dbl> <dbl> <int> <list>         <dbl>
-    ## 1 kegg_medicus_reference_ccr_cxcr_gnb_g_pi3k… 6.36e-5 0.00592   0.538 0.924  1.69    10 <chr [2]>          1
+    ##   pathway                  pval    padj log2err    ES   NES  size leadingEdge sign_NES
+    ##   <chr>                   <dbl>   <dbl>   <dbl> <dbl> <dbl> <int> <list>         <dbl>
+    ## 1 kegg_medicus_referen… 6.36e-5 0.00592   0.538 0.924  1.69    10 <chr [2]>          1
 
 ``` r
   # Or for one
@@ -840,7 +854,7 @@ gsList <- msigdbr_wrapper(
     ## [1] "using Feature col"
     ## [1] "building mapper"
 
-    ## ℹ GSVA version 2.0.3
+    ## ℹ GSVA version 2.0.7
 
     ## ℹ Calculating  ssGSEA scores for 235 gene sets
 

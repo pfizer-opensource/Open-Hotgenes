@@ -4,6 +4,7 @@
     - New modal for shiny fgsea tab alert you when there's no overlap
       between you input ranks and selected geneset params.
     - msigdbr_wrapper() now supports multiple set values.
+    - Mapper_() now returns all columns as charater.
 
 # version 0.0.48:
     - Updated Heatmap with default aliases
