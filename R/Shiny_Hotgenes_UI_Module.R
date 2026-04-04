@@ -45,7 +45,8 @@ ns <- shiny::NS(id)
 sidePanel_params <- shiny::sidebarPanel(
   width = width,
   
-  embed_Hotgenes_logo(),
+  embed_Hotgenes_logo(
+    id = ns("show_news")),
   
   
   # BoxPlot_UI_inputs_support ------------------------------------------------
@@ -236,6 +237,7 @@ if (!is.null(grDevices::dev.list())) {
 grDevices::graphics.off()
 }
 
+  logo_news(input = input, session = session)
 # AuxAssays_server --------------------------------------------------------
 
 

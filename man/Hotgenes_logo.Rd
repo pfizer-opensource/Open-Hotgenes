@@ -3,34 +3,14 @@
 \name{Hotgenes_logo}
 \alias{Hotgenes_logo}
 \alias{Hotgenes_logo_path}
-\alias{embed_Hotgenes_logo}
 \title{Hex logo for Hotgenes}
 \usage{
 Hotgenes_logo_path()
-
-embed_Hotgenes_logo(
-  logo_dir = Hotgenes_logo_path(),
-  align = "center",
-  height = "100px",
-  style = "text-align: center;margin-bottom:10px;"
-)
-}
-\arguments{
-\item{logo_dir}{path to www dir in shiny app working directory.
-Default is \code{\link[=Hotgenes_logo_path]{Hotgenes_logo_path()}}.}
-
-\item{align}{string html tag}
-
-\item{height}{string html tag}
-
-\item{style}{string html tag}
 }
 \description{
 Hex logo for Hotgenes
 
 path to package logo
-
-Adds logo file to shiny app directory
 }
 \examples{
 library(Hotgenes)
