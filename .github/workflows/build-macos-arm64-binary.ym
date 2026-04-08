@@ -1,0 +1,47 @@
+name: Build macOS ARM64 Binary
+
+on:
+  push:
+    tags:
+      - "v*"           # Se activa con tags de versión, e.g. v0.0.50
+  workflow_dispatch:   # Botón de activación manual en la UI de Actions
+
+permissions:
+  contents: write      # Necesario para subir assets al Release
+
+jobs:
+  build-macos-arm64:
+    name: Build R Binary (macOS ARM64)
+    runs-on: macos-14  # Runner Apple Silicon M1 (ARM64 nativo)
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@bd49c52ffe281809afa6f0fecbf37483c5dd0b93 # v2
+        with:
+          r-version: "4.4"
+
+      - name: Set up Bioconductor and install dependencies
+        uses: r-lib/actions/setup-r-dependencies@bd49c52ffe281809afa6f0fecbf37483c5dd0b93 # v2
+        with:
+          extra-packages: any::BiocManager, any::pkgbuild
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build macOS binary package (.tgz)
+        run: |
+          # R CMD INSTALL --build compila y produce un binario .tgz
+          R CMD INSTALL --build .
+          echo "BINARY=$(ls Hotgenes_*.tgz | head -n 1)" >> $GITHUB_ENV
+          echo "PKG_VERSION=$(grep '^Version:' DESCRIPTION | awk '{print $2}')" >> $GITHUB_ENV
+
+      - name: Create GitHub Release and upload binary
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ env.PKG_VERSION }}" \
+            --title "v${{ env.PKG_VERSION }}" \
+            --generate-notes \
+            "${{ env.BINARY }}"
