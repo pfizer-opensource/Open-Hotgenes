@@ -39,7 +39,7 @@ jobs:
 
       - name: Create GitHub Release and upload binary
         env:
-          ACTION_TOKEN: ${{ secrets.ACTION_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
         run: |
           gh release create "v${{ env.PKG_VERSION }}" \
             --title "v${{ env.PKG_VERSION }}" \
