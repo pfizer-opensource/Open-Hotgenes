@@ -70,7 +70,7 @@ parse_mapper_aliases <- function(Hotgenes = NULL,
 #' @inheritParams DE
 #' @importFrom shiny isTruthy
 #' @importFrom dplyr filter any_of if_any
-#' @example man/examples/Parse_Aliases_Example.R
+#' @example examples/Parse_Aliases_Example.R
 hotList_mapper <- function(Hotgenes = NULL,
                           hotList = NULL){
   

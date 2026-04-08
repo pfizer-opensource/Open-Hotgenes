@@ -90,7 +90,7 @@ valid_factors <- function(metadata = NULL) {
 #' @param modelMatrix output from model.matrix() function.
 #' @returns
 #' Value object returned by limma::makeContrasts(), named by contrasts
-#' @example man/examples/Hotgeneslimma_Example.R
+#' @example examples/Hotgeneslimma_Example.R
 #' 
 limma_paired_contrasts <- function(..., modelMatrix = NULL){
   

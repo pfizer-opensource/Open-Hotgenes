@@ -23,7 +23,7 @@
 #' to map aliases to original assay names. Must have a
 #' "Feature" column, which will be used for mapping to results. This object
 #' can be updated or viewed using Mapper_.
-#' @example man/examples/HotgenesUniversal_Example.R
+#' @example examples/HotgenesUniversal_Example.R
 
 HotgenesUniversal <- function(Output_DE = NULL,
                               Normalized_Expression = NULL,
@@ -133,7 +133,7 @@ if(is.null(Mapper)){
 #' -log10(.data$pvalue)*sign(.data$log2FoldChange)
 #'
 #' @seealso \code{\link[DESeq2]{lfcShrink}}
-#' @example man/examples/HotgenesDEseq2_Example.R
+#' @example examples/HotgenesDEseq2_Example.R
 
 
 
@@ -301,7 +301,7 @@ HotgenesDEseq2 <- function(DEseq2_object = NULL,
 #' individually.
 #'
 #' @seealso limma::topTable
-#' @example man/examples/Hotgeneslimma_Example.R
+#' @example examples/Hotgeneslimma_Example.R
 
 Hotgeneslimma <- function(limmafit = NULL,
                           coldata = NULL,
@@ -507,7 +507,7 @@ Hotgeneslimma <- function(limmafit = NULL,
 #' 
 #' The stat column is calculated as:  -log10(padj) * sign(log2FoldChange)
 #'
-#' @example man/examples/HotgenesDRomics_Example.R
+#' @example examples/HotgenesDRomics_Example.R
 #' 
 #' @importFrom dplyr mutate case_when rename any_of relocate
 #' @importFrom tibble as_tibble column_to_rownames

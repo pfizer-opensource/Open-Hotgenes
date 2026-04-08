@@ -33,7 +33,7 @@
 #' @return ggplot object
 #' @details xVar and group must be a column name accessible by coldata_
 #' function. String for yVar must be accessible by parse_features() function.
-#' @example man/examples/ExpsPlot_Example.R
+#' @example examples/ExpsPlot_Example.R
 #'
 ExpsPlot <- function(
     Hotgenes = NULL,

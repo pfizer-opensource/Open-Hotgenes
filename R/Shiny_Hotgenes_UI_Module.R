@@ -214,7 +214,7 @@ return(UI_params)
 #' @param remove_modal_spinner logical, if TRUE remove_modal_spinner will
 #' run at the end of initial server run.
 #' @export
-#' @example man/examples/Shiny_Hotgenes_Example.R
+#' @example examples/Shiny_Hotgenes_Example.R
 #' @rdname Shiny_Hotgenes_UI
 
 Shiny_Hotgenes_Server <- function(

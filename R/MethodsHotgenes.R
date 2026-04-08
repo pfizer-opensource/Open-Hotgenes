@@ -24,7 +24,7 @@
 #' data.frame containing a "Feature" column,
 #' which will be used for mapping to results. This object
 #' can be updated or viewed using Mapper_
-#' @example man/examples/HotgenesClass_Example.R
+#' @example examples/HotgenesClass_Example.R
 
 setClass("Hotgenes", slots = list(
   Output_DE = "list",

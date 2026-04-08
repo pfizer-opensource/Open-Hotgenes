@@ -23,7 +23,7 @@
 #' @return FactoMiner plot showing HCPC of genes, samples, and conditions
 #' @details Character coldata are removed prior to PCA. Please convert to
 #' factors if these columns are needed.
-#' @example man/examples/FactoWrapper_Example.R
+#' @example examples/FactoWrapper_Example.R
 
 FactoWrapper <- function(Hotgenes = NULL,
                          biplot = TRUE,

@@ -10,7 +10,7 @@
 #' @details Up to five vectors are compared.
 #' @seealso gplots::venn
 #' @seealso ggvenn::ggvenn
-#' @example man/examples/Venn_Report_Example.R
+#' @example examples/Venn_Report_Example.R
 
 Venn_Report <- function(FeatureList = NULL,
                         show_percentage = FALSE,

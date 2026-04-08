@@ -13,7 +13,7 @@
 #' If NULL (default), none are returned (unlike all with coldata_).
 #' @param label_by String matching a column name returned by
 #' Mapper_ function, default is "Feature".
-#' @example man/examples/DEphe_Example.R
+#' @example examples/DEphe_Example.R
 #' @details If Feature maps to multiple names, only one will be
 #' used.
 
@@ -147,7 +147,7 @@ DEphe <- function(
 #' @inheritParams coldata_
 #' @inheritParams DExps
 #' @inheritParams UpdateLevelsbyList
-#' @example man/examples/coldata_palettes_Example.R
+#' @example examples/coldata_palettes_Example.R
 #'
 
 

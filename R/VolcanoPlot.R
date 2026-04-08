@@ -173,7 +173,7 @@ ggplot2_Volcano_prep <- function(data = NULL,
 #' @param shinymode logical, if TRUE a named list of 
 #' parameters will be exported to processing by internal plotting functions.
 #' If FALSE, a volcano plot is returned. 
-#' @example man/examples/VPlot_Example.R
+#' @example examples/VPlot_Example.R
 
 VPlot <- function(
     Hotgenes = NULL,

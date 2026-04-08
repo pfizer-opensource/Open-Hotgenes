@@ -98,7 +98,7 @@ class = "btn-primary"
 #' @inheritParams TabCondition
 #' @inheritParams shiny::tabPanel
 #' @rdname Shiny_Tabs
-#' @example man/examples/Shiny_Tabs_Example.R
+#' @example examples/Shiny_Tabs_Example.R
 VennDiagram_UI_main_support <- function(
 id = NULL,
 tabsetPanel_id = "tabs",

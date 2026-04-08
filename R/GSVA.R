@@ -22,7 +22,7 @@
 #' @param method string for method to use for GSVA package. Options
 #' include: c("ssgsea","gsva", "zscore", "plage").
 #' @export
-#' @example man/examples/Hotgeneslimma_Example.R
+#' @example examples/Hotgeneslimma_Example.R
 
 HotgeneSets <- function(Hotgenes = NULL,
 ExpressionSlots = NULL,

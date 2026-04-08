@@ -5,7 +5,7 @@ NULL
 #' path to package logo
 #' @export
 #' @rdname Hotgenes_logo
-#' @example man/examples/Hotgenes_logo_Example.R
+#' @example examples/Hotgenes_logo_Example.R
 Hotgenes_logo_path <-function(){
   
   logo_file_path <- internal_system.file(

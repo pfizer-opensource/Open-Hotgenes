@@ -70,7 +70,7 @@ NULL
 #' by Mapper_ function.
 #'
 #'
-#' @example man/examples/Utilities_Example.R
+#' @example examples/Utilities_Example.R
 
 DE <- function(
     Hotgenes = NULL,

@@ -3,7 +3,7 @@
 #' @param tabsetPanel_id string for tabsetPanel id prefix to use.
 #' Default is "tabs". This is what controls the visibility of sidepanels.
 #' @inheritParams shiny::moduleServer
-#' @example man/examples/TabCondition_Example.R
+#' @example examples/TabCondition_Example.R
 #' @details
 #' When deploying an app with multiple Hotgenes UIs,
 #' don't 

@@ -14,7 +14,7 @@ NULL
 #' all negative and then switches to "pos" or "neg", depending on the outcome.
 #' Otherwise scoreType is "std"
 #' @importFrom cli cli_inform cli_abort cli_warn
-#' @example man/examples/GSEA_tools_Example.R
+#' @example examples/GSEA_tools_Example.R
 fgsea_ <- function(
     Ranks = NULL,
     pathways = NULL,
