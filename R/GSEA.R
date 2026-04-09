@@ -416,8 +416,10 @@ plotEnrichment_ <- function(
     dplyr::pull("NES")
 
   # message to show genes
-  message(paste0("leading edge genes for ", genesetName))
-  leadingGenes_msigdbr %>% dput()
+  cli::cli_inform(c(
+    "Leading edge genes for {genesetName}:",
+    "i" = "{paste(leadingGenes_msigdbr, collapse = ', ')}"
+  ))
 
   # Making plot
   fgPlot(
@@ -498,7 +500,7 @@ fgPlot <- function(
                           mapping = ggplot2::aes(
                             x = x,
                             y = -diff / 2, xend = x, yend = diff / 2
-                          ), size = ticksSize) +
+                          ), linewidth = ticksSize) +
     ggplot2::theme(panel.border = ggplot2::element_blank(), 
                    panel.grid.minor = ggplot2::element_blank()) +
     ggplot2::labs(x = "rank", y = "enrichment score")
