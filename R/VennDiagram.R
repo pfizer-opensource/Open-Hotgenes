@@ -1,13 +1,13 @@
 #' Generates VennDiagrams from lists
 #' @export
 #' @importFrom ggvenn ggvenn
-#' @param FeatureList Named list with up to five vectors
-#' @param ... Additional paramters for ggvenn \code{\link[ggvenn]{ggvenn}}
+#' @param FeatureList Named list with up to four vectors
+#' @param ... Additional parameters for ggvenn \code{\link[ggvenn]{ggvenn}}
 #' @inheritParams ggvenn::ggvenn
 #' @inheritParams ggplot2::theme
 #' @return List containing: venn diagram, corresponding lists,
 #' and names of lists with overlapping features.
-#' @details Up to five vectors are compared.
+#' @details Up to four vectors are compared.
 #' @seealso gplots::venn
 #' @seealso ggvenn::ggvenn
 #' @example examples/Venn_Report_Example.R
@@ -19,10 +19,9 @@ Venn_Report <- function(FeatureList = NULL,
                         text_size = 4,
                         ...) {
   # check lengths
-  if(length(FeatureList) > 4){
-    stop("no more that 4 groups")
+  if (length(FeatureList) > 4) {
+    stop("no more than 4 groups")
   }
-  
   
   if (isFALSE(all(lengths(FeatureList) == 0))) {
     Venn_FeatureList <- FeatureList %>%
@@ -33,14 +32,12 @@ Venn_Report <- function(FeatureList = NULL,
         text_size = text_size,
         ...
       ) +
-    #  ggplot2::theme(plot.margin = ggplot2::unit(c(1,1,1,1), "cm"),
-     #                aspect.ratio = aspect.ratio) +
-      ggplot2::coord_fixed(clip = "off" ) +
+      ggplot2::coord_fixed(clip = "off") +
       ggplot2::theme(plot.margin = ggplot2::unit(c(top = 1,
                                                    right = 2,
                                                    bottom = 1,
                                                    left = 2), "in"))
-
+    
     Int_FeatureList <- FeatureList %>%
       find_intersections()
     
@@ -66,8 +63,8 @@ Venn_Report <- function(FeatureList = NULL,
 #' @noRd
 find_intersections <- function(named_list = NULL) {
   obj_sorted <- named_list %>%
-    purrr::imap( ~ data.frame(value = .x)) %>% 
-    purrr::list_rbind(names_to = "contrast" )  %>%
+    purrr::imap(~ data.frame(value = .x)) %>%
+    purrr::list_rbind(names_to = "contrast") %>%
     
     dplyr::summarise(col = stringr::str_c(.data$contrast, collapse = ":"),
                      .by = "value")

@@ -1,3 +1,7 @@
+# version 0.0.52:
+    - Exported make_stat_frame()
+    - Cleaned up documentation in Venn methods.
+
 # version 0.0.51:
     - Added make_stat_frame() to support ranks stats clustering methods
       via FactoWrapper_DFs().

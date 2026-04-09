@@ -14,7 +14,7 @@ Venn_Report(
 )
 }
 \arguments{
-\item{FeatureList}{Named list with up to five vectors}
+\item{FeatureList}{Named list with up to four vectors}
 
 \item{show_percentage}{Show percentage for each set.}
 
@@ -24,7 +24,7 @@ Venn_Report(
 
 \item{text_size}{Text size for intersect contents.}
 
-\item{...}{Additional paramters for ggvenn \code{\link[ggvenn]{ggvenn}}}
+\item{...}{Additional parameters for ggvenn \code{\link[ggvenn]{ggvenn}}}
 }
 \value{
 List containing: venn diagram, corresponding lists,
@@ -34,7 +34,7 @@ and names of lists with overlapping features.
 Generates VennDiagrams from lists
 }
 \details{
-Up to five vectors are compared.
+Up to four vectors are compared.
 }
 \examples{
 if(interactive()){

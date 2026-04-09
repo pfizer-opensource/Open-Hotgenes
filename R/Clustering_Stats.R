@@ -15,6 +15,7 @@
 #' @param strict logical, if TRUE, incomplete observations will be dropped.
 #' Default is FALSE.
 #' @example examples/Clustering_Stats_Example.R
+#' @export
 make_stat_frame <- function(
   input_stats = NULL,
   feature_var = "Feature",
