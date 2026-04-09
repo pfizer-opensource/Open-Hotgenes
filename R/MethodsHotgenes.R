@@ -83,7 +83,6 @@ setValidity("Hotgenes", function(object) {
 
 
 #' update_object updates object class
-#' @importFrom BiocGenerics updateObject getObjectSlots
 #' @param Hotgenes Hotgenes object.
 #' @export
 
@@ -1106,7 +1105,6 @@ Features_ <- function(Hotgenes = NULL) {
 
 #' @rdname Hotgenes-class
 #' @export
-# @importFrom BiocGenerics getObjectSlots updateObject
 #' @param Hotgenes Hotgenes object.
 #' @param min_n numeric, sets the minimum number of unique values
 #' a column can have, default is 1. 
@@ -1196,7 +1194,6 @@ setMethod(
 
 #' @rdname Hotgenes-class
 #' @export
-# @importFrom BiocGenerics getObjectSlots updateObject
 #' @param Hotgenes Hotgenes object.
 #' @param Col String matching the column id from Mapper
 #' slot to pull. Default is "Feature".

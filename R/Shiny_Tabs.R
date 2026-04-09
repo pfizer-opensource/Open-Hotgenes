@@ -3628,8 +3628,6 @@ return(Final_output)
 ForcePlot <- function(P = NULL) {
 TF <- ggplot2::ggplot_build(P)
 TF <- ggplot2::ggplot_gtable(TF)
-# TF <- grid::grid.draw(TF)
-
 
 return(TF)
 }

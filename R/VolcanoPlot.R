@@ -158,7 +158,6 @@ ggplot2_Volcano_prep <- function(data = NULL,
 #' @export
 #' @inheritParams DE
 #' @importFrom ggrepel geom_text_repel
-#' @importFrom plotly layout ggplotly
 #' @inheritParams ggrepel::geom_text_repel
 #' @param Hide_labels Logical, if TRUE (Default), labels will not be shown.
 #' @param ... additional internal parameters.
@@ -292,6 +291,13 @@ plotly_Volcano_prep <- function(data = NULL,
                                 col = c("#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C"),
                                 colAlpha = 1,
                                 matched_contrast = NULL) {
+  
+  
+  
+  if(!requireNamespace("plotly", quietly = TRUE)){
+    cli::cli_abort("please install plotly")
+  }
+  
   # set up legend
   output_levels <- c(
     "NS", "log2FC",
