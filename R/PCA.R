@@ -6,6 +6,7 @@
 #' @inheritParams DExps
 #' @inheritParams DE
 #' @inheritParams FactoMineR::HCPC
+#' @inheritParams FactoMineR::PCA
 #' @param biplot Boolean value. If TRUE (Default), both individuals and variables
 #' will be shown on the plot. If FALSE, only individuals will be plotted.
 #' @param Top_var a numeric value indicating the number of top contributing
@@ -29,6 +30,7 @@ FactoWrapper <- function(Hotgenes = NULL,
                          biplot = TRUE,
                          min = 3,
                          max = 5,
+                         ncp = 5,
                          ExpressionSlots = NULL,
                          aux_features = "",
                          coldata_ids = coldata_names(Hotgenes),
@@ -99,6 +101,7 @@ FactoWrapper <- function(Hotgenes = NULL,
     biplot = biplot,
     min = min,
     max = max,
+    ncp = ncp,
     ellipse.level = ellipse.level,
     ellipse.alpha = ellipse.alpha,
     habillage_selection = habillage_selection,
@@ -142,12 +145,9 @@ FactoWrapper <- function(Hotgenes = NULL,
     output_PCA[summary_ids] <- output_PCA[summary_ids] %>%
       purrr::imap(function(x,y) {
         
- 
-  
-  out_x <- x %>%
-    dplyr::mutate(dplyr::across(dplyr::where(is.numeric),
-                                ~ signif(.x, signif_)))
-  
+        x %>%
+          dplyr::mutate(dplyr::across(dplyr::where(is.numeric),
+                                      ~ signif(.x, signif_)))
         
       })
   }
@@ -161,6 +161,7 @@ FactoWrapper <- function(Hotgenes = NULL,
 #' FactoWrapper_DFs for PCA/HCPC of expression data
 #' @rdname FactoWrapper
 #' @inheritParams factoextra::fviz_pca_biplot
+#' @inheritParams FactoMineR::PCA
 #' @param df wide dataframe, rows are samples.
 #' Must have rownames
 #' @param supp_data wide format data.frame to be used as supplementary data.  Must have rownames.
@@ -172,6 +173,7 @@ FactoWrapper_DFs <- function(df = NULL,
                              biplot = TRUE,
                              min = 3,
                              max = 5,
+                             ncp = 5,
                              Top_var = 10,
                              ellipse.level = 0.5,
                              ellipse.alpha = 0.5,
@@ -193,6 +195,11 @@ FactoWrapper_DFs <- function(df = NULL,
     cli::cli_abort("df must be a data.frame")
   }
   
+  
+  if(is.null(supp_data)) {
+    supp_data <- data.frame()
+  }
+  
   missing_rownames_ <- list(
     df = df,
     supp_data = supp_data) |> 
@@ -209,11 +216,7 @@ FactoWrapper_DFs <- function(df = NULL,
     
   }
   
-  if(is.null(supp_data)) {
-    supp_data <- data.frame()
-  }
-  
-  
+ 
   
   quanti_ <- supp_data %>% 
     #dplyr::select(-dplyr::any_of(sampleID_col)) %>% 
@@ -287,7 +290,7 @@ FactoWrapper_DFs <- function(df = NULL,
     res <- FactoMineR::PCA(
       dm_pheno,
       scale.unit = TRUE,
-      ncp = 5,
+      ncp = ncp,
       quali.sup = quali_sup,
       quanti.sup = quanti_sup,
       graph = FALSE
@@ -309,7 +312,7 @@ FactoWrapper_DFs <- function(df = NULL,
       nb.dec = 3,
       nbelements = 100,
       nbind = 100,
-      ncp = 3,
+      ncp = ncp,
       file = nullfile()
     )
     
@@ -367,6 +370,8 @@ FactoWrapper_DFs <- function(df = NULL,
       tibble::as_tibble()
   }
   
+  
+  
   # verify that v.test exists
   if ("v.test" %in% names(TopTibble_All)) {
     TopTibble_sup <- TopTibble_All %>%
@@ -374,8 +379,8 @@ FactoWrapper_DFs <- function(df = NULL,
       dplyr::rename(dplyr::any_of(c(Quanti.variable = "Feature"))) %>%
       dplyr::mutate(
         "Interpretation" = dplyr::case_when(
-          .data$v.test > 0 ~ "Cluster has elevated",
-          .data$v.test < 0 ~ "Cluster has reduced"
+          .data$v.test > 0 ~ "Above average in cluster",
+          .data$v.test < 0 ~ "Below average in cluster"
         ),
         .after = "Cluster"
       ) %>%
@@ -385,8 +390,8 @@ FactoWrapper_DFs <- function(df = NULL,
       dplyr::filter(!.data$Feature %in% quanti_) %>%
       dplyr::mutate(
         "Interpretation" = dplyr::case_when(
-          .data$v.test > 0 ~ "Cluster has elevated",
-          .data$v.test < 0 ~ "Cluster has reduced"
+          .data$v.test > 0 ~ "Above average in cluster",
+          .data$v.test < 0 ~ "Below average in cluster"
         ),
         .after = "Cluster"
       ) %>%
@@ -417,8 +422,8 @@ FactoWrapper_DFs <- function(df = NULL,
       tibble::as_tibble() %>%
       dplyr::mutate(
         "Interpretation" = dplyr::case_when(
-          .data$v.test > 0 ~ "Cluster has elevated",
-          .data$v.test < 0 ~ "Cluster has reduced"
+          .data$v.test > 0 ~ "Above average in cluster",
+          .data$v.test < 0 ~ "Below average in cluster"
         ),
         .after = "Cluster"
       ) %>%
@@ -515,7 +520,7 @@ factoExtra_DFs <- function(
   }
   
   
-  # swithing plot type
+  # switching plot type
   pca_funs <- switch (plot_match,
                       "ind" = "fviz_pca_ind",
                       "biplot" = "fviz_pca_biplot")

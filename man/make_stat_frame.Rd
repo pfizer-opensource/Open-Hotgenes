@@ -8,7 +8,8 @@ make_stat_frame(
   input_stats = NULL,
   feature_var = "Feature",
   value_var = "stat",
-  group_var = "group"
+  group_var = "group",
+  strict = FALSE
 )
 }
 \arguments{
@@ -23,6 +24,9 @@ log2FC, or feature ranks calculated via -log10(pvalue) * sign(log2FC).}
 
 \item{group_var}{string for column containing grouping var. Usually
 contrast names from DE analysis.}
+
+\item{strict}{logical, if TRUE, incomplete observations will be dropped.
+Default is FALSE.}
 }
 \value{
 a dataframe in wide format with features as
@@ -32,81 +36,77 @@ rownames and column names generated using ["group_var__value_var"].
 Build a wide dataframe from long stat to use with FactoWrapper_DFs()
 }
 \examples{
-if(interactive()){
-  # Getting example data ----------------------------------------------------
+if (interactive()) {
   
-  # load package
   library(Hotgenes)
   
-  dds_Hotgenes_dir <- system.file("extdata",
-                                  paste0("dds_Hotgenes", ".RDS"),
-                                  package = "Hotgenes",
-                                  mustWork = TRUE
+  # Load example Hotgenes object (built from DESeq2) ------------------------
+  htgs <- readRDS(
+    system.file("extdata", "dds_Hotgenes.RDS",
+                package = "Hotgenes", mustWork = TRUE
+    )
   )
-  # from DESeq2
-  htgs <- readRDS(dds_Hotgenes_dir)
-
-
-# clustering gene ranks ---------------------------------------------------
+  
+  
+  # Part 1: Cluster genes by DE test statistics -----------------------------
+  # Goal: identify genes with similar patterns across contrasts,
+  # as an alternative to Venn diagrams.
+  
+  # Step 1: Get the union of significant features across all contrasts
   InputFeatures <- htgs \%>\%
-    DE(
-      Report = "Features",
-      padj_cut = 0.1
-    )  |> unlist(use.names = FALSE) |> 
+    DE(Report = "Features", padj_cut = 0.1) \%>\%
+    unlist(use.names = FALSE) \%>\%
     unique()
   
-  # Get ranks
+  # Step 2: Get test statistics for those features (long format)
   InputRanks <- htgs \%>\%
-    Output_DE_df(
-     hotList = InputFeatures
-      #padj_cut = 0.1
-    ) |> 
-    dplyr::ungroup() |> 
-    dplyr::select(c("Feature", "group"= "contrast", "stat")) |> 
-    dplyr::distinct() 
+    Output_DE_df(hotList = InputFeatures) \%>\%
+    dplyr::ungroup() \%>\%
+    dplyr::select(c("Feature", "group" = "contrast", "stat")) \%>\%
+    dplyr::distinct()
   
-
-  Input_Frame <-  make_stat_frame(input_stats = InputRanks) 
+  # Step 3: Pivot to a feature x contrast matrix
+  # strict = TRUE drops features with missing stats in any contrast
+  Input_Frame <- make_stat_frame(input_stats = InputRanks, strict = TRUE)
   
-
-  out_1 <- FactoWrapper_DFs(
-    df = Input_Frame)
-    
-  out_1$TopTibble
+  # Step 4: PCA + HCPC clustering
+  out_1 <- FactoWrapper_DFs(df = Input_Frame)
   
-# with more plotting options
-  factoExtra_DFs(PCA_obj = out_1, 
-  select.ind = list( contrib = 10),
-  plot_type = "biplot",
-  repel = TRUE)
+  # Inspect results:
+  out_1$TopTibble               # features characterizing each cluster (v.test + direction)
+  out_1$res.hcpc$data.clust     # full feature list with cluster assignments
+  out_1$res.hcpc$desc.ind$para  # most typical features per cluster
+  
+  # review clustering tree
+  plot(out_1$res.hcpc, choice = "tree")
+  
+  # Plot: biplot showing top 10 contributing features per cluster
+  factoExtra_DFs(
+    PCA_obj = out_1,
+    select.ind = list(contrib = 10),
+    plot_type = "biplot",
+    repel = TRUE
+  )
   
   
-  # clustering genesets -----------------------------------------------------
-
-  # load signatures using msigdbr wrapper
-  # This returns a named list of pathways
+  # Part 2: Cluster gene sets by GSEA enrichment scores --------------------
+  # Goal: identify Hallmark pathways with similar enrichment patterns
+  # across contrasts.
+  
+  # Step 1: Load Hallmark gene sets from MSigDB (returns a named list)
   
   H_paths <- msigdbr_wrapper(
     species = "human",
-    set = c("GO:BP"),
-    gene_col = "gene_symbol"
+    set = "H",
+    gene_col = "gene_symbol" # must match the identifier in your Hotgenes object
   )
   
-  # These genes sets are mapped to gene symbols
-  # Verify Feature col contains gene symbols, too
-  # In this example the "Feature" column contains gene symbols
-  
-  # Get ranks
+  # Step 2: Get ranked gene lists for all contrasts (all genes, no padj filter)
+  # padj_cut = 1 keeps all genes — GSEA requires the full ranking
   InputRanks <- htgs \%>\%
-    DE(
-      Report = "Ranks",
-      Rank_name = "Feature", # see above
-      padj_cut = 1
-    )
+    DE(Report = "Ranks", Rank_name = "Feature", padj_cut = 1)
   
-  
-  
-  # fgsea wrapper --------
+  # Step 3: Run GSEA across all contrasts
   Out_GSEA <- fgsea_(
     Ranks = InputRanks,
     pathways = H_paths,
@@ -115,41 +115,42 @@ if(interactive()){
     maxSize = Inf
   )
   
-  # Get details for all
+  # Step 4: Collect results across contrasts (long format)
+  # this example uses padj_cut = 1 — clustering acts as the filter
+  # you can be more stringent
   list_out <- Out_GSEA \%>\%
-    fgsea_Results(
-      padj_cut = 1,
-      mode = "D"
-    ) |> 
-    purrr::keep(~nrow(.x) > 0) |> 
+    fgsea_Results(padj_cut = 1, mode = "Details") \%>\%
+    purrr::keep(~ nrow(.x) > 0) \%>\%
     purrr::list_rbind(names_to = "group")
   
-  Input_Frame_2 <-  make_stat_frame(input_stats = list_out,
-                                  feature_var = "pathway",
-                                  value_var = "NES") 
-  
-  head(Input_Frame_2)
-  
-  # clusters
-  out_2 <- FactoWrapper_DFs(
-    df = Input_Frame_2
-    
+  # Step 5: Pivot to a pathway x contrast matrix of NES values
+  Input_Frame_2 <- make_stat_frame(
+    input_stats = list_out,
+    feature_var = "pathway",
+    value_var = "NES", 
+    strict = TRUE
   )
   
-  out_2$TopTibble
+  # Step 6: PCA + HCPC clustering
+  out_2 <- FactoWrapper_DFs(df = Input_Frame_2)
   
-  # with more plotting options
-  pca_genesets_clusters <- factoExtra_DFs(PCA_obj = out_2, 
-                # select.ind = list( contrib = 100),
-                label_size = 0,
-                point_size = 2,
-                col.var = "black",
-                alpha.ind  = 0.1,
-                ellipse.alpha = 1,
-                 #plot_type = "biplot",
-                 repel = TRUE)
+  # Inspect results:
+  out_2$TopTibble  # pathways characterizing each cluster
+  out_2$res.hcpc$data.clust     # full feature list with cluster assignments
+  out_2$res.hcpc$desc.ind$para  # most typical features per cluster
   
-  pca_genesets_clusters
+  # review clustering tree
+  plot(out_2$res.hcpc, choice = "tree")
   
+  # Plot: individuals only (no labels — pathway names are too long)
+  factoExtra_DFs(
+    PCA_obj = out_2,
+    label_size = 0,
+    point_size = 2,
+    col.var = "black",
+    alpha.ind = 0.1,
+    ellipse.alpha = 1,
+    repel = TRUE
+  )
 }
 }

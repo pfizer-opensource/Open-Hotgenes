@@ -9,14 +9,18 @@
 #' @param value_var string for column containing values to cluster. Ideally,
 #' with negative and positive values, such normalized enrichment scores (GSEA),
 #' log2FC, or feature ranks calculated via -log10(pvalue) * sign(log2FC).
+#' @importFrom stats complete.cases
 #' @returns a dataframe in wide format with features as
 #' rownames and column names generated using ["group_var__value_var"].
+#' @param strict logical, if TRUE, incomplete observations will be dropped.
+#' Default is FALSE.
 #' @example examples/Clustering_Stats_Example.R
 make_stat_frame <- function(
   input_stats = NULL,
   feature_var = "Feature",
   value_var = "stat",
-  group_var = "group") {
+  group_var = "group",
+  strict = FALSE) {
   
   
   de <- input_stats |>
@@ -34,6 +38,18 @@ make_stat_frame <- function(
       values_fill = NA_real_
     ) |>
     tibble::column_to_rownames(var = feature_var)
+  
+  if(strict){
+    
+    output_complete <- stats::complete.cases(output)
+    output <- output[output_complete, , drop = FALSE]
+    
+    cli::cli_inform(
+  "{sum(output_complete)} features with complete stats \\
+  ({sum(!output_complete)} dropped)"
+  )
+    
+  }
   
   return(output)
 }

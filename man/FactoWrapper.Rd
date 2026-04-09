@@ -11,6 +11,7 @@ FactoWrapper(
   biplot = TRUE,
   min = 3,
   max = 5,
+  ncp = 5,
   ExpressionSlots = NULL,
   aux_features = "",
   coldata_ids = coldata_names(Hotgenes),
@@ -36,6 +37,7 @@ FactoWrapper_DFs(
   biplot = TRUE,
   min = 3,
   max = 5,
+  ncp = 5,
   Top_var = 10,
   ellipse.level = 0.5,
   ellipse.alpha = 0.5,
@@ -69,6 +71,8 @@ will be shown on the plot. If FALSE, only individuals will be plotted.}
 \item{min}{an integer. The least possible number of clusters suggested.}
 
 \item{max}{an integer. The higher possible number of clusters suggested; by default the minimum between 10 and the number of individuals divided by 2.}
+
+\item{ncp}{number of dimensions kept in the results (by default 5)}
 
 \item{ExpressionSlots}{name of normalized data to use.
 If NULL (default), the first name returned by ExpressionSlots_
