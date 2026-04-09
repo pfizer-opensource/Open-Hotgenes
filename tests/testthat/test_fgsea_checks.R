@@ -6,9 +6,9 @@
 H_paths <- msigdbr::msigdbr(
   species = "Homo sapiens",
   # category = "C5", subcategory = "BP"
-  category = "H"
+  collection = "H"
 ) %>%
-  # options for ids include: gene_symbol, entrez_gene, ensembl_gene
+  # options for ids include: gene_symbol, ensembl_gene
 
   dplyr::select(c("gene_symbol", "gs_name")) %>%
   plyr::dlply("gs_name", identity) %>%
@@ -134,10 +134,10 @@ testthat::expect_all_true(
 
 H_paths <- msigdbr::msigdbr(
   species = "Homo sapiens",
-  # category = "C5", subcategory = "BP"
+  # collection = "C5", subcategory = "BP"
   subcollection = "CP:KEGG_MEDICUS"
 ) %>%
-  # options for ids include: gene_symbol, entrez_gene, ensembl_gene
+  # options for ids include: gene_symbol, ensembl_gene
 
   dplyr::select(gene_symbol, gs_name) %>%
   plyr::dlply("gs_name", identity) %>%
@@ -197,7 +197,7 @@ OutMe <- OntologyMethods(
   InputChoices = list(
     "msigdbr" = c("CP:REACTOME", "CP:KEGG_MEDICUS")),
   gene_col_choices = list(
-    "msigdbr" = c("gene_symbol", "entrez_gene", "ensembl_gene")),
+    "msigdbr" = c("gene_symbol", "ensembl_gene")),
   
   species_choices = list(
     "msigdbr" = c("human", "mouse", "rat", "dog")),
@@ -222,8 +222,8 @@ testthat::expect_equal(gsList, H_paths)
 
 # custom library ----------------------------------------------------------
 
-example_sigs <- msigdbr::msigdbr( species = "human", category = "H") %>% 
-  dplyr::mutate_at( c("gene_symbol",  "entrez_gene", "ensembl_gene"),
+example_sigs <- msigdbr::msigdbr( species = "human", collection = "H") %>% 
+  dplyr::mutate_at( c("gene_symbol", "ensembl_gene"),
                     as.character) #%>% 
   
 # convert to long format
@@ -233,9 +233,9 @@ source_genesets <- example_sigs %>%
                 set = .data$gs_collection,
                 geneset_names = .data$gs_name) %>% 
   dplyr::select(c("species", "set", "geneset_names", 
-                  "gene_symbol",  "entrez_gene", "ensembl_gene"
+                  "gene_symbol",   "ensembl_gene"
                   )) %>% 
-  tidyr::pivot_longer(cols = c("gene_symbol",  "entrez_gene", "ensembl_gene"),
+  tidyr::pivot_longer(cols = c("gene_symbol",  "ensembl_gene"),
                       names_to = "aliase_category", values_to = "aliases") %>% 
   unique()
 
