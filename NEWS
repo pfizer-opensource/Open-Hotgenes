@@ -1,5 +1,10 @@
 # version 0.0.51:
-    - Added ranks stats clustering methods
+    - Added make_stat_frame() to support ranks stats clustering methods
+      via FactoWrapper_DFs().
+    - Dropped SamplesIDs arg for FactoWrapper_DFs(), which now
+      requires rownames.
+    - Added plot_type arg to factoExtra_DFs(), which now supports
+      biplots and ind plots using factoextra.
 
 # version 0.0.50:
     - Added news to shiny app.

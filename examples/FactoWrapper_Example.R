@@ -114,8 +114,8 @@ if(interactive()){
                            legend.title = "clust",
                            addEllipses = TRUE, ellipse.level = 0.5
   ) +
-    theme_classic() +
-    scale_shape_manual(values = rep(20, 100))
+    ggplot2::theme_classic() +
+    ggplot2::scale_shape_manual(values = rep(20, 100))
   
   
   
@@ -130,26 +130,36 @@ if(interactive()){
     tidyr::pivot_wider(
       id_cols = "sample_id",
       names_from = "Features"
-    )
+    ) |> 
+    tibble::column_to_rownames("sample_id")
   
-  supp_data <- coldata_(htgs
+  supp_data_ <- coldata_(htgs
   ) %>%
     tibble::rownames_to_column("sample_id") %>% 
     dplyr::left_join(auxiliary_assays_(htgs)%>%
-                       tibble::rownames_to_column("sample_id"))
+                       tibble::rownames_to_column("sample_id")) |> 
+    tibble::column_to_rownames("sample_id")
   
   
   PC <- FactoWrapper_DFs(
-    ExpressionDat = ExpressionDat,
-    supp_data = supp_data,
-    sampleID_col = "sample_id"
+    df = ExpressionDat,
+    supp_data = supp_data_
   )
+ 
   
   PC$res_PPI_pa_1
   
   # with more plotting options
   factoExtra_DFs(PCA_obj = PC, 
                  habillage_shape_id = "Hrs",
+                 legend_text_size = 10,
+                 repel = TRUE)
+  
+  # with biplot plotting options
+  factoExtra_DFs(PCA_obj = PC, 
+                 habillage_shape_id = "Hrs",
+                 plot_type = "biplot",
+                 select.var = list( contrib = 10),
                  legend_text_size = 10,
                  repel = TRUE)
   

@@ -64,7 +64,8 @@ FactoWrapper <- function(Hotgenes = NULL,
   supp_data <- coldata_(Hotgenes, coldata_ids = coldata_ids) %>% 
     tibble::rownames_to_column("SampleIDs") %>% 
     dplyr::left_join(aux_data_wide, by = "SampleIDs") %>%
-    dplyr::select_if(~ dplyr::n_distinct(na.omit(.x)) > 1) 
+    dplyr::select_if(~ dplyr::n_distinct(na.omit(.x)) > 1) |> 
+    tibble::column_to_rownames("SampleIDs")
   
   # Normalized expression
   # making expression data with coldata data ---------------------------------
@@ -83,13 +84,17 @@ FactoWrapper <- function(Hotgenes = NULL,
     Query_set = TRUE,
     coldata_ids = ""
   ) %>%
-    dplyr::select_if( ~ !is.character(.x)) %>%
-    tibble::rownames_to_column("SampleIDs")
+    dplyr::select_if( ~ !is.character(.x)) 
+  
+  if(nrow(ExpressionDat) == 0){
+    
+    ExpressionDat <- data.frame()
+    
+  }
   
   output_PCA <- FactoWrapper_DFs(
-    ExpressionDat = ExpressionDat,
+    df = ExpressionDat,
     supp_data = supp_data,
-    sampleID_col = "SampleIDs",
     Top_var = Top_var,
     biplot = biplot,
     min = min,
@@ -156,16 +161,14 @@ FactoWrapper <- function(Hotgenes = NULL,
 #' FactoWrapper_DFs for PCA/HCPC of expression data
 #' @rdname FactoWrapper
 #' @inheritParams factoextra::fviz_pca_biplot
-#' @param ExpressionDat wide expression data, rows are samples
-#' @param supp_data wide format data.frame to be used as supplementary data
-#' @param sampleID_col string column name for merging ExpressionDat with
-#' supp_data
+#' @param df wide dataframe, rows are samples.
+#' Must have rownames
+#' @param supp_data wide format data.frame to be used as supplementary data.  Must have rownames.
 #' @export
 #' @return FactoMiner plot showing HCPC of genes, samples, and conditions
 
-FactoWrapper_DFs <- function(ExpressionDat = NULL,
+FactoWrapper_DFs <- function(df = NULL,
                              supp_data = NULL,
-                             sampleID_col = NULL,
                              biplot = TRUE,
                              min = 3,
                              max = 5,
@@ -181,28 +184,66 @@ FactoWrapper_DFs <- function(ExpressionDat = NULL,
   # Normalized expression
   # making expression data with coldata data ---------------------------------
   
+  if(is.null(df)){
+    cli::cli_abort("df is NULL")
+  }
+  
+  
+  if(!is.data.frame(df)){
+    cli::cli_abort("df must be a data.frame")
+  }
+  
+  missing_rownames_ <- list(
+    df = df,
+    supp_data = supp_data) |> 
+    purrr::compact() |> 
+    purrr::imap(~tibble::has_rownames(.x)) |> 
+    purrr::keep(~.x == FALSE)
+  
+  if(length(missing_rownames_) > 0){
+    
+    cli::cli_abort(c(
+      "Rownames missing from the following:",
+      "x" = "{names(missing_rownames_)}"
+    ))
+    
+  }
+  
+  if(is.null(supp_data)) {
+    supp_data <- data.frame()
+  }
+  
+  
+  
   quanti_ <- supp_data %>% 
-    dplyr::select(-dplyr::any_of(sampleID_col)) %>% 
+    #dplyr::select(-dplyr::any_of(sampleID_col)) %>% 
     dplyr::select_if(is.numeric) %>% names()
   
   quali_ <- supp_data %>% 
-    dplyr::select(-dplyr::any_of(sampleID_col)) %>% 
+    # dplyr::select(-dplyr::any_of(sampleID_col)) %>% 
     dplyr::select_if(~!is.numeric(.x)) %>% names()
-  
   # filtered
   filtered_coldata_ids <- c(quanti_, quali_)
+  
   
   # ensuring only filtered_coldata_ids in
   # supp_data get passed along
   final_col <- supp_data %>%
-    dplyr::select(dplyr::any_of(c(sampleID_col, filtered_coldata_ids)))
+    dplyr::select(dplyr::any_of(c( filtered_coldata_ids))) |> 
+    
+    tibble::rownames_to_column("SampleIDs")
   
   
-  dm_pheno <- ExpressionDat %>%
-    dplyr::left_join(final_col, by = sampleID_col) %>%
-    dplyr::relocate(dplyr::any_of(filtered_coldata_ids), .before = 1) %>%
-    base::as.data.frame() %>%
-    tibble::column_to_rownames(sampleID_col)
+  dm_pheno <- df |> 
+    
+    tibble::rownames_to_column("SampleIDs")  |> 
+    dplyr::left_join(final_col, by = "SampleIDs")  |> 
+    dplyr::relocate(dplyr::any_of(filtered_coldata_ids),
+                    .before = 1) |> 
+    base::as.data.frame() |> 
+    tibble::column_to_rownames("SampleIDs")
+  
+  
   
   
   # Getting supplemental variables
@@ -430,22 +471,27 @@ FactoWrapper_DFs <- function(ExpressionDat = NULL,
 #' to use for ellipses. Default is "clust".
 #' @param habillage_shape_id string with the qualitative variable
 #' to use for individual shapes. Default is "clust".
+#' @param plot_type string indicating pca plot type. 
+#' Choices are "ind" or "biplot".
 #' @param point_size numeric value. Default is 3.
 #' @param label_size numeric value. Default is 3.
 #' @param legend_text_size numeric value. Default is 12.
 #' @param ... additional parameter to pass to [factoextra::fviz_pca_ind()]
+#' or [factoextra::fviz_pca_biplot()]
 #' @rdname FactoWrapper
 #' @export
 
-factoExtra_DFs <- function(PCA_obj = NULL,
-                           ellipse.alpha = 1,
-                           ellipse.level = 0.5,
-                           habillage_id = "clust",
-                           habillage_shape_id = "clust",
-                           point_size = 3,
-                           label_size = 3,
-                           legend_text_size = 12,
-                           ...) {
+factoExtra_DFs <- function(
+  PCA_obj = NULL,
+  ellipse.alpha = 1,
+  ellipse.level = 0.5,
+  plot_type = c("ind", "biplot" ),
+  habillage_id = "clust",
+  habillage_shape_id = "clust",
+  point_size = 3,
+  label_size = 3,
+  legend_text_size = 12,
+  ...) {
   # getting all quali IDs + clust
   quali_IDs <- c(colnames(PCA_obj$coldata_dat), "clust")
   
@@ -454,29 +500,60 @@ factoExtra_DFs <- function(PCA_obj = NULL,
     tibble::rownames_to_column("name") %>%
     dplyr::select(dplyr::any_of(c(quali_IDs, "name")))
   
+  plot_match <- match.arg(arg = plot_type, 
+                          choices = c("ind", "biplot" ), 
+                          several.ok = FALSE)
+  
+  
   if(label_size == 0){
     geom <- c("point")
     
   } else {
-    geom <- c("point", "text")
+    geom <- switch (plot_match,
+                    "ind" = c("point", "text"),
+                    "biplot" = c("point", "text"))
   }
   
-  # label_size
-  PCA_OUT <- factoextra::fviz_pca_ind(
-    PCA_obj$res,
+  
+  # swithing plot type
+  pca_funs <- switch (plot_match,
+                      "ind" = "fviz_pca_ind",
+                      "biplot" = "fviz_pca_biplot")
+  
+  # matching formals
+  formal_pca <- base::formals(fun = pca_funs)
+  if ("..." %in% names(formal_pca)) {
+    formal_pca[["..."]] <- NULL
+  }
+  
+  formals_list <- as.list(formal_pca)
+  
+  pca_args <- tryCatch(list(...), 
+  error = function(e) NULL)
+  
+  
+  PCA_list <- list(
+    X = PCA_obj$res,
     axes = c(1, 2),
     geom  = geom ,
-    # repel = TRUE,
-    # label=c("all"),
-    # col.var = c("black"),
+   
     pointsize = NA,
     addEllipses = FALSE,
     labelsize = label_size,
-    # scol.ind.sup = "black",
+    
     ellipse.alpha = ellipse.alpha,
-    legend.title = habillage_id,
-    ...
-  )
+    legend.title = habillage_id
+    ) 
+  
+  PCA_list <- PCA_list[names(PCA_list) %in% names(formals_list)] |> 
+    append(pca_args)
+  
+  
+  
+  PCA_OUT <- do.call(what = pca_funs,
+                     args = PCA_list)
+  
+  
   
   # To allows users to select var for point shape,
   # ellipse must be added after fviz_PCA_ind

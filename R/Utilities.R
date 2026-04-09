@@ -637,13 +637,11 @@ DExps <- function(
   if (isFALSE(Query_set)) {
     dm <- NormalizedData[row.names(NormalizedData) %in% gene_ids,
       colnames(NormalizedData) %in% Out_SampleIDs,
-      drop = FALSE
-    ]
+      drop = FALSE ]
   } else if (isTRUE(Query_set)) {
     Exps_Dat <- NormalizedData[row.names(NormalizedData) %in% gene_ids,
       colnames(NormalizedData) %in% Out_SampleIDs,
-      drop = FALSE
-    ]
+      drop = FALSE]
 
     tExps_Dat <- data.frame(t(Exps_Dat),
       check.names = FALSE,
@@ -671,8 +669,6 @@ DExps <- function(
     dm$Row.names <- NULL
   }
   
-  # dm <- tibble::as_tibble(dm) %>% 
-  #   dplyr::relocate("SampleIDs", .before = 1)
 
   return(dm)
 }

@@ -9,4 +9,5 @@
 ^data-raw$
 ^BuildSupport$
 ^Internal_Efforts$
+^.github$
 ^examples$

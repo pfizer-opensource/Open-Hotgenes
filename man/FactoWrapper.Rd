@@ -31,9 +31,8 @@ FactoWrapper(
 )
 
 FactoWrapper_DFs(
-  ExpressionDat = NULL,
+  df = NULL,
   supp_data = NULL,
-  sampleID_col = NULL,
   biplot = TRUE,
   min = 3,
   max = 5,
@@ -52,6 +51,7 @@ factoExtra_DFs(
   PCA_obj = NULL,
   ellipse.alpha = 1,
   ellipse.level = 0.5,
+  plot_type = c("ind", "biplot"),
   habillage_id = "clust",
   habillage_shape_id = "clust",
   point_size = 3,
@@ -125,16 +125,17 @@ Default is 0.}
 
 \item{SampleIDs}{vector of sample ids to select}
 
-\item{ExpressionDat}{wide expression data, rows are samples}
+\item{df}{wide dataframe, rows are samples.
+Must have rownames}
 
-\item{supp_data}{wide format data.frame to be used as supplementary data}
-
-\item{sampleID_col}{string column name for merging ExpressionDat with
-supp_data}
+\item{supp_data}{wide format data.frame to be used as supplementary data.  Must have rownames.}
 
 \item{title}{the title of the graph}
 
 \item{PCA_obj}{output of \code{\link[=FactoWrapper_DFs]{FactoWrapper_DFs()}}}
+
+\item{plot_type}{string indicating pca plot type.
+Choices are "ind" or "biplot".}
 
 \item{habillage_id}{string with the qualitative variable
 to use for ellipses. Default is "clust".}
@@ -148,7 +149,8 @@ to use for individual shapes. Default is "clust".}
 
 \item{legend_text_size}{numeric value. Default is 12.}
 
-\item{...}{additional parameter to pass to \code{\link[factoextra:fviz_pca]{factoextra::fviz_pca_ind()}}}
+\item{...}{additional parameter to pass to \code{\link[factoextra:fviz_pca]{factoextra::fviz_pca_ind()}}
+or \code{\link[factoextra:fviz_pca]{factoextra::fviz_pca_biplot()}}}
 }
 \value{
 FactoMiner plot showing HCPC of genes, samples, and conditions
@@ -283,8 +285,8 @@ if(interactive()){
                            legend.title = "clust",
                            addEllipses = TRUE, ellipse.level = 0.5
   ) +
-    theme_classic() +
-    scale_shape_manual(values = rep(20, 100))
+    ggplot2::theme_classic() +
+    ggplot2::scale_shape_manual(values = rep(20, 100))
   
   
   
@@ -299,26 +301,36 @@ if(interactive()){
     tidyr::pivot_wider(
       id_cols = "sample_id",
       names_from = "Features"
-    )
+    ) |> 
+    tibble::column_to_rownames("sample_id")
   
-  supp_data <- coldata_(htgs
+  supp_data_ <- coldata_(htgs
   ) \%>\%
     tibble::rownames_to_column("sample_id") \%>\% 
     dplyr::left_join(auxiliary_assays_(htgs)\%>\%
-                       tibble::rownames_to_column("sample_id"))
+                       tibble::rownames_to_column("sample_id")) |> 
+    tibble::column_to_rownames("sample_id")
   
   
   PC <- FactoWrapper_DFs(
-    ExpressionDat = ExpressionDat,
-    supp_data = supp_data,
-    sampleID_col = "sample_id"
+    df = ExpressionDat,
+    supp_data = supp_data_
   )
+ 
   
   PC$res_PPI_pa_1
   
   # with more plotting options
   factoExtra_DFs(PCA_obj = PC, 
                  habillage_shape_id = "Hrs",
+                 legend_text_size = 10,
+                 repel = TRUE)
+  
+  # with biplot plotting options
+  factoExtra_DFs(PCA_obj = PC, 
+                 habillage_shape_id = "Hrs",
+                 plot_type = "biplot",
+                 select.var = list( contrib = 10),
                  legend_text_size = 10,
                  repel = TRUE)
   

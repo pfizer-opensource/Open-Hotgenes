@@ -70,8 +70,8 @@ factoextra::fviz_pca_ind(FactoOutput$res,
   legend.title = "clust",
   addEllipses = TRUE, ellipse.level = 0.5
 ) +
-  theme_classic() +
-  scale_shape_manual(values = rep(20, 100))
+  ggplot2::theme_classic() +
+  ggplot2::scale_shape_manual(values = rep(20, 100))
 
 # sup
 FactoOutput$TopTibble_sup # cluster stats
