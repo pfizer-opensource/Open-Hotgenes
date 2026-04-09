@@ -17,16 +17,16 @@ make_stat_frame(
 \item{feature_var}{string for column containing features. Can be
 features from DE analysis, or geneset names.}
 
-\item{group_var}{string for column containing grouping var. Usually
-contrast names from DE analysis.}
-
-\item{value_vars}{string for column containing values to cluster. Ideally,
+\item{value_var}{string for column containing values to cluster. Ideally,
 with negative and positive values, such normalized enrichment scores (GSEA),
 log2FC, or feature ranks calculated via -log10(pvalue) * sign(log2FC).}
+
+\item{group_var}{string for column containing grouping var. Usually
+contrast names from DE analysis.}
 }
 \value{
 a dataframe in wide format with features as
-rownames and column names generated using "{group_var}__{value_var}".
+rownames and column names generated using ["group_var__value_var"].
 }
 \description{
 Build a wide dataframe from long stat to use with FactoWrapper_DFs()

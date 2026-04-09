@@ -6,11 +6,11 @@
 #' contrast names from DE analysis. 
 #' @param feature_var string for column containing features. Can be
 #' features from DE analysis, or geneset names. 
-#' @param value_vars string for column containing values to cluster. Ideally,
+#' @param value_var string for column containing values to cluster. Ideally,
 #' with negative and positive values, such normalized enrichment scores (GSEA),
 #' log2FC, or feature ranks calculated via -log10(pvalue) * sign(log2FC).
 #' @returns a dataframe in wide format with features as
-#' rownames and column names generated using "{group_var}__{value_var}".
+#' rownames and column names generated using ["group_var__value_var"].
 #' @example examples/Clustering_Stats_Example.R
 make_stat_frame <- function(
   input_stats = NULL,
