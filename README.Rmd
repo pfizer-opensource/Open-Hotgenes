@@ -226,7 +226,7 @@ Hotgenes::Shiny_Hotgenes(Hotgenes_airway)
 ## Convert DRomics DE analysis into Hotgenes Object
 
 
-```{r message = FALSE}
+```{r, message = FALSE}
  require(Hotgenes)
   
   
@@ -546,7 +546,7 @@ DEphe(fit_Hotgenes,
 
 ### Run GSEA using msigdbr genesets
 
-```{r GSEA_1 message = FALSE}
+```{r GSEA_1, message = FALSE}
 # get geneset
 H_paths <- msigdbr_wrapper(
     species = "human",
@@ -580,7 +580,7 @@ H_paths <- msigdbr_wrapper(
     fgsea_Results(
       contrasts = "Hrs_6_vs_0",
       padj_cut = 0.2,
-      mode = "D"
+      mode = "Details"
     )
   
   # Or for one
@@ -610,7 +610,7 @@ H_paths <- msigdbr_wrapper(
 
 ### Or use the HotgeneSets() function for gsva
 
-```{r hotgeneSets message = FALSE}
+```{r hotgeneSets, message = FALSE}
 
 choice_set <- "CP:KEGG_MEDICUS"
 choice_id <- "gene_symbol"

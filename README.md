@@ -263,41 +263,13 @@ datafilename <- system.file("extdata", "RNAseq_sample.txt", package="DRomics")
 o <- DRomics::RNAseqdata(datafilename, check = TRUE, transfo.method = "vst")
 ```
 
-    ## converting counts to integer mode
-
     ## Warning in DRomics::RNAseqdata(datafilename, check = TRUE, transfo.method = "vst"): 
     ## To optimize the dose-response modelling, it is recommended to use a
     ## dose-response design with at least six different tested doses.
 
 ``` r
 s_quad <- DRomics::itemselect(o, select.method = "quadratic", FDR = 0.05)
-```
 
-    ## converting counts to integer mode
-
-    ##   the design formula contains one or more numeric variables with integer values,
-    ##   specifying a model with increasing fold change for higher values.
-    ##   did you mean for this to be a factor? if so, first convert
-    ##   this variable to a factor using the factor() function
-
-    ##   the design formula contains one or more numeric variables that have mean or
-    ##   standard deviation larger than 5 (an arbitrary threshold to trigger this message).
-    ##   Including numeric variables with large mean can induce collinearity with the intercept.
-    ##   Users should center and scale numeric variables in the design to improve GLM convergence.
-
-    ## estimating size factors
-
-    ## estimating dispersions
-
-    ## gene-wise dispersion estimates
-
-    ## mean-dispersion relationship
-
-    ## final dispersion estimates
-
-    ## fitting model and testing
-
-``` r
 f <- DRomics::drcfit(itemselect = s_quad, parallel = "no")
 ```
 
@@ -774,7 +746,7 @@ H_paths <- msigdbr_wrapper(
     fgsea_Results(
       contrasts = "Hrs_6_vs_0",
       padj_cut = 0.2,
-      mode = "D"
+      mode = "Details"
     )
 ```
 
@@ -821,10 +793,6 @@ H_paths <- msigdbr_wrapper(
   )
 ```
 
-    ## Leading edge genes for
-    ## kegg_medicus_pathogen_sars_cov_2_s_to_angii_at1r_nox2_signaling_pathway:
-    ## ℹ CXCL8, CCL2, IL6, NFKB1, MMP3, IL1B
-
 ![](man/figures/README-GSEA_1-2.png)<!-- -->
 
 ### Or use the HotgeneSets() function for gsva
@@ -853,20 +821,6 @@ gsList <- msigdbr_wrapper(
 
     ## [1] "using Feature col"
     ## [1] "building mapper"
-
-    ## ℹ GSVA version 2.0.7
-
-    ## ℹ Calculating  ssGSEA scores for 235 gene sets
-
-    ## ℹ Calculating ranks
-
-    ## ℹ Calculating rank weights
-
-    ## ℹ Normalizing ssGSEA scores
-
-    ## ✔ Calculations finished
-
-    ## using geneset weights
 
 ``` r
   HotgeneSets_out
