@@ -1,10 +1,9 @@
 #' Makes expression plots via ggplot2
 #' @inheritParams DExps
 #' @inheritParams ggplot2::facet_wrap
-#' @importFrom ggplot2 coord_flip element_blank element_text
-#' geom_boxplot geom_hline
-#' geom_line geom_segment ggplot label_both labs scale_fill_manual theme
-#' theme_bw theme_minimal unit
+#' @importFrom ggplot2 element_text geom_boxplot geom_hline
+#' geom_line geom_point ggplot labs scale_color_manual scale_fill_manual theme
+#' theme_classic unit aes coord_fixed
 #' @param group String indicating the grouping variable.
 #' @param xVar String indicating the x variable. If NULL (default),
 #' the first column name reported by coldata_ function will be used.
@@ -25,7 +24,7 @@
 #' @param filter_eval to be passed to
 #'  \code{\link[dplyr]{filter}}.
 #' @inheritParams UpdateLevelsbyList
-#' @importFrom rlang enexprs !!!
+#' @importFrom rlang enquos !!!
 #' @param ... additional arguments for
 #' \code{\link[ggplot2]{facet_wrap}}
 #' @inheritParams DEphe
@@ -57,16 +56,15 @@ ExpsPlot <- function(
     ...) {
   # Check object
   stopifnot(is(Hotgenes, "Hotgenes"))
-
   
   mapper_choices <- names(Mapper_(Hotgenes))
   
   matched_name_col <- match.arg(
     arg = name_col,
-    choices = mapper_choices, several.ok = FALSE)
+    choices = mapper_choices, several.ok = FALSE
+  )
   
   # color pal
-
   if (!shiny::isTruthy(fill)) {
     fill_pal <- NULL
   } else {
@@ -74,7 +72,7 @@ ExpsPlot <- function(
       coldata_palettes(coldata_ids = fill, SampleIDs = SampleIDs) %>%
       purrr::chuck(fill)
   }
-
+  
   if (!shiny::isTruthy(color)) {
     color_pal <- NULL
   } else {
@@ -82,43 +80,39 @@ ExpsPlot <- function(
       coldata_palettes(coldata_ids = color, SampleIDs = SampleIDs) %>%
       purrr::chuck(color)
   }
-
-
   
   # Prep to building long expression data
   Matched_ExpSel <- match.arg(
     ExpressionSlots,
     ExpressionSlots_(Hotgenes)
   )
-
- # parsing variables
   
-  all_varbles<-c(xVar, yVar, "SampleIDs",
-    color, linevar,
-    group, fill, facets)
+  # parsing variables
+  all_varbles <- c(xVar, yVar, "SampleIDs",
+                   color, linevar,
+                   group, fill, facets)
   
   all_varbles <- all_varbles[!detected_missingness(all_varbles)]
- 
+  
   parsed_features <- parse_features(Hotgenes,
-                                features = all_varbles)
- 
+                                    features = all_varbles)
   
   yVar_parsed <- parsed_features[c("aux_features",
-                                   "exps_features")] %>% 
-    purrr::imap(function(x,y){
-      x %>% stringr::str_subset( ".+")
-      
-    }) %>% purrr::compact() %>% 
+                                   "exps_features")] %>%
+    purrr::imap(function(x, y) {
+      x %>% stringr::str_subset(".+")
+    }) %>%
+    purrr::compact() %>%
     unlist(use.names = FALSE)
   
-  if(!all(yVar_parsed %in% parsed_features$exps_features)){
+  if (!all(yVar_parsed %in% parsed_features$exps_features)) {
     Update_Y_lab <- "Relative values\n(mixed assays)"
   } else {
-    Update_Y_lab <- Matched_ExpSel 
+    Update_Y_lab <- Matched_ExpSel
   }
   
   # yVar_parsed can be multiple Features, but not NULL
-  if (is.null(yVar_parsed) | is.null(xVar)) {
+  if (is.null(yVar_parsed) || is.null(xVar)) {
     ExpDat <- NULL
   } else if (!is.null(yVar_parsed) && !is.null(xVar)) {
     # expression data
@@ -131,54 +125,44 @@ ExpsPlot <- function(
         ExpressionSlots = Matched_ExpSel,
         SampleIDs = SampleIDs
       ) %>%
-      dplyr::arrange(dplyr::across(dplyr::any_of(xVar)))# %>%
-      
-   
-    if(matched_name_col != "Feature"){
-      
+      dplyr::arrange(dplyr::across(dplyr::any_of(xVar)))
+    
+    if (matched_name_col != "Feature") {
       # label_by
       label_aliases <- hotList_mapper(
         Hotgenes,
-        hotList = parsed_features$exps_features ) %>%
-        dplyr::select(dplyr::any_of(c("Feature", matched_name_col))) 
+        hotList = parsed_features$exps_features
+      ) %>%
+        dplyr::select(dplyr::any_of(c("Feature", matched_name_col)))
       
-      ExpDat <- init_ExpDat %>% 
+      ExpDat <- init_ExpDat %>%
         tidyr::pivot_longer(
           cols = dplyr::any_of(c(yVar_parsed)),
           names_to = "Feature",
           values_to = value_col
-        ) %>% 
-        dplyr::left_join(label_aliases, by = "Feature") %>% 
-        
-        set_missing_alias_default(default_alias = "Feature",
-                                  preferred_alias = matched_name_col)
-      
-      
+        ) %>%
+        dplyr::left_join(label_aliases, by = "Feature") %>%
+        set_missing_alias_default(
+          default_alias = "Feature",
+          preferred_alias = matched_name_col
+        )
     } else {
-      
-      
-      ExpDat <- init_ExpDat %>% 
-      # converting to long format
-      tidyr::pivot_longer(
-        cols = dplyr::any_of(c(yVar_parsed)),
-        names_to = matched_name_col,
-        values_to = value_col
-      ) 
-      
-      
+      ExpDat <- init_ExpDat %>%
+        # converting to long format
+        tidyr::pivot_longer(
+          cols = dplyr::any_of(c(yVar_parsed)),
+          names_to = matched_name_col,
+          values_to = value_col
+        )
     }
-    
-    
-    
   }
-
+  
   # setting blank
   if (is.null(ExpDat) || nrow(ExpDat) == 0) {
     gplot <- empty_plot()
-   
   } else {
     # plot --------------------------------------------------------------------
-
+    
     # setting mapping
     mapping <- ggplot2::aes(
       x = .data[[xVar]],
@@ -187,9 +171,7 @@ ExpsPlot <- function(
       color = .data[[color]],
       group = .data[[group]]
     )
-
-
-
+    
     # Preparing to drop empty mappings
     list_mappings <- list(
       x = xVar,
@@ -199,34 +181,28 @@ ExpsPlot <- function(
       group = group
     ) %>%
       purrr::keep(~ all(!shiny::isTruthy(.x)))
-
+    
     # removing empties
     mapping[names(list_mappings)] <- NULL
-
+    
     # updating expression data
     # can't use is.null
     if (!missing(filter_eval)) {
       args <- rlang::enquos(filter_eval)
-
-      # enexprs this works
-      # args <- rlang::enexprs(filter_eval)
       ExpDat <- ExpDat %>%
         dplyr::filter(!!!args)
     }
-
+    
     # updating levels
     if (!is.null(named_levels)) {
       ExpDat <- ExpDat %>%
         UpdateLevelsbyList(named_levels = named_levels)
     }
-
+    
     # making plot
     gplot <- ExpDat %>%
       ggplot2::ggplot(mapping) +
       list(
-        # geom_point(size=2),
-        # scale_fill_manual(values = alpha(fill_pal,0.3)) ,
-        # scale_color_manual(values = alpha(color_pal,1)),
         ggplot2::scale_fill_manual(values = fill_pal),
         ggplot2::scale_color_manual(values = color_pal),
         ggplot2::labs(y = Update_Y_lab),
@@ -237,42 +213,43 @@ ExpsPlot <- function(
           title = ggplot2::element_text(hjust = 0.5),
           plot.margin = ggplot2::unit(c(1, 1, 1, 1), "cm")
         ),
-        ggplot2::facet_wrap(c(matched_name_col, facets), # labeller = labeller ,
-          scales = scales, ...
+        ggplot2::facet_wrap(c(matched_name_col, facets),
+                            scales = scales, ...
         )
       )
-
+    
     # setting baseMean
     if (isTRUE(basemean)) {
       # by Feature
       baseMean <- ExpDat %>%
         dplyr::group_by(.data[[matched_name_col]]) %>%
         dplyr::summarise(baseMean = mean(.data[[value_col]]))
-
+      
       gplot <- gplot +
-        ggplot2::geom_hline(data = baseMean, aes(yintercept = .data$baseMean))
+        ggplot2::geom_hline(
+          data = baseMean,
+          ggplot2::aes(yintercept = .data$baseMean)
+        )
     }
+    
     # line check
     if (shiny::isTruthy(linevar)) {
       gplot <- gplot +
-        ggplot2::geom_line(ggplot2::aes( # color = .data[[linevar]],
-          group = .data[[linevar]]
-        ))
+        ggplot2::geom_line(ggplot2::aes(group = .data[[linevar]]))
     }
-
+    
     # point check
     if (isTRUE(pointplot)) {
       gplot <- gplot + ggplot2::geom_point()
     }
-
+    
     # boxplot check
     if (isTRUE(boxplot)) {
       gplot <- gplot + ggplot2::geom_boxplot()
     }
   }
-
+  
   # final return
-
   return(gplot)
 }
 
@@ -291,21 +268,20 @@ ExpsPlot_Table <- function(
   data <- ggplot_obj$data
   # preparing to reformat data
   xx_vars <- c(facets, xVar)
-
+  
   D2 <- data %>%
     dplyr::select(dplyr::any_of(c(
       xx_vars,
       name_col,
       value_col
     )))
-
   
   # adding column name as prefix
   D2[xx_vars] <- D2[xx_vars] %>%
     purrr::imap(function(x, y) {
       paste(y, x, sep = "")
     })
-
+  
   # pivot table
   D_table_Out <- D2 %>%
     dplyr::group_by(dplyr::across(dplyr::any_of(xx_vars))) %>%
@@ -321,7 +297,6 @@ ExpsPlot_Table <- function(
     dplyr::rename("yVar" = .env$name_col) %>%
     dplyr::relocate(dplyr::any_of(c("yVar")), .before = 1) %>%
     dplyr::arrange(.data$yVar)
-
+  
   return(D_table_Out)
 }
-

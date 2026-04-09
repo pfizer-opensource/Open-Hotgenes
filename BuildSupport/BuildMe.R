@@ -60,6 +60,7 @@ devtools::install(upgrade = "never")
 
 file.edit("README.md")
 
+ExpsPlot_Server_module()
 pkgdown::build_site()
 # usethis::use_apache_license()
 # buildignore -------------------------------------------------------------

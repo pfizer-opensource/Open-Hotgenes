@@ -2396,6 +2396,7 @@ DT::dataTableOutput("Express_Dat_Table" %>% ns())
 #' @inheritParams DE_pheServer
 #' @inheritParams fgsea_
 #' @inheritParams Shiny_Hotgenes_Server
+#' @importFrom ggplot2 label_both 
 #' @rdname Shiny_Tabs
 ExpsPlot_Server_module <- function(
 id = NULL,
@@ -2564,7 +2565,7 @@ basemean = FALSE,
 ExpressionSlots = ExpressionSlots(),
 SampleIDs = SampleIDs(),
 facets = c(input$facet_wrap),
-labeller = label_both,
+labeller = ggplot2::label_both,
 ncol = input$facet_ncol,
 scales = set_scales, 
 name_col = input$label_by
