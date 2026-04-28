@@ -22,7 +22,7 @@
 #' @param method string for method to use for GSVA package. Options
 #' include: c("ssgsea","gsva", "zscore", "plage").
 #' @export
-#' @example examples/Hotgeneslimma_Example.R
+#' @example examples/GSVA_Example.R
 
 HotgeneSets <- function(Hotgenes = NULL,
 ExpressionSlots = NULL,
@@ -58,7 +58,7 @@ geneset_weights <- gsva_outList$geneset_weights
 
 if(use_vooma){
 
-glue::glue("using vooma") %>% message()
+  cli::cli_inform("using vooma")
 
 # limma method
 if(is.null(voomaGroup)){
@@ -87,9 +87,8 @@ vooma_plot <- NULL
 }
 
 if(use_weights){
-glue::glue("using geneset weights") %>% message()
 
-
+cli::cli_inform("using geneset weights")
 trend <- geneset_weights
 
 } else {
@@ -103,7 +102,8 @@ fit <- limma::lmFit(vm_exp)
 
 # using contrast matrix
 if(!is.null(contrast_matrix)){
-glue::glue("using contrast matrix") %>% message()
+  
+cli::cli_inform("using contrast matrix")  
 
 fit_final <- limma::contrasts.fit(fit = fit,
 contrasts = contrast_matrix) 
@@ -162,17 +162,18 @@ Matched_ExpSel <- match.arg(ExpressionSlots, ExprOptions)
 
 # prepare to remap
 if (MapperCol == "Feature") {
-print("using Feature col")
 
+cli::cli_inform("using Feature col")
+  
 NormalizedData <- Normalized_Data_(
 Hotgenes,
 slot = Matched_ExpSel
 ) %>%
 as.matrix()
 } else if (MapperCol != "Feature") {
-paste0("using ", MapperCol, " col") %>%
-print()
 
+cli::cli_inform("using {MapperCol} col")  
+  
 # This converts ids from expression data to
 # ids supplied in original mapper slot
 
@@ -198,7 +199,7 @@ as.matrix()
 
 # build a new mapper for geneset names
 
-print("building mapper")
+cli::cli_inform("building mapper")
 
 Featur_s <- rownames(NormalizedData)
 

@@ -1,3 +1,9 @@
+# version 0.0.53:
+    - Added Build_DILI_Hotgenes.R to data-raw — builds a Hotgenes object
+      from the publicly available DILI discovery proteomics dataset
+      (Federspiel et al., MassIVE MSV000089782).
+    - Other clean up
+
 # version 0.0.52:
     - Exported make_stat_frame()
     - Cleaned up documentation in Venn methods.

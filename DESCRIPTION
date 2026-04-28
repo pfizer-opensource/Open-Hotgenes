@@ -1,14 +1,14 @@
 Package: Hotgenes
 Type: Package
-Title: Tools to simplify Omics DE analysis
-Version: 0.0.52
+Title: Tools to simplify Omics DE Analysis
+Version: 0.0.53
 Author: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
 Maintainer: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
 Description: Converts outputs from DESeq2, limma, or a method of your
     choice into a Hotgenes object to simplify downstream analysis. 
     Recall all results, specific genes, or identify genes of interest with 
     hierarchical clustering on principal components.
-License: Apache License (>= 2)
+License: Apache License (>= 2) | file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.3
@@ -31,7 +31,6 @@ Imports:
     grid,
     GSVA (>= 1.46.0),
     janitor,
-    knitr,
     limma,
     methods,
     msigdbr (>= 7.5.1),
@@ -61,6 +60,7 @@ Suggests:
     apeglm,
     edgeR,
     devtools,
+    knitr,
     roxygen2,
     testthat,
     org.Hs.eg.db,
@@ -68,6 +68,7 @@ Suggests:
     plotly,
     DelayedArray (>= 0.24.0),
     DBI,
-    rmarkdown
+    rmarkdown,
+    vsn
 VignetteBuilder: knitr
 Depends: R (>= 4.2.0)

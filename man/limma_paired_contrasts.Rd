@@ -36,8 +36,6 @@ if(interactive()) {
   
   # Hotgeneslimma -----------------------------------------------------------
   require(DESeq2)
-  #require(limma)
-  #require(edgeR)
   
   dds_con_dir <- system.file("extdata",
                              "dds_con.Rdata",
