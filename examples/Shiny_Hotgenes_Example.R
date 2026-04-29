@@ -62,12 +62,9 @@ HotgenesObj %>% contrastMatrix_()
 # ?HotgeneSets
 HotgeneSets_out <- HotgeneSets(
   Hotgenes = HotgenesObj,
-  gset.idx.list = gsList,
+  geneSets = gsList,
   kcdf = "Gaussian",
-  method = "gsva",
-  min.sz = 5,
-  max.sz = Inf,
-  parallel.sz = 16L
+  method = "gsva"
 )
 
 HotgeneSets_out
