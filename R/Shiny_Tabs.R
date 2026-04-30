@@ -1964,14 +1964,6 @@ output$fgseaPlot <- shiny::renderPlot({
 summary_fgsea_reactive()
 })
 
-# renders heatmap
-DE_pheServer(
-id = "A", Hotgenes = Hotgenes,
-hotList = LeadingFeatures,
-ExpressionSlots = ExpressionSlots,
-SampleIDs = SampleIDs,
-Subtitle = reactive_selectedPathway
-)
 
 LeadingFeatures <- shiny::reactive({
   shiny::req(input$fgseaTable_rows_selected)
@@ -1999,6 +1991,18 @@ dplyr::slice(input$fgseaTable_rows_selected) %>%
 dplyr::pull("pathway") %>%
 unlist(use.names = FALSE)
 })
+
+# renders heatmap
+DE_pheServer(
+  id = "A", 
+  Hotgenes = Hotgenes,
+  ExpressionSlots = ExpressionSlots,
+  SampleIDs = SampleIDs,
+  
+  # defined above
+  hotList = LeadingFeatures,
+  Subtitle = reactive_selectedPathway
+)
 
 # reactive plot
 enrichmentPlot_p <- shiny::reactive({

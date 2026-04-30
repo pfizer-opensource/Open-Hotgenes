@@ -1,3 +1,6 @@
+# version 0.0.54:
+    - Updates to Hotgenes generating functions. 
+
 # version 0.0.53:
     - Added Build_DILI_Hotgenes.R to data-raw — builds a Hotgenes object
       from the publicly available DILI discovery proteomics dataset
