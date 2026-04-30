@@ -140,14 +140,14 @@ auxiliary_assays_check <- function(Hotgenes = NULL) {
   
   if(length(overl_names) > 0){
 
-    cli::cli_inform("{glue::glue_collapse(overl_names, sep = ', ')} not added, since already in coldata")
+    cli::cli_inform("{overl_names} not added, since already in coldata")
   }
   
   # checks for duplicate names with expression slots
   overl_features <- aux_df_features[aux_df_features %in% Features_(Hotgenes)]
   
   if(length(overl_features) > 0){
-    cli::cli_inform("{glue::glue_collapse(overl_features, sep = ', ')} not added, since already in Expression")
+    cli::cli_inform("{overl_features} not added, since already in Expression")
   }
   
 
@@ -439,7 +439,7 @@ auxiliary_assays_filter <- function(Hotgenes = NULL,
   
   if(length(exclude_these) > 0){
     
-    cli::cli_inform("{glue::glue_collapse(exclude_these, sep = ', ')} not added, since already in coldata or Features slot")
+    cli::cli_inform("{exclude_these} not added, since already in coldata or Features slot")
   }
   
   # checks for duplicate names with coldata slots
