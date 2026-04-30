@@ -666,9 +666,8 @@ new_value <- ini() / input$goButton2
 
 # print to console, just to check if it updated.
 # print(new_value)
-paste0("PCA runs when new_value is not 1. new_value = ", new_value) %>%
-print()
 
+cli::cli_inform("PCA runs when new_value is not 1. new_value = {new_value}")
 
 shiny::req(new_value != 1)
 
