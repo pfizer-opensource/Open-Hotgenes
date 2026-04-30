@@ -11,3 +11,5 @@
 ^Internal_Efforts$
 ^.github$
 ^examples$
+^\.positai$
+^\.claude$

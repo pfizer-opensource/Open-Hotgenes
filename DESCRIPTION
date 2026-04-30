@@ -60,6 +60,7 @@ Suggests:
     apeglm,
     edgeR,
     devtools,
+    GEOquery,
     knitr,
     roxygen2,
     testthat,
@@ -69,6 +70,7 @@ Suggests:
     DelayedArray (>= 0.24.0),
     DBI,
     rmarkdown,
+    tximport,
     vsn
 VignetteBuilder: knitr
 Depends: R (>= 4.2.0)
