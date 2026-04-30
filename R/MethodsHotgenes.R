@@ -328,7 +328,7 @@ Output_DE_check <- function(Hotgenes = NULL) {
     unique()
   
   if (isFALSE(all(DE_Check))) {
-    cli::cli_abort("All data.frames in Output_DE must contain: {paste(DE_Reqs, collapse = ', ')}")
+    cli::cli_abort("All data.frames in Output_DE must contain: {DE_Reqs}")
   }
   
   # verify numeric
