@@ -336,18 +336,18 @@ Hotgeneslimma <- function(limmafit = NULL,
   
   # check Expression_name
   if (is.null(Expression_name)) {
-    stop("No expression name given")
+    cli::cli_abort("No expression name given")
   }
   
   # Setup output conditions -------------------------------------------------
   # verify that coldata and expression data align
   if (!all(rownames(coldata) == colnames(Expression))) {
-    stop("coldata does not match Expression")
+    cli::cli_abort("coldata does not match Expression")
   }
   
   # verify that rownames(limmafit$design) and expression data align
   if (!all(rownames(limmafit$design) == colnames(Expression))) {
-    stop("limmafit$design does not match Expression")
+    cli::cli_abort("limmafit$design does not match Expression")
   }
   
   # getting available contrasts by removing intercept
@@ -517,15 +517,15 @@ HotgenesDRomics <- function(
   
   # Input validation --------------------------------------------------------
   if (is.null(bmdcalc)) {
-    stop("bmdcalc parameter is required and cannot be NULL")
+    cli::cli_abort("bmdcalc parameter is required and cannot be NULL")
   }
   
   if (! inherits(bmdcalc, "bmdcalc")) {
-    stop("bmdcalc must be an object returned by DRomics::bmdcalc()")
+    cli::cli_abort("bmdcalc must be an object returned by DRomics::bmdcalc()")
   }
   
   if (is.null(bmdcalc$omicdata) || is.null(bmdcalc$res)) {
-    stop("bmdcalc object must contain omicdata and res slots")
+    cli::cli_abort("bmdcalc object must contain omicdata and res slots")
   }
   
   if(any_missingness(pseudocount)) {

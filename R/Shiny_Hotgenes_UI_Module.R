@@ -355,7 +355,7 @@ BoxPlot_output$reactive_NormSlot()
 # # verifies that everything is loaded
 if (isTRUE(remove_modal_spinner)) {
 shiny::observeEvent(shiny::req(serverOut() %in% ExpressionSlots_(Hotgenes_out)), {
-print("remove_modal_spinner")
+cli::cli_inform("remove_modal_spinner")
 shinybusy::remove_modal_spinner(session = session)
 })
 }
@@ -460,7 +460,7 @@ theme = shinythemes::shinytheme("united"),
 parallel.sz = 1L,
 max_col_levels = Inf) {
 
-print("processing as list")
+cli::cli_inform("processing as list")
 
 HotgenesList <- Hotgenes
 
@@ -547,7 +547,7 @@ session = session,
 spin = "cube-grid",
 text = "loading")
 
-print(input$StudyID)
+cli::cli_inform("{input$StudyID}")
 ss <- HotgenesList[[input$StudyID]]
 
 

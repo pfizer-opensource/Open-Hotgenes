@@ -228,7 +228,7 @@ coldata_palettes <- function(
       } else if (!is.null(BinaryColorScheme)) {
         # checking BinaryColorScheme
         if (length(BinaryColorScheme) > 2) {
-          stop("BinaryColorScheme length > 2")
+          cli::cli_abort("BinaryColorScheme length > 2")
         }
         
         # Binary color

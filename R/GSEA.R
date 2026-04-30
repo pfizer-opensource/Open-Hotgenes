@@ -66,7 +66,7 @@ fgsea_ <- function(
   # fsgea for list
   List_fgsea_Out <- Ranks %>%
     purrr::imap(function(x, y) {
-      print(y)
+      cli::cli_inform("{y}")
 
 
       allSigns <- sign(x)
@@ -137,7 +137,7 @@ fgsea_Results <- function(
     mode = "Details") {
   # Check if fgseaRes is a list
   if (!is(fgseaRes, "list")) {
-    stop("fgseaRes is not a list")
+    cli::cli_abort("fgseaRes is not a list")
   }
 
   # Getting Results
@@ -146,7 +146,7 @@ fgsea_Results <- function(
 
   # Check if fgseaRes is a list
   if (!is(Output_Results, "list")) {
-    stop("Output_Results is not a list")
+    cli::cli_abort("Output_Results is not a list")
   }
 
   # getting available contrasts
@@ -551,27 +551,27 @@ OntologyMethods <- function(
   # check Ontology_Function
   
   if (!is(Ontology_Function, "list")) {
-    stop("Ontology_Function is not a list")
+    cli::cli_abort("Ontology_Function is not a list")
   }
 
   # check InputChoices
   if (!is(InputChoices, "list")) {
-    stop("InputChoices is not a list")
+    cli::cli_abort("InputChoices is not a list")
   }
 
   # check gene_col_choices
   if (!is(gene_col_choices, "list")) {
-    stop("gene_col_choices is not a list")
+    cli::cli_abort("gene_col_choices is not a list")
   }
 
   # check species_choices
   if (!is(species_choices, "list")) {
-    stop("species_choices is not a list")
+    cli::cli_abort("species_choices is not a list")
   }
 
   # verify names
   if (isFALSE(all(names(Ontology_Function) == names(InputChoices)))) {
-    stop("names don't match")
+    cli::cli_abort("names don't match")
   }
 
   # Final methods
@@ -580,27 +580,27 @@ OntologyMethods <- function(
       # check if function
       
       if (!is(Ontology_Function[[y]], "function")) {
-        stop("function not valid")
+        cli::cli_abort("function not valid")
       }
 
       # check if character
       if (!is(InputChoices[[y]], "character")) {
-        stop("choices not valid")
+        cli::cli_abort("choices not valid")
       }
 
       # check if character gene_col_choices
       if (!is(gene_col_choices[[y]], "character")) {
-        stop("choices not valid")
+        cli::cli_abort("choices not valid")
       }
 
       # check if character species_choices
       if (!is(species_choices[[y]], "character")) {
-        stop("choices not valid")
+        cli::cli_abort("choices not valid")
       }
 
       # check version
       if (is.null(versions[[y]])) {
-        stop("versions not valid")
+        cli::cli_abort("versions not valid")
       }
 
       list(

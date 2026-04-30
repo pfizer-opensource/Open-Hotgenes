@@ -114,11 +114,11 @@ auxiliary_assays_check <- function(Hotgenes = NULL) {
   aux_df <- Hotgenes@auxiliary_assays
   
   if(isFALSE(is.data.frame(aux_df))){
-    stop("auxiliary_assays slot must contain a data.frame")
+    cli::cli_abort("auxiliary_assays slot must contain a data.frame")
   }
   
   if(isFALSE("SampleIDs" %in% colnames(aux_df))){
-    stop("data.frame must contain a SampleIDs column")
+    cli::cli_abort("data.frame must contain a SampleIDs column")
   }
   
   # verify at least some overlap
@@ -128,7 +128,7 @@ auxiliary_assays_check <- function(Hotgenes = NULL) {
   
   # verify the SampleIDs column
   if (nrow(sample_check) == 0) {
-    warning("no overlap with metadata")
+    cli::cli_warn("no overlap with metadata")
   }
   
   # checks for duplicate names with coldata slots
@@ -140,22 +140,14 @@ auxiliary_assays_check <- function(Hotgenes = NULL) {
   
   if(length(overl_names) > 0){
 
-    message(
-        glue::glue(
-          "{glue::glue_collapse(overl_names, sep = ', ')} 
-           not added, since already in coldata"
-          ))
+    cli::cli_inform("{glue::glue_collapse(overl_names, sep = ', ')} not added, since already in coldata")
   }
   
   # checks for duplicate names with expression slots
   overl_features <- aux_df_features[aux_df_features %in% Features_(Hotgenes)]
   
   if(length(overl_features) > 0){
-    message(
-      glue::glue(
-        "{glue::glue_collapse(
-        overl_features, sep = ', ')
-        }  not added, since already in Expression"))
+    cli::cli_inform("{glue::glue_collapse(overl_features, sep = ', ')} not added, since already in Expression")
   }
   
 
@@ -172,12 +164,8 @@ expression_data_check <- function(Hotgenes = NULL){
   
   # check if Normalized_Expression has names
   if (is.null(names(Hotgenes@Normalized_Expression))) {
-    stop("Normalized_Expression elements must be named")
+    cli::cli_abort("Normalized_Expression elements must be named")
   }
-  
-  
-  
-}
 
 #' internal function returns Mapper_() contents as named list
 #' @noRd
@@ -195,7 +183,7 @@ designMatrix_check  <- function(Hotgenes = NULL) {
   
   # check coldata row lengths
   if (nrow(Hotgenes@designMatrix) == 0) {
-    stop("designMatrix slot has no rows")
+    cli::cli_abort("designMatrix slot has no rows")
   }
   
   # verify designMatrix has rownames
@@ -203,7 +191,7 @@ designMatrix_check  <- function(Hotgenes = NULL) {
   if (!tibble::has_rownames(
     base::as.data.frame(Hotgenes@designMatrix) 
     )) {
-    stop("designMatrix slot has no row names")
+    cli::cli_abort("designMatrix slot has no row names")
   }
   
   # verify that all output_DE names are in 
@@ -216,7 +204,7 @@ designMatrix_check  <- function(Hotgenes = NULL) {
     length()
   
   if (length_cols == 0) {
-    stop("designMatrix must have at least one column")
+    cli::cli_abort("designMatrix must have at least one column")
   }
   
   
@@ -227,7 +215,7 @@ designMatrix_check  <- function(Hotgenes = NULL) {
       
       coldata_SampleNames <- rownames(Hotgenes@designMatrix)
       if (!all(coldata_SampleNames == Exps_SampleNames)) {
-        stop("Sample IDs from designMatrix and expression data aren't equal")
+        cli::cli_abort("Sample IDs from designMatrix and expression data aren't equal")
       } else if (all(coldata_SampleNames == Exps_SampleNames)) {
         return("Sample IDs from designMatrix and expression data are equal")
       }
@@ -239,17 +227,17 @@ designMatrix_check  <- function(Hotgenes = NULL) {
 coldata_check <- function(Hotgenes = NULL) {
   # check coldata row lengths
   if (nrow(Hotgenes@coldata) == 0) {
-    stop("coldata slot has no rows")
+    cli::cli_abort("coldata slot has no rows")
   }
   
   # verify coldata has rownames
   if (!has_rownames(Hotgenes@coldata)) {
-    stop("coldata slot has no row names")
+    cli::cli_abort("coldata slot has no row names")
   }
   
   # can't have SampleIDs in coldata
   if ("SampleIDs" %in% base::colnames(Hotgenes@coldata)) {
-    stop("SampleIDs can't be in coldata")
+    cli::cli_abort("SampleIDs can't be in coldata")
   }
   
   # verify coldata has atleast one column
@@ -260,7 +248,7 @@ coldata_check <- function(Hotgenes = NULL) {
     length()
   
   if (check_factor == 0) {
-    stop("coldata must have at least one factor")
+    cli::cli_abort("coldata must have at least one factor")
   }
   
   # verify match with exps data
@@ -270,7 +258,7 @@ coldata_check <- function(Hotgenes = NULL) {
       
       coldata_SampleNames <- rownames(Hotgenes@coldata)
       if (!all(coldata_SampleNames == Exps_SampleNames)) {
-        stop("Sample IDs from coldata and expression data aren't equal")
+        cli::cli_abort("Sample IDs from coldata and expression data aren't equal")
       } else if (all(coldata_SampleNames == Exps_SampleNames)) {
         return("Sample IDs from coldata and expression data are equal")
       }
@@ -288,7 +276,7 @@ Features_check <- function(Hotgenes = NULL) {
       
       # Check for empty spaces
       if (any_missingness(Features_names)) {
-        stop("Empty name detected! Check your expression matrix rownames")
+        cli::cli_abort("Empty name detected! Check your expression matrix rownames")
       } else {
         return(Features_names)
       }
@@ -326,10 +314,8 @@ required_DE_numeric_cols <- function(){
 Output_DE_check <- function(Hotgenes = NULL) {
   # check if Output_DE has names
   if (is.null(names(Hotgenes@Output_DE))) {
-    stop("Output_DE elements must be named")
+    cli::cli_abort("Output_DE elements must be named")
   }
-  
-  # verifies that require col are present
   # sets required cols
   DE_Reqs <- required_DE_cols()
   
@@ -342,10 +328,7 @@ Output_DE_check <- function(Hotgenes = NULL) {
     unique()
   
   if (isFALSE(all(DE_Check))) {
-    stop(paste0(
-      "All data.frames in Output_DE must contain: ",
-      paste0(DE_Reqs, collapse = ", ")
-    ))
+    cli::cli_abort("All data.frames in Output_DE must contain: {paste(DE_Reqs, collapse = ', ')}")
   }
   
   # verify numeric
@@ -368,9 +351,7 @@ Output_DE_check <- function(Hotgenes = NULL) {
   
   # numeric_Check
   if (isFALSE(all(numeric_Check))) {
-    stop(
-      "Missing numeric columns in Output_DE"
-    )
+    cli::cli_abort("Missing numeric columns in Output_DE")
   }
   
   # check for empties
@@ -382,7 +363,7 @@ Output_DE_check <- function(Hotgenes = NULL) {
     nrow()
   
   if (DE_Check_blanks > 0) {
-    stop("Empty Feature detected! Check your Output_DE slot")
+    cli::cli_abort("Empty Feature detected! Check your Output_DE slot")
   }
 }
 
@@ -447,7 +428,7 @@ auxiliary_assays_filter <- function(Hotgenes = NULL,
   aux_df <-new_auxiliary_assays 
   
   if(isFALSE(is.data.frame(aux_df))){
-    stop("auxiliary_assays slot must contain a data.frame")
+    cli::cli_abort("auxiliary_assays slot must contain a data.frame")
   }
   
   # exclude_these
@@ -458,11 +439,7 @@ auxiliary_assays_filter <- function(Hotgenes = NULL,
   
   if(length(exclude_these) > 0){
     
-    message(
-      glue::glue(
-        "{glue::glue_collapse(exclude_these, sep = ', ')} not added, 
-        since already in coldata or Features slot"
-      ))
+    cli::cli_inform("{glue::glue_collapse(exclude_these, sep = ', ')} not added, since already in coldata or Features slot")
   }
   
   # checks for duplicate names with coldata slots
@@ -802,7 +779,7 @@ ExpressionSlots_ <- function(Hotgenes = NULL) {
   
   # check if Normalized_Expression has names
   if (is.null(names(Hotgenes@Normalized_Expression))) {
-    stop("Normalized_Expression elements must be named")
+    cli::cli_abort("Normalized_Expression elements must be named")
   }
 
   return(names(Hotgenes@Normalized_Expression))
@@ -1062,7 +1039,7 @@ contrasts_ <- function(Hotgenes = NULL) {
 
   # check if Output_DE has names
   if (is.null(names(Hotgenes@Output_DE))) {
-    stop("Output_DE elements must be named")
+    cli::cli_abort("Output_DE elements must be named")
   }
   return(names(Hotgenes@Output_DE))
 }
