@@ -13,6 +13,8 @@ NULL
 #' @details `fgsea_()` detects for ranks that are all positive or
 #' all negative and then switches to "pos" or "neg", depending on the outcome.
 #' Otherwise scoreType is "std"
+#' @param verbose logical if TRUE (default) you'll be informed of the contrast name
+#' when being analyzed. If FALSE, no name will be printed.
 #' @importFrom cli cli_inform cli_abort cli_warn
 #' @example examples/GSEA_tools_Example.R
 fgsea_ <- function(
@@ -21,6 +23,7 @@ fgsea_ <- function(
     minSize = 1,
     maxSize = Inf,
     nproc = 1,
+    verbose = FALSE,
     ...) {
   # Check if Ranks is a list
   if (!is(Ranks, "list")) {
@@ -66,9 +69,11 @@ fgsea_ <- function(
   # fsgea for list
   List_fgsea_Out <- Ranks %>%
     purrr::imap(function(x, y) {
-      cli::cli_inform("{y}")
-
-
+      
+      if(verbose) {
+        cli::cli_inform("{y}")
+      }
+      
       allSigns <- sign(x)
 
       if (all(allSigns == 1)) {
