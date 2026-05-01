@@ -756,9 +756,9 @@ NULL
 })
 
 # debug 
-shiny::observe({
-cli::cli_inform("{output_temp()$TopTibble_sup}")
-})
+# shiny::observe({
+# cli::cli_inform("{output_temp()$TopTibble_sup}")
+# })
 
 output$Tab2_PCA_quanti_sup <- DT::renderDataTable({
 
