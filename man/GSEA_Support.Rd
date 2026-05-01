@@ -22,6 +22,7 @@ fgsea_(
   minSize = 1,
   maxSize = Inf,
   nproc = 1,
+  verbose = FALSE,
   ...
 )
 
@@ -100,6 +101,9 @@ descending order.}
 \item{maxSize}{Maximal size of a gene set to test. All pathways above the threshold are excluded.}
 
 \item{nproc}{If not equal to zero sets BPPARAM to use nproc workers (default = 0).}
+
+\item{verbose}{logical if TRUE (default) you'll be informed of the contrast name
+when being analyzed. If FALSE, no name will be printed.}
 
 \item{...}{additional args passed to supplied methods}
 
