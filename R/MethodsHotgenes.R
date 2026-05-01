@@ -166,6 +166,7 @@ expression_data_check <- function(Hotgenes = NULL){
   if (is.null(names(Hotgenes@Normalized_Expression))) {
     cli::cli_abort("Normalized_Expression elements must be named")
   }
+}
 
 #' internal function returns Mapper_() contents as named list
 #' @noRd
