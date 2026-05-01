@@ -294,7 +294,7 @@ unique(Venn_p()$df$Category)
 
 
 output$Venn_plot <- shiny::renderPlot({
-print(Venn_p()$vennD)
+Venn_p()$vennD
 })
 
 # Venn_Table
@@ -666,9 +666,8 @@ new_value <- ini() / input$goButton2
 
 # print to console, just to check if it updated.
 # print(new_value)
-paste0("PCA runs when new_value is not 1. new_value = ", new_value) %>%
-print()
 
+cli::cli_inform("PCA runs when new_value is not 1. new_value = {new_value}")
 
 shiny::req(new_value != 1)
 
@@ -757,9 +756,9 @@ NULL
 })
 
 # debug 
-shiny::observe({
-output_temp()$TopTibble_sup %>% print()
-})
+# shiny::observe({
+# cli::cli_inform("{output_temp()$TopTibble_sup}")
+# })
 
 output$Tab2_PCA_quanti_sup <- DT::renderDataTable({
 
@@ -1384,7 +1383,7 @@ MainTitle <- paste0(chr_Subtitle, "\nExpression: ", ExpressionSlots())
 
 # reordering xVar
 if (isTruthy(input$Var_levels)) {
-  print("reactive_input_vars")
+  cli::cli_inform("reactive_input_vars")
   level_choices <- shiny::req(input$arrangeby)
   
   newMeta <- DF_coldata()$quali_distinct[level_choices] %>%
@@ -1469,7 +1468,7 @@ annotation_row = annotation_row()
 
 
 output$pheat_plot <- shiny::renderPlot(
-print(pheat_p())
+pheat_p()
 )
 
 Server_download_plot(
@@ -1826,12 +1825,10 @@ Output_fgsea_reactive <- shiny::eventReactive(input$fgsea_Button, {
 # update the value
 new_value <- ini_fgsea() / input$fgsea_Button
 
-
 # print to console, just to check if it updated.
 # print(new_value)
 
-paste0("GSEA runs when new_value is not 1. new_value = ",
-       new_value) %>% print()
+cli::cli_inform("GSEA runs when new_value is not 1. new_value = {new_value}")
 
 shiny::req(new_value != 1)
 
@@ -1964,14 +1961,6 @@ output$fgseaPlot <- shiny::renderPlot({
 summary_fgsea_reactive()
 })
 
-# renders heatmap
-DE_pheServer(
-id = "A", Hotgenes = Hotgenes,
-hotList = LeadingFeatures,
-ExpressionSlots = ExpressionSlots,
-SampleIDs = SampleIDs,
-Subtitle = reactive_selectedPathway
-)
 
 LeadingFeatures <- shiny::reactive({
   shiny::req(input$fgseaTable_rows_selected)
@@ -1999,6 +1988,18 @@ dplyr::slice(input$fgseaTable_rows_selected) %>%
 dplyr::pull("pathway") %>%
 unlist(use.names = FALSE)
 })
+
+# renders heatmap
+DE_pheServer(
+  id = "A", 
+  Hotgenes = Hotgenes,
+  ExpressionSlots = ExpressionSlots,
+  SampleIDs = SampleIDs,
+  
+  # defined above
+  hotList = LeadingFeatures,
+  Subtitle = reactive_selectedPathway
+)
 
 # reactive plot
 enrichmentPlot_p <- shiny::reactive({
@@ -2513,7 +2514,7 @@ shiny::req(ExpressionSlots() %in% ExpressionSlots_(Hotgenes))
 
 # reordering xVar
 if (isTruthy(input$Var_levels)) {
-print("reactive_input_vars")
+cli::cli_inform("reactive_input_vars")
 level_choices <- shiny::req(input$Filter_Var_levels)
 
 newMeta <- DF_coldata()$quali_distinct[level_choices] %>%
@@ -3776,13 +3777,13 @@ Hotgenes_re <- shiny::reactive({
 if(shiny::isTruthy(input$Update_Button)){
 
 
-print("updating")
+cli::cli_inform("updating")
 
 
 auxiliary_assays_(Hotgenes) <- Final_auxdata_re() 
 
 
-print("done")
+cli::cli_inform("done")
 }
 
 return(Hotgenes)

@@ -20,7 +20,7 @@ Venn_Report <- function(FeatureList = NULL,
                         ...) {
   # check lengths
   if (length(FeatureList) > 4) {
-    stop("no more than 4 groups")
+    cli::cli_abort("no more than 4 groups")
   }
   
   if (isFALSE(all(lengths(FeatureList) == 0))) {

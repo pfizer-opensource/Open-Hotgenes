@@ -171,4 +171,4 @@ dili_hotgenes <- Hotgenes::Hotgeneslimma(
 
 dili_hotgenes
 
-rm(list = ls())
+#rm(list = ls())

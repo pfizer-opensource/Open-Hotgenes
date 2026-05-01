@@ -151,7 +151,7 @@ MapperCol = "Feature",
 GSVA_check <- utils::packageVersion("GSVA")
 
 if(GSVA_check < '1.50.0'){
-stop("This function requires GSVA (>= 1.50.0).")
+cli::cli_abort("This function requires GSVA (>= 1.50.0).")
 }
 
 # Preparing expression data
@@ -207,7 +207,7 @@ Featur_s <- rownames(NormalizedData)
 are_names_valid <-checkisValidAndUnreserved(names(geneSets))
 
 if(!all(are_names_valid)){
-warning("correcting invalid geneSets names")
+cli::cli_warn("correcting invalid geneSets names")
 
 geneSets <- geneSets %>% 
 purrr::set_names(~.x %>% janitor::make_clean_names())

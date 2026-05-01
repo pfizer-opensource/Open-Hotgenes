@@ -15,7 +15,7 @@ TabCondition <- function(
   
   out <- glue::glue("input.{tabsetPanel_id} ===\ '{id}\'")
  
-  print(out)
+  cli::cli_inform("{out}")
   return(out)
 }
 
@@ -248,7 +248,7 @@ df_coldata_handler <- function(Hotgenes = NULL,
                                min_col_levels = 0){
   
   if(is.null(max_col_levels)){
-    stop("max_col_levels must be provided")
+    cli::cli_abort("max_col_levels must be provided")
   }
   
   DF_coldata <- shiny::eventReactive(shiny::req(Hotgenes), {

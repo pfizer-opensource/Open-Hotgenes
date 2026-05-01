@@ -105,9 +105,22 @@ testthat::expect_no_message(
     Ranks = InputRanks["sh_EWS_vs_Ctrl"],
     pathways = H_paths,
     minSize = 5,
-    maxSize = Inf
+    maxSize = Inf,
+    verbose = FALSE
   )
   )
+
+# will get message because verbose is TRUE
+testthat::expect_message(
+  no_show<- fgsea_(
+    Ranks = InputRanks["sh_EWS_vs_Ctrl"],
+    pathways = H_paths,
+    minSize = 5,
+    maxSize = Inf,
+    verbose = TRUE
+  )
+)
+
 
 
 # warning if no overlap between ranks and features

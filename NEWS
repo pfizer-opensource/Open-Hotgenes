@@ -1,3 +1,11 @@
+# version 0.0.54:
+    - Replaced base R messaging/error calls (stop(), warning(), message(),
+      print(), cat()) with cli equivalents across R/ sources.
+    - Added verbose arg to fgsea_() to control contrast name logging;
+      defaults to FALSE.
+    - Added contrast_vectors arg to HotgenesDEseq2() to support
+      contrast setting.
+
 # version 0.0.53:
     - Added Build_DILI_Hotgenes.R to data-raw — builds a Hotgenes object
       from the publicly available DILI discovery proteomics dataset

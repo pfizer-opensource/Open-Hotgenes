@@ -278,22 +278,6 @@ ExpressionSlots = BoxPlot_output$reactive_NormSlot,
 SampleIDs = BoxPlot_output$SampleIDs_Sel
 )
 
-# fgsea_Server_module -----------------------------------------------------
-
-
-
-fgsea_Server_module(
-id = "GSEA",
-input = input, output = output,
-session = session,
-Hotgenes = Hotgenes_out,
-PCA_TopTibble = out,
-ExpressionSlots = BoxPlot_output$reactive_NormSlot,
-SampleIDs = BoxPlot_output$SampleIDs_Sel,
-OntologyMethods = OntologyMethods,
-Mapper_choices = Mapper_choices
-)
-
 
 # ExpsPlot_Server_module --------------------------------------------------
 
@@ -333,7 +317,7 @@ SampleIDs = BoxPlot_output$SampleIDs_Sel
 # PCA_Server_module -------------------------------------------------------
 
 
-
+# out defined here used below
 out <-  PCA_Server_module(
 id = "PCA",
 input = input, output = output,
@@ -342,6 +326,25 @@ Hotgenes = Hotgenes_out,
 ExpressionSlots = BoxPlot_output$reactive_NormSlot,
 SampleIDs = BoxPlot_output$SampleIDs_Sel
 ) 
+
+
+# fgsea_Server_module -----------------------------------------------------
+
+
+
+fgsea_Server_module(
+  id = "GSEA",
+  input = input, output = output,
+  session = session,
+  Hotgenes = Hotgenes_out,
+  # out defined above via PCA_Server_module
+  PCA_TopTibble = out,
+  ExpressionSlots = BoxPlot_output$reactive_NormSlot,
+  SampleIDs = BoxPlot_output$SampleIDs_Sel,
+  OntologyMethods = OntologyMethods,
+  Mapper_choices = Mapper_choices
+)
+
 
 serverOut <- shiny::reactive({
 shiny::req(shiny::isTruthy(BoxPlot_output$reactive_NormSlot()))
@@ -352,7 +355,7 @@ BoxPlot_output$reactive_NormSlot()
 # # verifies that everything is loaded
 if (isTRUE(remove_modal_spinner)) {
 shiny::observeEvent(shiny::req(serverOut() %in% ExpressionSlots_(Hotgenes_out)), {
-print("remove_modal_spinner")
+cli::cli_inform("remove_modal_spinner")
 shinybusy::remove_modal_spinner(session = session)
 })
 }
@@ -457,7 +460,7 @@ theme = shinythemes::shinytheme("united"),
 parallel.sz = 1L,
 max_col_levels = Inf) {
 
-print("processing as list")
+cli::cli_inform("processing as list")
 
 HotgenesList <- Hotgenes
 
@@ -544,7 +547,7 @@ session = session,
 spin = "cube-grid",
 text = "loading")
 
-print(input$StudyID)
+cli::cli_inform("{input$StudyID}")
 ss <- HotgenesList[[input$StudyID]]
 
 
