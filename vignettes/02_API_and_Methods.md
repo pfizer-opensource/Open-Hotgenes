@@ -1,0 +1,298 @@
+Hotgenes API and Methods
+================
+
+## Overview
+
+This vignette covers the core API for interacting with a Hotgenes object
+after it has been created. All examples use the pre-built `dds_Hotgenes`
+object that ships with the package (created from a DESeq2 analysis of
+Ewing sarcoma RNAseq data).
+
+For instructions on creating a Hotgenes object from scratch, see **01
+Creating Hotgenes Objects**.
+
+``` r
+library(Hotgenes)
+
+# Load the pre-built DESeq2-based example
+htgs <- readRDS(
+  system.file("extdata", "dds_Hotgenes.RDS",
+              package = "Hotgenes",
+              mustWork = TRUE)
+) |> update_object()
+```
+
+------------------------------------------------------------------------
+
+## 1. Object Summary
+
+Calling a Hotgenes object prints a summary of its contents:
+
+``` r
+htgs
+```
+
+------------------------------------------------------------------------
+
+## 2. Accessing Slots
+
+### Sample metadata
+
+``` r
+coldata_(htgs)
+```
+
+### Normalized expression data
+
+`Normalized_Data_()` returns the named list of expression matrices. Use
+`ExpressionSlots_()` to see available slot names.
+
+``` r
+ExpressionSlots_(htgs)
+```
+
+``` r
+# Access a specific slot by name
+Normalized_Data_(htgs, slot = "vsd")[1:4, 1:4]
+```
+
+### Sample IDs
+
+``` r
+SampleIDs_(htgs)
+```
+
+### Feature alias mapper
+
+``` r
+Mapper_(htgs) |> head()
+```
+
+### Design matrix
+
+``` r
+designMatrix_(htgs) |> head()
+```
+
+### Original DE object
+
+`O_()` returns the original analysis object stored at creation time (a
+`DESeqDataSet` for DESeq2-derived objects, an `EList` with an embedded
+limma fit for limma-derived objects).
+
+``` r
+O_(htgs) |> class()
+```
+
+### Auxiliary assays
+
+Auxiliary assays store per-sample data that do not fit into the
+expression matrix—clinical scores, QC metrics, low-throughput assay
+values, etc. The slot starts empty (only a `SampleIDs` column).
+
+``` r
+auxiliary_assays_(htgs)
+```
+
+Add data with the assignment form of the accessor:
+
+``` r
+set.seed(42)
+n_samples <- length(SampleIDs_(htgs))
+
+new_aux <- auxiliary_assays_default(htgs) |>
+  dplyr::mutate(
+    score_A = rnorm(n_samples, mean = 5, sd = 1),
+    score_B = runif(n_samples, min = 0, max = 10)
+  )
+
+auxiliary_assays_(htgs) <- new_aux
+auxiliary_assays_(htgs)
+```
+
+------------------------------------------------------------------------
+
+## 3. The `DE()` Function
+
+`DE()` is the main entry point for querying differential expression
+results. It supports filtering by contrast, adjusted p-value, log2
+fold-change, and gene name.
+
+### Default: all significant features across all contrasts
+
+``` r
+DE(htgs, padj_cut = 0.05, .log2FoldChange = 1) |> head()
+```
+
+### Select specific contrasts
+
+``` r
+# List available contrasts
+contrasts_(htgs)
+```
+
+``` r
+DE(htgs,
+   contrasts      = "sh_EWS_vs_Ctrl",
+   padj_cut       = 0.05,
+   .log2FoldChange = 1) |> head()
+```
+
+### Look up specific genes with `hotList`
+
+When `hotList` is provided, all matches are returned regardless of
+significance thresholds. A `significant` column is added to flag
+features that pass the thresholds.
+
+``` r
+DE(htgs,
+   hotList        = c("CSF2", "IL6", "CCL2"),
+   padj_cut       = 0.05,
+   .log2FoldChange = 0.5)
+```
+
+### `Report` options
+
+The `Report` argument controls what `DE()` returns:
+
+| `Report` | Returns |
+|---|---|
+| `"Details"` (default) | Complete DE result table |
+| `"Features"` | Character vector of feature names per contrast |
+| `"contrast_dir"` | Feature names named by `<contrast>_up` / `<contrast>_down` |
+| `"Length"` | Number of significant features per contrast |
+| `"Ranks"` | Named numeric vector of stats (for GSEA input) |
+| `"FC"` | Named numeric vector of log2 fold changes |
+
+``` r
+DE(htgs, Report = "Length", padj_cut = 0.1)
+```
+
+``` r
+DE(htgs,
+   Report   = "Features",
+   contrasts = "sh_EWS_vs_Ctrl",
+   padj_cut = 0.1) |> head()
+```
+
+``` r
+# Ranks are sorted by the stat column (used as GSEA input)
+DE(htgs,
+   Report    = "Ranks",
+   contrasts  = "sh_EWS_vs_Ctrl",
+   Rank_name = "Feature",
+   padj_cut  = 1) |> head()
+```
+
+``` r
+DE(htgs,
+   Report    = "FC",
+   contrasts  = "sh_EWS_vs_Ctrl",
+   Rank_name = "Feature",
+   padj_cut  = 1) |> head()
+```
+
+------------------------------------------------------------------------
+
+## 4. `Output_DE_()` — Low-level Access
+
+`Output_DE_()` returns the raw list of DE tables stored in the object,
+without further filtering or formatting. Useful when you need to pass
+results downstream in list form.
+
+``` r
+raw_DE <- Output_DE_(htgs, padj_cut = 1, as_list = TRUE)
+names(raw_DE)
+raw_DE[["sh_EWS_vs_Ctrl"]] |> head(3)
+```
+
+------------------------------------------------------------------------
+
+## 5. `DExps()` — Expression Data Merged with Metadata
+
+`DExps()` joins normalized expression values with sample metadata,
+making it easy to build plots or run downstream models without extra
+data-wrangling steps.
+
+``` r
+DExps(htgs,
+      hotList    = c("IL6", "CSF2"),
+      coldata_ids = c("Hrs", "sh"),
+      Query_set  = TRUE) |> head()
+```
+
+------------------------------------------------------------------------
+
+## 6. `DECoefs()` — Per-Feature Coefficients
+
+`DECoefs()` extracts the model coefficients (one column per contrast)
+for a set of features of interest.
+
+``` r
+DECoefs(htgs, hotList = c("CSF2", "IL6", "CCL2"))
+```
+
+------------------------------------------------------------------------
+
+## 7. Updating the Mapper
+
+The mapper table can be replaced or augmented at any time:
+
+``` r
+current_mapper <- Mapper_(htgs)
+head(current_mapper)
+
+# Add a synthetic annotation column
+updated_mapper <- current_mapper |>
+  dplyr::mutate(custom_note = paste0("gene:", .data$Feature))
+
+Mapper_(htgs) <- updated_mapper
+Mapper_(htgs) |> head()
+```
+
+------------------------------------------------------------------------
+
+## 8. Combining Multiple Hotgenes Objects
+
+When you have objects from different experiments or platforms, store
+them in a named list. The Shiny app and several reporting functions
+accept this list directly.
+
+``` r
+# Load the limma-based example as a second object
+fit_Hotgenes <- readRDS(
+  system.file("extdata", "fit_Hotgenes.RDS",
+              package = "Hotgenes",
+              mustWork = TRUE)
+)
+
+Hotgenes_list <- list(
+  DESeq2_experiment = htgs,
+  limma_experiment  = fit_Hotgenes
+)
+
+# Access individual objects from the list
+Hotgenes_list[["limma_experiment"]]
+```
+
+------------------------------------------------------------------------
+
+## Summary of Key Accessors
+
+| Function | Purpose |
+|---|---|
+| `coldata_()` | Sample metadata data.frame |
+| `Normalized_Data_()` | Named list of expression matrices |
+| `ExpressionSlots_()` | Names of available expression slots |
+| `SampleIDs_()` | Sample identifiers |
+| `Features_()` | Feature (gene/protein) names |
+| `contrasts_()` | Available contrast names |
+| `Mapper_()` | Feature alias mapping table |
+| `designMatrix_()` | Model design matrix |
+| `contrastMatrix_()` | Contrast matrix |
+| `O_()` | Original DE object |
+| `auxiliary_assays_()` | Auxiliary sample-level data |
+| `DE()` | Query DE results with flexible reporting |
+| `Output_DE_()` | Raw DE list (low-level) |
+| `DExps()` | Expression + metadata joined table |
+| `DECoefs()` | Per-feature model coefficients |
