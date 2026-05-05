@@ -15,10 +15,11 @@ vignette: >
 This vignette demonstrates how to build a Hotgenes object from the Drug-Induced
 Liver Injury (DILI) discovery proteomics dataset published in:
 
-> Federspiel et al. (2023). *Proteomics of drug-induced liver injury (DILI)
-> identifies a distinct bile acid signature in patients with Hy's Law.*
-> **Journal of Hepatology**, 79(2), 370–382.
-> <https://doi.org/10.1016/j.jhep.2023.03.013>
+> Ravindra, K.C., Vaidya, V.S., Wang, Z. et al. *Tandem mass tag-based 
+> quantitative proteomic profiling identifies candidate serum biomarkers 
+> of drug-induced liver injury in humans*
+> **Nat Commun**, 14, 1215 (2023).
+> <https://doi.org/10.1038/s41467-023-36858-6>
 
 The raw data are publicly deposited in MassIVE under accession **MSV000089782**.
 A pre-parsed snapshot is shipped with this package as `inst/extdata/dili_raw.RDS`

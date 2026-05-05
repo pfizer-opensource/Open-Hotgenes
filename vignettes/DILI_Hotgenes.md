@@ -7,10 +7,10 @@ This vignette demonstrates how to build a Hotgenes object from the
 Drug-Induced Liver Injury (DILI) discovery proteomics dataset published
 in:
 
-> Federspiel et al. (2023). *Proteomics of drug-induced liver injury
-> (DILI) identifies a distinct bile acid signature in patients with Hy’s
-> Law.* **Journal of Hepatology**, 79(2), 370–382.
-> <https://doi.org/10.1016/j.jhep.2023.03.013>
+> Ravindra, K.C., Vaidya, V.S., Wang, Z. et al. *Tandem mass tag-based
+> quantitative proteomic profiling identifies candidate serum biomarkers
+> of drug-induced liver injury in humans* **Nat Commun**, 14, 1215
+> (2023). <https://doi.org/10.1038/s41467-023-36858-6>
 
 The raw data are publicly deposited in MassIVE under accession
 **MSV000089782**. A pre-parsed snapshot is shipped with this package as
@@ -580,7 +580,7 @@ Out_GSEA <- fgsea_(
   minSize  = 5,
   maxSize  = Inf
 )
-##   |                                                                                                        |                                                                                                |   0%  |                                                                                                        |================================================                                                |  50%  |                                                                                                        |================================================================================================| 100%
+##   |                                                                                                        |                                                                                                |   0%  |                                                                                                        |================================================================================================| 100%
 
 # Summarise significant pathways
 Out_GSEA |>
@@ -593,10 +593,10 @@ Out_GSEA |>
 ## # A tibble: 4 × 9
 ##   pathway                                      pval   padj log2err     ES   NES  size leadingEdge sign_NES
 ##   <chr>                                       <dbl>  <dbl>   <dbl>  <dbl> <dbl> <int> <list>         <dbl>
-## 1 kegg_medicus_variant_mutation_caused_aber… 0.173  0.173    0.131 -0.539 -1.28     5 <chr [4]>         -1
-## 2 kegg_medicus_reference_itga_b_talin_vincu… 0.0393 0.0524   0.322 -0.647 -1.53     5 <chr [5]>         -1
-## 3 kegg_medicus_reference_promotion_of_micro… 0.0350 0.0524   0.322 -0.657 -1.56     5 <chr [5]>         -1
-## 4 kegg_medicus_reference_microtubule_depoly… 0.0177 0.0524   0.352 -0.660 -1.69     6 <chr [6]>         -1
+## 1 kegg_medicus_variant_mutation_caused_aber… 0.171  0.171    0.131 -0.539 -1.29     5 <chr [4]>         -1
+## 2 kegg_medicus_reference_itga_b_talin_vincu… 0.0521 0.0695   0.249 -0.647 -1.55     5 <chr [5]>         -1
+## 3 kegg_medicus_reference_promotion_of_micro… 0.0427 0.0695   0.277 -0.657 -1.57     5 <chr [5]>         -1
+## 4 kegg_medicus_reference_microtubule_depoly… 0.0219 0.0695   0.352 -0.660 -1.67     6 <chr [6]>         -1
 ```
 
 ### Interactive exploration with Shiny
