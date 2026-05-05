@@ -271,7 +271,7 @@ fit2 <- limma::eBayes(fit2)
 
 All upstream objects are bundled into a single `Hotgenes` object using
 `Hotgeneslimma()`. The raw log2-transformed matrix is stored as an auxiliary
-assay so it is available for alternative visualisations.
+assay so it is available for alternative visualizations.
 
 ```{r hotgenes_object}
 dili_hotgenes <- Hotgeneslimma(
