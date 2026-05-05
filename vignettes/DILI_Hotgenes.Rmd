@@ -346,7 +346,7 @@ ExpsPlot(dili_hotgenes,
 # Get KEGG gene sets
 H_paths <- msigdbr_wrapper(
   species  = "human",
-  set      = "CP:KEGG",
+  set      = "CP:KEGG_MEDICUS",
   gene_col = "gene_symbol"
 )
 
