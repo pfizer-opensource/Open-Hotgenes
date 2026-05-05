@@ -43,7 +43,7 @@ rmarkdown::render("README.Rmd",
 
 list_rmds <- file.path(getwd(), "vignettes") |> 
   list.files(pattern = ".Rmd", full.names = TRUE) |> 
-  stringr::str_subset("0[1-9]") |> 
+  stringr::str_subset("0[1-9]|DILI") |> 
   purrr::set_names(~basename(.x)) |> 
   purrr::imap(function(x,y){
     

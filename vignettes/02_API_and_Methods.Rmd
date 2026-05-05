@@ -151,7 +151,7 @@ contrasts_(htgs)
 DE(htgs,
    contrasts      = "sh_EWS_vs_Ctrl",
    padj_cut       = 0.05,
-   .log2FoldChange = 1) |> head()
+   .log2FoldChange = 1) 
 ```
 
 ### Look up specific genes with `hotList`
@@ -188,7 +188,9 @@ DE(htgs, Report = "Length", padj_cut = 0.1)
 DE(htgs,
    Report   = "Features",
    contrasts = "sh_EWS_vs_Ctrl",
-   padj_cut = 0.1) |> head()
+   # limit to top 5
+   Topn = 5,
+   padj_cut = 0.1) 
 ```
 
 ```{r de_ranks}
@@ -196,16 +198,21 @@ DE(htgs,
 DE(htgs,
    Report    = "Ranks",
    contrasts  = "sh_EWS_vs_Ctrl",
+   
+   # limit to top 5
+   Topn = 5,
    Rank_name = "Feature",
-   padj_cut  = 1) |> head()
+   padj_cut  = 1) 
 ```
 
 ```{r de_fc}
 DE(htgs,
    Report    = "FC",
    contrasts  = "sh_EWS_vs_Ctrl",
+   # limit to top 5
+   Topn = 5,
    Rank_name = "Feature",
-   padj_cut  = 1) |> head()
+   padj_cut  = 1) 
 ```
 
 ---
