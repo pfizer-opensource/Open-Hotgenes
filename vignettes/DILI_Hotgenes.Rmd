@@ -1,6 +1,9 @@
 ---
 title: "DILI Discovery Proteomics with Hotgenes"
-output: rmarkdown::html_vignette
+output: 
+  github_document:
+    html_preview: false
+
 vignette: >
   %\VignetteIndexEntry{DILI Discovery Proteomics with Hotgenes}
   %\VignetteEngine{knitr::rmarkdown}
