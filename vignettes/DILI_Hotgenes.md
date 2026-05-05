@@ -141,13 +141,13 @@ mapper_df <- filtered_exps |>
 
 head(mapper_df)
 ## # A tibble: 6 × 4
-##   Feature  Gene     Protein                   Description                       
-##   <chr>    <chr>    <chr>                     <chr>                             
-## 1 IGLV4.69 IGLV4-69 sp|A0A075B6H9|LV469_HUMAN Immunoglobulin lambda variable 4-…
-## 2 IGLV4.60 IGLV4-60 sp|A0A075B6I1|LV460_HUMAN Immunoglobulin lambda variable 4-…
-## 3 IGLV3.16 IGLV3-16 sp|A0A075B6K0|LV316_HUMAN Immunoglobulin lambda variable 3-…
-## 4 IGLV3.10 IGLV3-10 sp|A0A075B6K4|LV310_HUMAN Immunoglobulin lambda variable 3-…
-## 5 IGLV3.9  IGLV3-9  sp|A0A075B6K5|LV39_HUMAN  Immunoglobulin lambda variable 3-…
+##   Feature  Gene     Protein                   Description                    
+##   <chr>    <chr>    <chr>                     <chr>                          
+## 1 IGLV4.69 IGLV4-69 sp|A0A075B6H9|LV469_HUMAN Immunoglobulin lambda variable…
+## 2 IGLV4.60 IGLV4-60 sp|A0A075B6I1|LV460_HUMAN Immunoglobulin lambda variable…
+## 3 IGLV3.16 IGLV3-16 sp|A0A075B6K0|LV316_HUMAN Immunoglobulin lambda variable…
+## 4 IGLV3.10 IGLV3-10 sp|A0A075B6K4|LV310_HUMAN Immunoglobulin lambda variable…
+## 5 IGLV3.9  IGLV3-9  sp|A0A075B6K5|LV39_HUMAN  Immunoglobulin lambda variable…
 ## # ℹ 1 more row
 ```
 
@@ -341,73 +341,73 @@ dili_hotgenes
 DE(dili_hotgenes, Topn = 5)
 ## $DF_vs_DO
 ## # A tibble: 5 × 14
-##   Feature contrast_dir  baseMean log2FoldChange     FC  stat   pvalue       padj
-##   <chr>   <chr>            <dbl>          <dbl>  <dbl> <dbl>    <dbl>      <dbl>
-## 1 HPD     DF_vs_DO_down    -3.19          -3.51 0.0875 -8.23 8.90e-11    1.30e-7
-## 2 GPT     DF_vs_DO_down    -2.96          -3.62 0.0814 -7.79 4.18e-10    3.06e-7
-## 3 AMDHD1  DF_vs_DO_down    -3.32          -3.09 0.118  -7.34 2.01e- 9    9.79e-7
-## 4 GOT1    DF_vs_DO_down    -2.51          -2.57 0.168  -6.42 5.29e- 8    1.93e-5
-## 5 ECI1    DF_vs_DO_down    -2.83          -3.68 0.0780 -6.27 9.21e- 8    2.69e-5
+##   Feature contrast_dir  baseMean log2FoldChange     FC  stat   pvalue    padj
+##   <chr>   <chr>            <dbl>          <dbl>  <dbl> <dbl>    <dbl>   <dbl>
+## 1 HPD     DF_vs_DO_down    -3.19          -3.51 0.0875 -8.23 8.90e-11 1.30e-7
+## 2 GPT     DF_vs_DO_down    -2.96          -3.62 0.0814 -7.79 4.18e-10 3.06e-7
+## 3 AMDHD1  DF_vs_DO_down    -3.32          -3.09 0.118  -7.34 2.01e- 9 9.79e-7
+## 4 GOT1    DF_vs_DO_down    -2.51          -2.57 0.168  -6.42 5.29e- 8 1.93e-5
+## 5 ECI1    DF_vs_DO_down    -2.83          -3.68 0.0780 -6.27 9.21e- 8 2.69e-5
 ## # ℹ 6 more variables: t <dbl>, B <dbl>, Gene <chr>, Protein <chr>,
 ## #   Description <chr>, significant <chr>
 ## 
 ## $DF_vs_HV
 ## # A tibble: 5 × 14
-##   Feature contrast_dir baseMean log2FoldChange    FC  stat  pvalue    padj     t
-##   <chr>   <chr>           <dbl>          <dbl> <dbl> <dbl>   <dbl>   <dbl> <dbl>
-## 1 VASP    DF_vs_HV_do…    -2.85          -2.79 0.145 -7.48 1.22e-9 1.17e-6 -7.48
-## 2 NEXN    DF_vs_HV_do…    -3.12          -3.04 0.121 -7.41 1.60e-9 1.17e-6 -7.41
-## 3 CAVIN2  DF_vs_HV_do…    -3.25          -3.09 0.117 -6.84 1.22e-8 4.45e-6 -6.84
-## 4 PDLIM5  DF_vs_HV_do…    -2.83          -2.51 0.176 -6.85 1.16e-8 4.45e-6 -6.85
-## 5 EEF1G   DF_vs_HV_do…    -2.84          -2.78 0.146 -6.57 3.12e-8 6.53e-6 -6.57
-## # ℹ 5 more variables: B <dbl>, Gene <chr>, Protein <chr>, Description <chr>,
-## #   significant <chr>
+##   Feature contrast_dir  baseMean log2FoldChange    FC  stat    pvalue    padj
+##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>     <dbl>   <dbl>
+## 1 VASP    DF_vs_HV_down    -2.85          -2.79 0.145 -7.48   1.22e-9 1.17e-6
+## 2 NEXN    DF_vs_HV_down    -3.12          -3.04 0.121 -7.41   1.60e-9 1.17e-6
+## 3 CAVIN2  DF_vs_HV_down    -3.25          -3.09 0.117 -6.84   1.22e-8 4.45e-6
+## 4 PDLIM5  DF_vs_HV_down    -2.83          -2.51 0.176 -6.85   1.16e-8 4.45e-6
+## 5 EEF1G   DF_vs_HV_down    -2.84          -2.78 0.146 -6.57   3.12e-8 6.53e-6
+## # ℹ 6 more variables: t <dbl>, B <dbl>, Gene <chr>, Protein <chr>,
+## #   Description <chr>, significant <chr>
 ## 
 ## $DO_vs_HV
 ## # A tibble: 5 × 14
-##   Feature contrast_dir  baseMean log2FoldChange     FC  stat   pvalue     padj
-##   <chr>   <chr>            <dbl>          <dbl>  <dbl> <dbl>    <dbl>    <dbl>
-## 1 VASP    DO_vs_HV_down    -2.85          -3.56 0.0847 -9.70 5.77e-13 8.44e-10
-## 2 FLNA    DO_vs_HV_down    -2.31          -3.27 0.104  -8.80 1.21e-11 4.17e- 9
-## 3 NEXN    DO_vs_HV_down    -3.12          -3.72 0.0757 -8.95 7.30e-12 4.17e- 9
-## 4 MAPRE2  DO_vs_HV_down    -2.18          -4.18 0.0550 -8.83 1.12e-11 4.17e- 9
-## 5 EHD3    DO_vs_HV_down    -2.99          -3.34 0.0991 -8.75 1.42e-11 4.17e- 9
+##   Feature contrast_dir baseMean log2FoldChange     FC  stat   pvalue     padj
+##   <chr>   <chr>           <dbl>          <dbl>  <dbl> <dbl>    <dbl>    <dbl>
+## 1 VASP    DO_vs_HV_do…    -2.85          -3.56 0.0847 -9.70 5.77e-13 8.44e-10
+## 2 FLNA    DO_vs_HV_do…    -2.31          -3.27 0.104  -8.80 1.21e-11 4.17e- 9
+## 3 NEXN    DO_vs_HV_do…    -3.12          -3.72 0.0757 -8.95 7.30e-12 4.17e- 9
+## 4 MAPRE2  DO_vs_HV_do…    -2.18          -4.18 0.0550 -8.83 1.12e-11 4.17e- 9
+## 5 EHD3    DO_vs_HV_do…    -2.99          -3.34 0.0991 -8.75 1.42e-11 4.17e- 9
 ## # ℹ 6 more variables: t <dbl>, B <dbl>, Gene <chr>, Protein <chr>,
 ## #   Description <chr>, significant <chr>
 ## 
 ## $NAFLD_vs_HV
 ## # A tibble: 5 × 14
-##   Feature contrast_dir   baseMean log2FoldChange     FC   stat   pvalue     padj
-##   <chr>   <chr>             <dbl>          <dbl>  <dbl>  <dbl>    <dbl>    <dbl>
-## 1 VASP    NAFLD_vs_HV_d…    -2.85          -3.99 0.0628 -11.1  5.13e-15 7.51e-12
-## 2 FLNA    NAFLD_vs_HV_d…    -2.31          -3.77 0.0731 -10.00 2.15e-13 1.18e-10
-## 3 TWF2    NAFLD_vs_HV_d…    -2.41          -3.45 0.0917  -9.88 3.11e-13 1.18e-10
-## 4 PDLIM5  NAFLD_vs_HV_d…    -2.83          -3.48 0.0894  -9.87 3.22e-13 1.18e-10
-## 5 NEXN    NAFLD_vs_HV_d…    -3.12          -3.94 0.0653  -9.75 4.87e-13 1.19e-10
-## # ℹ 6 more variables: t <dbl>, B <dbl>, Gene <chr>, Protein <chr>,
-## #   Description <chr>, significant <chr>
+##   Feature contrast_dir     baseMean log2FoldChange     FC   stat   pvalue
+##   <chr>   <chr>               <dbl>          <dbl>  <dbl>  <dbl>    <dbl>
+## 1 VASP    NAFLD_vs_HV_down    -2.85          -3.99 0.0628 -11.1  5.13e-15
+## 2 FLNA    NAFLD_vs_HV_down    -2.31          -3.77 0.0731 -10.00 2.15e-13
+## 3 TWF2    NAFLD_vs_HV_down    -2.41          -3.45 0.0917  -9.88 3.11e-13
+## 4 PDLIM5  NAFLD_vs_HV_down    -2.83          -3.48 0.0894  -9.87 3.22e-13
+## 5 NEXN    NAFLD_vs_HV_down    -3.12          -3.94 0.0653  -9.75 4.87e-13
+## # ℹ 7 more variables: padj <dbl>, t <dbl>, B <dbl>, Gene <chr>,
+## #   Protein <chr>, Description <chr>, significant <chr>
 ## 
 ## $NDF_vs_HV
 ## # A tibble: 5 × 14
-##   Feature contrast_dir   baseMean log2FoldChange     FC  stat   pvalue      padj
-##   <chr>   <chr>             <dbl>          <dbl>  <dbl> <dbl>    <dbl>     <dbl>
-## 1 CAVIN2  NDF_vs_HV_down    -3.25          -3.87 0.0684 -7.12 4.42e- 9   1.29e-6
-## 2 VASP    NDF_vs_HV_down    -2.85          -3.21 0.108  -7.25 2.77e- 9   1.29e-6
-## 3 NEXN    NDF_vs_HV_down    -3.12          -3.62 0.0813 -7.16 3.81e- 9   1.29e-6
-## 4 CTTN    NDF_vs_HV_down    -2.77          -4.10 0.0583 -7.28 2.48e- 9   1.29e-6
-## 5 PDLIM5  NDF_vs_HV_down    -2.83          -3.31 0.101  -7.55 9.50e-10   1.29e-6
+##   Feature contrast_dir  baseMean log2FoldChange     FC  stat   pvalue    padj
+##   <chr>   <chr>            <dbl>          <dbl>  <dbl> <dbl>    <dbl>   <dbl>
+## 1 CAVIN2  NDF_vs_HV_do…    -3.25          -3.87 0.0684 -7.12 4.42e- 9 1.29e-6
+## 2 VASP    NDF_vs_HV_do…    -2.85          -3.21 0.108  -7.25 2.77e- 9 1.29e-6
+## 3 NEXN    NDF_vs_HV_do…    -3.12          -3.62 0.0813 -7.16 3.81e- 9 1.29e-6
+## 4 CTTN    NDF_vs_HV_do…    -2.77          -4.10 0.0583 -7.28 2.48e- 9 1.29e-6
+## 5 PDLIM5  NDF_vs_HV_do…    -2.83          -3.31 0.101  -7.55 9.50e-10 1.29e-6
 ## # ℹ 6 more variables: t <dbl>, B <dbl>, Gene <chr>, Protein <chr>,
 ## #   Description <chr>, significant <chr>
 ## 
 ## $NDO_vs_DO
 ## # A tibble: 5 × 14
-##   Feature contrast_dir baseMean log2FoldChange    FC  stat   pvalue         padj
-##   <chr>   <chr>           <dbl>          <dbl> <dbl> <dbl>    <dbl>        <dbl>
-## 1 CPS1    NDO_vs_DO_up    -3.56           3.86 14.6   8.93 7.86e-12 0.0000000115
-## 2 UGP2    NDO_vs_DO_up    -3.40           4.36 20.5   7.01 6.55e- 9 0.00000479  
-## 3 ACAA2   NDO_vs_DO_up    -3.20           3.79 13.8   6.87 1.09e- 8 0.00000530  
-## 4 PSAT1   NDO_vs_DO_up    -2.82           3.26  9.59  5.89 3.51e- 7 0.000128    
-## 5 ACAA1   NDO_vs_DO_up    -3.11           3.64 12.5   5.57 1.09e- 6 0.000318    
+##   Feature contrast_dir baseMean log2FoldChange    FC  stat   pvalue      padj
+##   <chr>   <chr>           <dbl>          <dbl> <dbl> <dbl>    <dbl>     <dbl>
+## 1 CPS1    NDO_vs_DO_up    -3.56           3.86 14.6   8.93 7.86e-12   1.15e-8
+## 2 UGP2    NDO_vs_DO_up    -3.40           4.36 20.5   7.01 6.55e- 9   4.79e-6
+## 3 ACAA2   NDO_vs_DO_up    -3.20           3.79 13.8   6.87 1.09e- 8   5.30e-6
+## 4 PSAT1   NDO_vs_DO_up    -2.82           3.26  9.59  5.89 3.51e- 7   1.28e-4
+## 5 ACAA1   NDO_vs_DO_up    -3.11           3.64 12.5   5.57 1.09e- 6   3.18e-4
 ## # ℹ 6 more variables: t <dbl>, B <dbl>, Gene <chr>, Protein <chr>,
 ## #   Description <chr>, significant <chr>
 ## 
@@ -430,7 +430,7 @@ DE(dili_hotgenes, Topn = 5)
 DEPlot(dili_hotgenes, .log2FoldChange = 0, padj_cut = 0.1)
 ```
 
-![](/Users/virger/Documents/OpenSource_Pfizer/Open-Hotgenes/vignettes/DILI_Hotgenes_files/figure-gfm/dep_plot-1.png)<!-- -->
+![](DILI_Hotgenes_files/figure-dep_plot-1.png)<!-- -->
 
 ### Volcano plot
 
@@ -440,7 +440,7 @@ VPlot(dili_hotgenes,
       contrasts = "DO_vs_HV")
 ```
 
-![](/Users/virger/Documents/OpenSource_Pfizer/Open-Hotgenes/vignettes/DILI_Hotgenes_files/figure-gfm/volcano-1.png)<!-- -->
+![](DILI_Hotgenes_files/figure-volcano-1.png)<!-- -->
 
 ### Venn diagram of overlapping hits
 
@@ -457,7 +457,7 @@ dili_hotgenes |>
 ## $vennD
 ```
 
-![](/Users/virger/Documents/OpenSource_Pfizer/Open-Hotgenes/vignettes/DILI_Hotgenes_files/figure-gfm/venn-1.png)<!-- -->
+![](DILI_Hotgenes_files/figure-venn-1.png)<!-- -->
 
     ## 
     ## $Intsect
@@ -585,7 +585,7 @@ DEphe(dili_hotgenes,
       annotations = c("Condition", "Pool"))
 ```
 
-![](/Users/virger/Documents/OpenSource_Pfizer/Open-Hotgenes/vignettes/DILI_Hotgenes_files/figure-gfm/heatmap-1.png)<!-- -->
+![](DILI_Hotgenes_files/figure-heatmap-1.png)<!-- -->
 
 ### Expression plots
 
@@ -598,7 +598,7 @@ ExpsPlot(dili_hotgenes,
 )
 ```
 
-![](/Users/virger/Documents/OpenSource_Pfizer/Open-Hotgenes/vignettes/DILI_Hotgenes_files/figure-gfm/exps_plot-1.png)<!-- -->
+![](DILI_Hotgenes_files/figure-exps_plot-1.png)<!-- -->
 
 ### GSEA with KEGG pathways
 
@@ -627,7 +627,7 @@ Out_GSEA <- fgsea_(
   minSize  = 5,
   maxSize  = Inf
 )
-##   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
+##   |                                                                           |                                                                   |   0%  |                                                                           |==================================                                 |  50%  |                                                                           |===================================================================| 100%
 
 # Summarise significant pathways
 Out_GSEA |>
@@ -638,12 +638,12 @@ Out_GSEA |>
   )
 ## $DO_vs_HV
 ## # A tibble: 4 × 9
-##   pathway            pval   padj log2err     ES   NES  size leadingEdge sign_NES
-##   <chr>             <dbl>  <dbl>   <dbl>  <dbl> <dbl> <int> <list>         <dbl>
-## 1 kegg_medicus_va… 0.191  0.191    0.124 -0.539 -1.26     5 <chr [4]>         -1
-## 2 kegg_medicus_re… 0.0525 0.0700   0.249 -0.647 -1.52     5 <chr [5]>         -1
-## 3 kegg_medicus_re… 0.0477 0.0700   0.262 -0.657 -1.54     5 <chr [5]>         -1
-## 4 kegg_medicus_re… 0.0241 0.0700   0.352 -0.660 -1.65     6 <chr [6]>         -1
+##   pathway         pval   padj log2err     ES   NES  size leadingEdge sign_NES
+##   <chr>          <dbl>  <dbl>   <dbl>  <dbl> <dbl> <int> <list>         <dbl>
+## 1 kegg_medicus… 0.182  0.182    0.128 -0.539 -1.27     5 <chr [4]>         -1
+## 2 kegg_medicus… 0.0415 0.0560   0.282 -0.647 -1.53     5 <chr [5]>         -1
+## 3 kegg_medicus… 0.0420 0.0560   0.322 -0.657 -1.55     5 <chr [5]>         -1
+## 4 kegg_medicus… 0.0159 0.0560   0.352 -0.660 -1.66     6 <chr [6]>         -1
 ```
 
 ### Interactive exploration with Shiny

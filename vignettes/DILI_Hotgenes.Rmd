@@ -45,6 +45,7 @@ Federspiel et al.
 ```{r set, eval=TRUE, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+    fig.path = "DILI_Hotgenes_files/figure-",
   fig.height = 4, fig.width = 6
 )
 ```

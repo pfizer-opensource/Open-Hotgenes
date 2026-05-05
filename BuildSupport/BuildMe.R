@@ -42,6 +42,7 @@ rmarkdown::render("README.Rmd",
 
 rmarkdown::render(file.path(getwd(), "vignettes", "DILI_Hotgenes.Rmd"), 
                   output_dir = file.path(getwd(), "vignettes"),
+                  
                   output_file = "DILI_Hotgenes.md")
 
 
