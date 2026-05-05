@@ -201,9 +201,9 @@ dds_Hotgenes
 ## Original class/package:  DESeqDataSet/DESeq2
 ## 
 ## Differential expression (default thresholds): 
-## |contrast                                       | total|
-## |:----------------------------------------------|-----:|
-## |list(coef = "sh_EWS_vs_Ctrl", type = "apeglm") |    52|
+## |contrast       | total|
+## |:--------------|-----:|
+## |sh_EWS_vs_Ctrl |    52|
 ## 
 ## Available feature mapping:  Feature 
 ## ExpressionSlots:  vsd 
