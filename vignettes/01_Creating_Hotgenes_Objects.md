@@ -12,7 +12,7 @@ app—regardless of which upstream analysis tool produced your DE results.
 The core slots of a Hotgenes object are:
 
 | Slot | Description | Accessor |
-|---|---|---|
+|----|----|----|
 | `Output_DE` | Named list of DE result tables | `Output_DE_()` |
 | `Normalized_Expression` | Named list of normalized expression matrices | `Normalized_Data_()` |
 | `coldata` | Sample metadata data.frame | `coldata_()` |
@@ -61,6 +61,8 @@ s_quad <- DRomics::itemselect(o,
 
 # Fit dose-response models
 f <- DRomics::drcfit(itemselect = s_quad, parallel = "no")
+## The fitting may be long if the number of selected items is high.
+##   |                                                                                                        |                                                                                                |   0%  |                                                                                                        |==                                                                                              |   2%  |                                                                                                        |====                                                                                            |   5%  |                                                                                                        |=======                                                                                         |   7%  |                                                                                                        |=========                                                                                       |   9%  |                                                                                                        |===========                                                                                     |  12%  |                                                                                                        |=============                                                                                   |  14%  |                                                                                                        |================                                                                                |  16%  |                                                                                                        |==================                                                                              |  19%  |                                                                                                        |====================                                                                            |  21%  |                                                                                                        |======================                                                                          |  23%  |                                                                                                        |=========================                                                                       |  26%  |                                                                                                        |===========================                                                                     |  28%  |                                                                                                        |=============================                                                                   |  30%  |                                                                                                        |===============================                                                                 |  33%  |                                                                                                        |=================================                                                               |  35%  |                                                                                                        |====================================                                                            |  37%  |                                                                                                        |======================================                                                          |  40%  |                                                                                                        |========================================                                                        |  42%  |                                                                                                        |==========================================                                                      |  44%  |                                                                                                        |=============================================                                                   |  47%  |                                                                                                        |===============================================                                                 |  49%  |                                                                                                        |=================================================                                               |  51%  |                                                                                                        |===================================================                                             |  53%  |                                                                                                        |======================================================                                          |  56%  |                                                                                                        |========================================================                                        |  58%  |                                                                                                        |==========================================================                                      |  60%  |                                                                                                        |============================================================                                    |  63%  |                                                                                                        |===============================================================                                 |  65%  |                                                                                                        |=================================================================                               |  67%  |                                                                                                        |===================================================================                             |  70%  |                                                                                                        |=====================================================================                           |  72%  |                                                                                                        |=======================================================================                         |  74%  |                                                                                                        |==========================================================================                      |  77%  |                                                                                                        |============================================================================                    |  79%  |                                                                                                        |==============================================================================                  |  81%  |                                                                                                        |================================================================================                |  84%  |                                                                                                        |===================================================================================             |  86%  |                                                                                                        |=====================================================================================           |  88%  |                                                                                                        |=======================================================================================         |  91%  |                                                                                                        |=========================================================================================       |  93%  |                                                                                                        |============================================================================================    |  95%  |                                                                                                        |==============================================================================================  |  98%  |                                                                                                        |================================================================================================| 100%
 
 # Compute benchmark doses
 bmdcalc_out <- DRomics::bmdcalc(f)
@@ -75,6 +77,18 @@ hotDR <- HotgenesDRomics(bmdcalc = bmdcalc_out)
 
 # Print summary
 hotDR
+## class: Hotgenes 
+## Original class/package:  bmdcalc/
+## 
+## Differential expression (default thresholds): 
+## |contrast | total|
+## |:--------|-----:|
+## |DRomics  |    38|
+## 
+## Available feature mapping:  Feature 
+## ExpressionSlots:  Normalized_data 
+## Total auxiliary assays:  0 
+## Total samples:  14
 ```
 
 The single contrast is named `"DRomics"` and contains one row per
@@ -183,12 +197,24 @@ dds_Hotgenes <- HotgenesDEseq2(
 )
 
 dds_Hotgenes
+## class: Hotgenes 
+## Original class/package:  DESeqDataSet/DESeq2
+## 
+## Differential expression (default thresholds): 
+## |contrast                                       | total|
+## |:----------------------------------------------|-----:|
+## |list(coef = "sh_EWS_vs_Ctrl", type = "apeglm") |    52|
+## 
+## Available feature mapping:  Feature 
+## ExpressionSlots:  vsd 
+## Total auxiliary assays:  0 
+## Total samples:  12
 ```
 
 Key parameters:
 
 | Parameter | Purpose |
-|---|---|
+|----|----|
 | `lfcShrink_type` | Shrinkage estimator: `"normal"`, `"apeglm"`, or `"ashr"` |
 | `contrasts` | Character vector of contrast names (from `DESeq2::resultsNames(dds)`) |
 | `contrast_vectors` | Alternative: named list of `c("factor","level1","level2")` vectors |
@@ -302,12 +328,30 @@ dili_hotgenes <- Hotgeneslimma(
 )
 
 dili_hotgenes
+## class: Hotgenes 
+## Original class/package:  EList/limma
+## 
+## Differential expression (default thresholds): 
+## |contrast    | total|
+## |:-----------|-----:|
+## |DF_vs_DO    |    61|
+## |DF_vs_HV    |    73|
+## |DO_vs_HV    |   212|
+## |NAFLD_vs_HV |   428|
+## |NDF_vs_HV   |    78|
+## |NDO_vs_DO   |    73|
+## |NDO_vs_HV   |   303|
+## 
+## Available feature mapping:  Feature, Gene, Protein, Description 
+## ExpressionSlots:  VSN, log2 
+## Total auxiliary assays:  0 
+## Total samples:  50
 ```
 
 Key parameters for `Hotgeneslimma()`:
 
 | Parameter | Purpose |
-|---|---|
+|----|----|
 | `limmafit` | `MArrayLM` object from `limma::lmFit()` + `eBayes()` |
 | `coldata` | Sample metadata (rownames must match `colnames(Expression)`) |
 | `Expression` | `EList` from `limma::voom()` or `voomaByGroup()` |
@@ -335,15 +379,19 @@ htgs <- readRDS(
 
 # Available contrasts
 contrasts_(htgs)
+## [1] "sh_EWS_vs_Ctrl" "Hrs_2_vs_0"     "Hrs_6_vs_0"     "shEWS.Hrs2"     "shEWS.Hrs6"
 
 # Sample IDs
 SampleIDs_(htgs) |> head()
+## [1] "shCON_0hrs_1" "shCON_0hrs_2" "shCON_2hrs_1" "shCON_2hrs_2" "shCON_6hrs_1" "shCON_6hrs_2"
 
 # Available expression slots
 ExpressionSlots_(htgs)
+## [1] "rld"  "vsd"  "log2"
 
 # Available feature aliases
 Mapper_(htgs) |> names()
+## [1] "Feature"    "ensembl_id"
 ```
 
 The object summary (printed automatically on call) shows the number of
@@ -351,6 +399,22 @@ DE features per contrast at the default thresholds:
 
 ``` r
 htgs
+## class: Hotgenes 
+## Original class/package:  DESeqDataSet/DESeq2
+## 
+## Differential expression (default thresholds): 
+## |contrast       | total|
+## |:--------------|-----:|
+## |sh_EWS_vs_Ctrl |    52|
+## |Hrs_2_vs_0     |    40|
+## |Hrs_6_vs_0     |    63|
+## |shEWS.Hrs2     |     5|
+## |shEWS.Hrs6     |     1|
+## 
+## Available feature mapping:  Feature, ensembl_id 
+## ExpressionSlots:  rld, vsd, log2 
+## Total auxiliary assays:  0 
+## Total samples:  12
 ```
 
 For details on how to use these objects for analysis and visualization,

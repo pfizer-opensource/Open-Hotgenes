@@ -95,7 +95,7 @@ the MSigDB via the `msigdbr` package. Any collection supported by
 # Retrieve KEGG and Reactome pathways for human
 H_paths <- msigdbr_wrapper(
   species  = "human",
-  set      = c("CP:KEGG", "CP:REACTOME"),
+  set      = c("CP:KEGG_MEDICUS", "CP:REACTOME"),
   gene_col = "gene_symbol"
 )
 
@@ -180,15 +180,22 @@ sig_paths <- Out_GSEA |>
                 padj_cut  = 0.2,
                 mode      = "D")
 
-if (nrow(sig_paths) > 0) {
-  plotEnrichment_(Out_GSEA, "Hrs_2_vs_0", sig_paths$pathway[1])
+if (nrow(sig_paths$Hrs_2_vs_0) > 0) {
+  first_geneset_name <- sig_paths$Hrs_2_vs_0$pathway[1]
+  
+  plotEnrichment_(fgseaRes = Out_GSEA, contrast = "Hrs_2_vs_0", 
+                genesetName = first_geneset_name)
+
 }
 ```
 
 ```{r gsea_leading_genes}
 # Retrieve the leading-edge gene list for one pathway
-if (nrow(sig_paths) > 0) {
-  leadingGenes(Out_GSEA, "Hrs_2_vs_0", sig_paths$pathway[1])
+if (nrow(sig_paths$Hrs_2_vs_0) > 0) {
+    first_geneset_name <- sig_paths$Hrs_2_vs_0$pathway[1]
+
+  leadingGenes(fgseaRes = Out_GSEA, contrast = "Hrs_2_vs_0", 
+                genesetName = first_geneset_name)
 }
 ```
 

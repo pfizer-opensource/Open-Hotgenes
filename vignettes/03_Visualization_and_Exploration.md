@@ -24,13 +24,15 @@ fit_Hotgenes <- readRDS(
 
 ## 1. `DEPlot()` — Overview of All Contrasts
 
-`DEPlot()` gives a bird's-eye view of DE results across all contrasts in
+`DEPlot()` gives a bird’s-eye view of DE results across all contrasts in
 the object. Each bar shows the number of significant features for one
 contrast, split by direction (up / down).
 
 ``` r
 DEPlot(fit_Hotgenes, .log2FoldChange = 0, padj_cut = 0.1)
 ```
+
+![](03_Visualization_and_Exploration_files/figure-dep_1-1.png)<!-- -->
 
 Pass a `hotList` to highlight specific features across contrasts:
 
@@ -40,6 +42,8 @@ DEPlot(fit_Hotgenes,
        .log2FoldChange = 0,
        padj_cut       = 0.1)
 ```
+
+![](03_Visualization_and_Exploration_files/figure-dep_2-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -56,6 +60,8 @@ VPlot(fit_Hotgenes,
       padj_cut        = 0.1)
 ```
 
+![](03_Visualization_and_Exploration_files/figure-vplot_1-1.png)<!-- -->
+
 Highlight a gene of interest with `hotList`:
 
 ``` r
@@ -66,6 +72,8 @@ VPlot(fit_Hotgenes,
       hotList         = "CSF2",
       Hide_labels     = FALSE)
 ```
+
+![](03_Visualization_and_Exploration_files/figure-vplot_2-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -88,9 +96,13 @@ venn_out <- fit_Hotgenes |>
     padj_cut = 0.1
   ) |>
   Venn_Report(set_name_size = 4, stroke_size = 0.5, text_size = 4)
+## Coordinate system already present.
+## ℹ Adding new coordinate system, which will replace the existing one.
 
 venn_out$vennD
 ```
+
+![](03_Visualization_and_Exploration_files/figure-venn_features-1.png)<!-- -->
 
 ``` r
 # Including directionality (up/down) for two contrasts
@@ -101,26 +113,55 @@ venn_dir_out <- fit_Hotgenes |>
     padj_cut = 0.1
   ) |>
   Venn_Report(set_name_size = 3.5)
+## Coordinate system already present.
+## ℹ Adding new coordinate system, which will replace the existing one.
 
 venn_dir_out$vennD
 ```
+
+![](03_Visualization_and_Exploration_files/figure-venn_dir-1.png)<!-- -->
 
 Retrieve the names and gene lists from the intersections:
 
 ``` r
 # Names of features found in all intersecting sets
 venn_out$Names
+## [1] "Hrs_2_vs_0:Hrs_6_vs_0"                "sh_EWS_vs_Ctrl:Hrs_2_vs_0"           
+## [3] "sh_EWS_vs_Ctrl:Hrs_6_vs_0"            "sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0"
 
 # All intersection sets as a named list
 venn_out$Intsect |> head()
+## $Hrs_2_vs_0
+## [1] "NFE2L2" "KEAP1"  "PDGFA"  "HDAC4"  "OXER1"  "GAPDH"  "MEF2C" 
+## 
+## $Hrs_6_vs_0
+##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"   "BCL6"  
+## [12] "TLR3"   "GRB2"   "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2" 
+## [23] "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
+## 
+## $sh_EWS_vs_Ctrl
+##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"    "HMGN1" 
+## [12] "CLTC"   "GNAQ"   "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"  
+## [23] "LTB4R2"
+## 
+## $`Hrs_2_vs_0:Hrs_6_vs_0`
+##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"    "CXCR4"  
+## [11] "MAFK"    "PTGFR"   "FOS"     "MYC"     "RIPK2"   "IL2"     "MAFG"    "CSF2"    "TWIST2"  "IFIT1"  
+## [21] "FLT1"   
+## 
+## $`sh_EWS_vs_Ctrl:Hrs_2_vs_0`
+## [1] "HMGB2"  "MAP3K9" "CEBPB"  "IRF1"  
+## 
+## $`sh_EWS_vs_Ctrl:Hrs_6_vs_0`
+##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2" "IFI44" "CCL7"
 ```
 
 ------------------------------------------------------------------------
 
 ## 4. `DEphe()` — Heatmap of Top Hits
 
-`DEphe()` generates a pheatmap of the top `Topn` features for a
-selected contrast, annotated with sample metadata.
+`DEphe()` generates a pheatmap of the top `Topn` features for a selected
+contrast, annotated with sample metadata.
 
 ``` r
 DEphe(fit_Hotgenes,
@@ -178,6 +219,8 @@ ExpsPlot(fit_Hotgenes,
          boxplot = TRUE)
 ```
 
+![](03_Visualization_and_Exploration_files/figure-exps_1-1.png)<!-- -->
+
 Filter samples on the fly with `filter_eval`:
 
 ``` r
@@ -188,6 +231,8 @@ ExpsPlot(fit_Hotgenes,
          boxplot     = TRUE,
          filter_eval = Hrs != 2)
 ```
+
+![](03_Visualization_and_Exploration_files/figure-exps_2-1.png)<!-- -->
 
 Reorder factor levels using `named_levels`:
 
@@ -201,6 +246,8 @@ ExpsPlot(fit_Hotgenes,
                              Hrs     = c("6", "2", "0")))
 ```
 
+![](03_Visualization_and_Exploration_files/figure-exps_3-1.png)<!-- -->
+
 ------------------------------------------------------------------------
 
 ## 6. `BoxPlot()` — Sample-level QC Plot
@@ -213,12 +260,16 @@ samples.
 BoxPlot(fit_Hotgenes)
 ```
 
+![](03_Visualization_and_Exploration_files/figure-boxplot_1-1.png)<!-- -->
+
 Restrict to a subset of samples:
 
 ``` r
 BoxPlot(fit_Hotgenes,
         SampleIDs = SampleIDs_(fit_Hotgenes)[1:6])
 ```
+
+![](03_Visualization_and_Exploration_files/figure-boxplot_2-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -235,17 +286,39 @@ FactoOutput <- FactoWrapper(
   coldata_ids = c("Hrs", "sh"),
   biplot      = FALSE
 )
+## Appending TopTibble with available aliases: ensembl_id
 ```
 
 ``` r
 FactoOutput$res_PPI_pa_1
 ```
 
+![](03_Visualization_and_Exploration_files/figure-pca_plot-1.png)<!-- -->
+
 Inspect cluster assignments and top contributing features:
 
 ``` r
 FactoOutput$TopTibble   # top features per cluster
+## # A tibble: 102 × 10
+##    Cluster Interpretation   Feature v.test `Mean in category` `Overall mean` `sd in category` `Overall sd`
+##    <fct>   <fct>            <chr>    <dbl>              <dbl>          <dbl>            <dbl>        <dbl>
+##  1 1       Above average i… IFIT2     2.91              10.3            9.89           0.100        0.339 
+##  2 1       Above average i… DDIT3     2.75              10.4           10.1            0.0402       0.231 
+##  3 1       Above average i… MAP3K1    2.72              10.00           9.75           0.0537       0.216 
+##  4 1       Above average i… PTGFR     2.65              10.4           10.1            0.0489       0.285 
+##  5 1       Above average i… PGK1      2.63              15.3           15.2            0.0224       0.0484
+##  6 1       Above average i… TWIST2    2.51              13.3           13.1            0.0343       0.182 
+##  7 1       Above average i… TWIST2    2.51              13.3           13.1            0.0343       0.182 
+##  8 1       Above average i… IFIT3     2.51               9.09           8.85           0.0863       0.225 
+##  9 1       Above average i… MKNK1     2.34              10.9           10.7            0.0904       0.126 
+## 10 1       Above average i… IFIT1     2.22              10.8           10.4            0.0765       0.400 
+## # ℹ 92 more rows
+## # ℹ 2 more variables: p.value <dbl>, ensembl_id <chr>
 FactoOutput$TopGroups   # cluster membership per sample
+## # A tibble: 1 × 8
+##   Cluster Interpretation           Category  `Cla/Mod` `Mod/Cla` Global p.value v.test
+##   <fct>   <fct>                    <chr>         <dbl>     <dbl>  <dbl>   <dbl>  <dbl>
+## 1 1       Above average in cluster Hrs=Hrs_0       100       100   33.3 0.00202   3.09
 ```
 
 ------------------------------------------------------------------------
@@ -258,19 +331,30 @@ in custom ggplot2 themes.
 
 ``` r
 coldata_palettes(fit_Hotgenes)
+## $sh
+##        Ctrl         EWS 
+## "lightgrey"     "black" 
+## 
+## $Bio_Rep
+##           1           2 
+## "lightgrey"     "black" 
+## 
+## $Hrs
+##         0         2         6 
+## "#1B9E77" "#D95F02" "#7570B3"
 ```
 
 ------------------------------------------------------------------------
 
 ## Summary of Visualization Functions
 
-| Function | Purpose |
-|---|---|
-| `DEPlot()` | Bar chart of DE counts across all contrasts |
-| `VPlot()` | Volcano plot for a single contrast |
-| `Venn_Report()` | Venn diagram of overlapping features |
-| `DEphe()` | Heatmap of top hits for a contrast |
-| `ExpsPlot()` | Expression trajectory plots |
-| `BoxPlot()` | Sample-level expression boxplots (QC) |
-| `FactoWrapper()` | PCA + HCPC clustering |
-| `coldata_palettes()` | Colour palettes for metadata factors |
+| Function             | Purpose                                     |
+|----------------------|---------------------------------------------|
+| `DEPlot()`           | Bar chart of DE counts across all contrasts |
+| `VPlot()`            | Volcano plot for a single contrast          |
+| `Venn_Report()`      | Venn diagram of overlapping features        |
+| `DEphe()`            | Heatmap of top hits for a contrast          |
+| `ExpsPlot()`         | Expression trajectory plots                 |
+| `BoxPlot()`          | Sample-level expression boxplots (QC)       |
+| `FactoWrapper()`     | PCA + HCPC clustering                       |
+| `coldata_palettes()` | Colour palettes for metadata factors        |
