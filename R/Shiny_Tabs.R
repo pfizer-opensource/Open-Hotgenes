@@ -3796,7 +3796,7 @@ drp_these <- feature_drop_re() %>%
 unlist(use.names = FALSE) %>% 
 stringr::str_c( collapse = ', ') 
 
-return(cli::cli_inform("Removed: {drp_these}"))
+return(glue::glue("Removed: {drp_these}") )
 })
 
 
@@ -3812,7 +3812,7 @@ output$num_aux_features <- shiny::renderText({
 
 Hotgenes <- Hotgenes_re()
 
-cli::cli_inform("Total auxiliary assays: {length(auxiliary_assays_features(Hotgenes))}") 
+glue::glue("Total auxiliary assays: {length(auxiliary_assays_features(Hotgenes))}") 
 })
 
 
