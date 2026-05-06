@@ -37,7 +37,7 @@ all_mapper_cols <- names(Mapper_(HotgenesObj))
 
 default_contrast <- all_contrasts[1]
 default_expr_slot <- all_expr_slots[1]
-default_coldata_col <- all_coldata_cols[1]
+default_coldata_col <- all_coldata_cols[3]
 default_feature <- all_features[1]
 venn_contrasts <- all_contrasts[seq_len(min(2, length(all_contrasts)))]
 pca_contrasts <- all_contrasts[seq_len(min(3, length(all_contrasts)))]
@@ -351,8 +351,10 @@ cli::cli_inform("Figures will be saved to: {.file {fig_dir}}")
 
 cli::cli_h2("Launching Shiny app")
 
+OntologyMethods <- Hotgenes::OntologyMethods()
+
 app <- AppDriver$new(
-  app = Shiny_Hotgenes(HotgenesObj),
+  app = Shiny_Hotgenes(HotgenesObj, OntologyMethods = OntologyMethods),
   height = 1000,
   width = 1600
 )
@@ -380,9 +382,10 @@ take_screenshot(
   app = app,
   tab_id = "Hotgenes_A-BoxPlot",
   filename = "shiny-01-boxplot_raw.png",
-  inputs = construct_inputs("BoxPlot", NormSlot = default_expr_slot),
+  inputs = construct_inputs("BoxPlot", NormSlot = default_expr_slot,
+                            SampleGroups = default_coldata_col),
   output_dir = fig_dir,
-  wait_time = 1.5
+  wait_time = 2
 )
 
 annotate_screenshot(
@@ -539,6 +542,7 @@ if (n_removed > 0) {
 cli::cli_h1("All done! Vignette figures ready")
 
 all_files <- list.files(fig_dir, full.names = FALSE)
+# unlink(fig_dir, recursive = TRUE)
 n_files <- length(all_files)
 
 cli::cli_h2("Generated files ({n_files} total)")
@@ -554,3 +558,4 @@ cli::cli_h2("Output directory")
 cli::cli_inform("Path: {.file {fig_dir}}")
 
 browseURL(fig_dir)
+
