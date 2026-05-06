@@ -1,3 +1,9 @@
+# version 0.0.55:
+    - Fixed contrast_vectors arg to HotgenesDEseq2() bug that dropped contrast
+      names from export.
+    - Fixed HotgenesDEseq2() issue not supporting stat col generation for "ashr"
+    - Updates to DE() to stabilize Topn behavoir across Report types.
+
 # version 0.0.54:
     - Replaced base R messaging/error calls (stop(), warning(), message(),
       print(), cat()) with cli equivalents across R/ sources.
