@@ -126,8 +126,8 @@ Retrieve the names and gene lists from the intersections:
 ``` r
 # Names of features found in all intersecting sets
 venn_out$Names
-## [1] "Hrs_2_vs_0:Hrs_6_vs_0"                "sh_EWS_vs_Ctrl:Hrs_2_vs_0"            "sh_EWS_vs_Ctrl:Hrs_6_vs_0"           
-## [4] "sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0"
+## [1] "Hrs_2_vs_0:Hrs_6_vs_0"                "sh_EWS_vs_Ctrl:Hrs_2_vs_0"           
+## [3] "sh_EWS_vs_Ctrl:Hrs_6_vs_0"            "sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0"
 
 # All intersection sets as a named list
 venn_out$Intsect |> head()
@@ -135,16 +135,19 @@ venn_out$Intsect |> head()
 ## [1] "NFE2L2" "KEAP1"  "PDGFA"  "HDAC4"  "OXER1"  "GAPDH"  "MEF2C" 
 ## 
 ## $Hrs_6_vs_0
-##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"   "BCL6"   "TLR3"   "GRB2"  
-## [14] "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2"  "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
+##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"   "BCL6"  
+## [12] "TLR3"   "GRB2"   "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2" 
+## [23] "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
 ## 
 ## $sh_EWS_vs_Ctrl
-##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"    "HMGN1"  "CLTC"   "GNAQ"  
-## [14] "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"   "LTB4R2"
+##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"    "HMGN1" 
+## [12] "CLTC"   "GNAQ"   "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"  
+## [23] "LTB4R2"
 ## 
 ## $`Hrs_2_vs_0:Hrs_6_vs_0`
-##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"    "CXCR4"   "MAFK"    "PTGFR"  
-## [13] "FOS"     "MYC"     "RIPK2"   "IL2"     "MAFG"    "CSF2"    "TWIST2"  "IFIT1"   "FLT1"   
+##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"    "CXCR4"  
+## [11] "MAFK"    "PTGFR"   "FOS"     "MYC"     "RIPK2"   "IL2"     "MAFG"    "CSF2"    "TWIST2"  "IFIT1"  
+## [21] "FLT1"   
 ## 
 ## $`sh_EWS_vs_Ctrl:Hrs_2_vs_0`
 ## [1] "HMGB2"  "MAP3K9" "CEBPB"  "IRF1"  

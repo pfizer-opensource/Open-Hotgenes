@@ -219,21 +219,7 @@ DE(htgs,
 
 ---
 
-## 4. `Output_DE_()` — Low-level Access
-
-`Output_DE_()` returns the raw list of DE tables stored in the object,
-without further filtering or formatting. Useful when you need to pass
-results downstream in list form.
-
-```{r output_de}
-raw_DE <- Output_DE_(htgs, padj_cut = 1, as_list = TRUE)
-names(raw_DE)
-raw_DE[["sh_EWS_vs_Ctrl"]] |> head(3)
-```
-
----
-
-## 5. `DExps()` — Expression Data Merged with Metadata
+## 4. `DExps()` — Expression Data Merged with Metadata
 
 `DExps()` joins normalized expression values with sample metadata,
 making it easy to build plots or run downstream models without
@@ -248,7 +234,7 @@ DExps(htgs,
 
 ---
 
-## 6. `DECoefs()` — Per-Feature Coefficients
+## 5. `DECoefs()` — Per-Feature Coefficients
 
 `DECoefs()` extracts the model coefficients (one column per contrast)
 for a set of features of interest.
@@ -259,7 +245,7 @@ DECoefs(htgs, hotList = c("CSF2", "IL6", "CCL2"))
 
 ---
 
-## 7. Updating the Mapper
+## 6. Updating the Mapper
 
 The mapper table can be replaced or augmented at any time:
 
@@ -277,10 +263,10 @@ Mapper_(htgs) |> head()
 
 ---
 
-## 8. Combining Multiple Hotgenes Objects
+## 7. Combining Multiple Hotgenes Objects
 
 When you have objects from different experiments or platforms, store
-them in a named list. The Shiny app and several reporting functions
+them in a named list. The Shiny app can
 accept this list directly.
 
 ```{r combine}
@@ -318,6 +304,5 @@ Hotgenes_list[["limma_experiment"]]
 | `O_()` | Original DE object |
 | `auxiliary_assays_()` | Auxiliary sample-level data |
 | `DE()` | Query DE results with flexible reporting |
-| `Output_DE_()` | Raw DE list (low-level) |
 | `DExps()` | Expression + metadata joined table |
 | `DECoefs()` | Per-feature model coefficients |
