@@ -199,6 +199,7 @@ HotgenesDEseq2 <- function(DEseq2_object = NULL,
     
   } else {
     output_method <- Output_contrasts %>%
+      purrr::set_names(~ .x) %>%
       purrr::imap(function(xList, yList) {
         list(
           
@@ -209,6 +210,9 @@ HotgenesDEseq2 <- function(DEseq2_object = NULL,
   }
   
   
+  DESeq2_args <- tryCatch(list(...), 
+                       error = function(e) NULL)
+  
   Output_DE <- output_method %>%
     purrr::set_names(~ .x) %>%
     purrr::imap(function(xList, yList) {
@@ -218,7 +222,7 @@ HotgenesDEseq2 <- function(DEseq2_object = NULL,
         dds = DEseq2_object
          ) |> 
         append(xList) |> 
-        append(list(...))
+        append(DESeq2_args)
       
       out_lfcSh <- base::do.call(what = DESeq2::lfcShrink,
                                 args = list_lfcSh ) |> 
@@ -226,8 +230,9 @@ HotgenesDEseq2 <- function(DEseq2_object = NULL,
         tibble::rownames_to_column(var = "Feature")  |> 
         dplyr::arrange(.data$padj)
       
-      # Calculating stat for GSEA
-      if (lfcShrink_type == "apeglm") {
+      
+      # Calculating stat for GSEA when not returned by lfcShrink
+      if (!"stat" %in% names(out_lfcSh)) {
         out_lfcSh <- out_lfcSh %>%
           dplyr::mutate(stat = (-log10(.data$padj) * sign(.data$log2FoldChange)))
       }

@@ -40,10 +40,28 @@ rmarkdown::render("README.Rmd",
                   output_file="README.md")
 
 
-rmarkdown::render(file.path(getwd(), "vignettes", "DILI_Hotgenes.Rmd"), 
-                  output_dir = file.path(getwd(), "vignettes"),
-                  
-                  output_file = "DILI_Hotgenes.md")
+
+list_rmds <- file.path(getwd(), "vignettes") |> 
+  list.files(pattern = ".Rmd", full.names = TRUE) |> 
+  stringr::str_subset("0[1-9]|DILI") |> 
+  purrr::set_names(~basename(.x)) |> 
+  purrr::imap(function(x,y){
+    
+    md_name <- y |> 
+      stringr::str_replace("[.]Rmd", ".md") 
+    
+    rmarkdown::render(x, 
+                      output_dir = file.path(getwd(), "vignettes"),
+                      
+                      output_file = md_name)
+    
+  })
+
+
+# rmarkdown::render(file.path(getwd(), "vignettes", "DILI_Hotgenes.Rmd"), 
+#                   output_dir = file.path(getwd(), "vignettes"),
+#                   
+#                   output_file = "DILI_Hotgenes.md")
 
 
 devtools::test(stop_on_failure = TRUE)
