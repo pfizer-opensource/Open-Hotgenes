@@ -198,65 +198,65 @@ DE(htgs,
 ## # A tibble: 10 × 11
 ##    Feature contrast_dir        baseMean log2FoldChange    FC   stat   pvalue     padj  lfcSE ensembl_id  
 ##    <chr>   <chr>                  <dbl>          <dbl> <dbl>  <dbl>    <dbl>    <dbl>  <dbl> <chr>       
-##  1 C1R     sh_EWS_vs_Ctrl_down    5967.         -0.799 0.575 -15.1  1.16e-51 1.99e-49 0.0427 ENSG0000015…
-##  2 C1R     sh_EWS_vs_Ctrl_down    5967.         -0.799 0.575 -15.1  1.16e-51 1.99e-49 0.0427 ENSG0000028…
-##  3 CCL2    sh_EWS_vs_Ctrl_down    3119.         -0.945 0.519 -14.8  1.61e-49 1.37e-47 0.0474 ENSG0000010…
-##  4 C1S     sh_EWS_vs_Ctrl_down    3514.         -0.594 0.662 -11.7  1.36e-31 7.76e-30 0.0415 ENSG0000018…
-##  5 MMP3    sh_EWS_vs_Ctrl_up      3986.          0.578 1.49    8.80 1.31e-18 5.60e-17 0.0496 ENSG0000014…
-##  6 HMGB2   sh_EWS_vs_Ctrl_up      1118.          0.621 1.54    7.92 2.29e-15 7.83e-14 0.0539 ENSG0000016…
-##  7 STAT1   sh_EWS_vs_Ctrl_down    4448.         -0.355 0.782  -7.24 4.52e-13 1.29e-11 0.0398 ENSG0000011…
-##  8 CXCL6   sh_EWS_vs_Ctrl_down     130.         -1.65  0.318  -7.02 2.27e-12 5.54e-11 0.107  ENSG0000012…
-##  9 IL1R1   sh_EWS_vs_Ctrl_down    1519.         -0.414 0.751  -6.65 2.88e-11 6.16e-10 0.0508 ENSG0000011…
-## 10 RAC1    sh_EWS_vs_Ctrl_up      9136.          0.265 1.20    6.38 1.80e-10 3.43e- 9 0.0360 ENSG0000013…
+##  1 C1R     sh_EWS_vs_Ctrl_down    5967.         -0.819 0.567 -48.7  1.16e-51 1.99e-49 0.0547 ENSG0000015…
+##  2 C1R     sh_EWS_vs_Ctrl_down    5967.         -0.819 0.567 -48.7  1.16e-51 1.99e-49 0.0547 ENSG0000028…
+##  3 CCL2    sh_EWS_vs_Ctrl_down    3119.         -0.959 0.514 -46.9  1.61e-49 1.37e-47 0.0657 ENSG0000010…
+##  4 C1S     sh_EWS_vs_Ctrl_down    3514.         -0.602 0.659 -29.1  1.36e-31 7.76e-30 0.0525 ENSG0000018…
+##  5 MMP3    sh_EWS_vs_Ctrl_up      3986.          0.597 1.51   16.3  1.31e-18 5.60e-17 0.0698 ENSG0000014…
+##  6 HMGB2   sh_EWS_vs_Ctrl_up      1118.          0.606 1.52   13.1  2.29e-15 7.83e-14 0.0794 ENSG0000016…
+##  7 STAT1   sh_EWS_vs_Ctrl_down    4448.         -0.349 0.785 -10.9  4.52e-13 1.29e-11 0.0493 ENSG0000011…
+##  8 CXCL6   sh_EWS_vs_Ctrl_down     130.         -1.77  0.294 -10.3  2.27e-12 5.54e-11 0.267  ENSG0000012…
+##  9 IL1R1   sh_EWS_vs_Ctrl_down    1519.         -0.457 0.728  -9.21 2.88e-11 6.16e-10 0.0720 ENSG0000011…
+## 10 RAC1    sh_EWS_vs_Ctrl_up      9136.          0.267 1.20    8.47 1.80e-10 3.43e- 9 0.0427 ENSG0000013…
 ## # ℹ 1 more variable: significant <chr>
 ## 
 ## $Hrs_2_vs_0
 ## # A tibble: 10 × 11
 ##    Feature contrast_dir  baseMean log2FoldChange    FC  stat    pvalue      padj  lfcSE ensembl_id     
 ##    <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>     <dbl>     <dbl>  <dbl> <chr>          
-##  1 IL6     Hrs_2_vs_0_up     914.          2.30   4.94 26.7  7.56e-157 1.93e-154 0.0725 ENSG00000136244
-##  2 TNFAIP3 Hrs_2_vs_0_up     780.          1.92   3.79 21.3  5.75e-101 7.34e- 99 0.0750 ENSG00000118503
-##  3 CXCL8   Hrs_2_vs_0_up    1409.          2.88   7.35 19.4  8.35e- 84 7.10e- 82 0.120  ENSG00000169429
-##  4 IL11    Hrs_2_vs_0_up     659.          1.80   3.49 18.3  1.93e- 74 1.23e- 72 0.0821 ENSG00000095752
-##  5 PTGS2   Hrs_2_vs_0_up    1907.          1.12   2.17 15.5  3.41e- 54 1.74e- 52 0.0595 ENSG00000073756
-##  6 SMAD7   Hrs_2_vs_0_up    3674.          0.901  1.87 14.9  1.98e- 50 8.40e- 49 0.0533 ENSG00000101665
-##  7 CXCL1   Hrs_2_vs_0_up    1533.          1.87   3.67 14.7  1.08e- 48 3.92e- 47 0.101  ENSG00000163739
-##  8 CCL2    Hrs_2_vs_0_up    3119.          0.808  1.75 13.5  1.63e- 41 5.19e- 40 0.0522 ENSG00000108691
-##  9 JUN     Hrs_2_vs_0_up    1619.          0.742  1.67  9.44 3.84e- 21 1.09e- 19 0.0653 ENSG00000177606
-## 10 CXCL3   Hrs_2_vs_0_up     132.          1.30   2.47  8.27 1.37e- 16 3.50e- 15 0.143  ENSG00000163734
+##  1 IL6     Hrs_2_vs_0_up     914.          2.49   5.60 154.  7.56e-157 1.93e-154 0.0936 ENSG00000136244
+##  2 TNFAIP3 Hrs_2_vs_0_up     780.          2.12   4.33  98.1 5.75e-101 7.34e- 99 0.0997 ENSG00000118503
+##  3 CXCL8   Hrs_2_vs_0_up    1409.          3.49  11.2   81.1 8.35e- 84 7.10e- 82 0.181  ENSG00000169429
+##  4 IL11    Hrs_2_vs_0_up     659.          2.00   3.99  71.9 1.93e- 74 1.23e- 72 0.110  ENSG00000095752
+##  5 PTGS2   Hrs_2_vs_0_up    1907.          1.12   2.18  51.8 3.41e- 54 1.74e- 52 0.0730 ENSG00000073756
+##  6 SMAD7   Hrs_2_vs_0_up    3674.          0.933  1.91  48.1 1.98e- 50 8.40e- 49 0.0629 ENSG00000101665
+##  7 CXCL1   Hrs_2_vs_0_up    1533.          2.08   4.24  46.4 1.08e- 48 3.92e- 47 0.144  ENSG00000163739
+##  8 CCL2    Hrs_2_vs_0_up    3119.          0.812  1.76  39.3 1.63e- 41 5.19e- 40 0.0607 ENSG00000108691
+##  9 JUN     Hrs_2_vs_0_up    1619.          0.767  1.70  19.0 3.84e- 21 1.09e- 19 0.0823 ENSG00000177606
+## 10 CXCL3   Hrs_2_vs_0_up     132.          2.00   3.99  14.5 1.37e- 16 3.50e- 15 0.250  ENSG00000163734
 ## # ℹ 1 more variable: significant <chr>
 ## 
 ## $Hrs_6_vs_0
 ## # A tibble: 10 × 11
 ##    Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj  lfcSE ensembl_id     
 ##    <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl>  <dbl> <chr>          
-##  1 CCL2    Hrs_6_vs_0_up    3119.          1.25   2.38  20.8 3.57e-96 7.14e-94 0.0507 ENSG00000108691
-##  2 PTGS2   Hrs_6_vs_0_up    1907.          1.42   2.68  20.2 1.35e-90 1.35e-88 0.0576 ENSG00000073756
-##  3 IL6     Hrs_6_vs_0_up     914.          1.73   3.32  20.0 8.93e-89 5.95e-87 0.0724 ENSG00000136244
-##  4 CXCL8   Hrs_6_vs_0_up    1409.          3.04   8.24  19.8 4.19e-87 2.09e-85 0.122  ENSG00000169429
-##  5 TNFAIP3 Hrs_6_vs_0_up     780.          1.67   3.18  17.9 6.41e-72 2.56e-70 0.0741 ENSG00000118503
-##  6 CXCL1   Hrs_6_vs_0_up    1533.          2.23   4.69  16.4 1.46e-60 4.86e-59 0.101  ENSG00000163739
-##  7 RELB    Hrs_6_vs_0_up     436.          1.83   3.55  16.0 9.66e-58 2.76e-56 0.0874 ENSG00000104856
-##  8 IL11    Hrs_6_vs_0_up     659.          1.26   2.40  13.0 1.21e-38 3.03e-37 0.0823 ENSG00000095752
-##  9 BIRC2   Hrs_6_vs_0_up    5074.          0.702  1.63  12.1 1.42e-33 3.15e-32 0.0509 ENSG00000110330
-## 10 NFKB1   Hrs_6_vs_0_up     705.          0.943  1.92  10.6 3.94e-26 7.88e-25 0.0724 ENSG00000109320
+##  1 CCL2    Hrs_6_vs_0_up    3119.          1.24   2.36  93.1 3.57e-96 7.14e-94 0.0600 ENSG00000108691
+##  2 PTGS2   Hrs_6_vs_0_up    1907.          1.44   2.72  87.9 1.35e-90 1.35e-88 0.0720 ENSG00000073756
+##  3 IL6     Hrs_6_vs_0_up     914.          1.89   3.70  86.2 8.93e-89 5.95e-87 0.0952 ENSG00000136244
+##  4 CXCL8   Hrs_6_vs_0_up    1409.          3.55  11.7   84.7 4.19e-87 2.09e-85 0.181  ENSG00000169429
+##  5 TNFAIP3 Hrs_6_vs_0_up     780.          1.79   3.47  69.6 6.41e-72 2.56e-70 0.101  ENSG00000118503
+##  6 CXCL1   Hrs_6_vs_0_up    1533.          2.33   5.03  58.3 1.46e-60 4.86e-59 0.143  ENSG00000163739
+##  7 RELB    Hrs_6_vs_0_up     436.          1.90   3.72  55.6 9.66e-58 2.76e-56 0.120  ENSG00000104856
+##  8 IL11    Hrs_6_vs_0_up     659.          1.44   2.71  36.5 1.21e-38 3.03e-37 0.112  ENSG00000095752
+##  9 BIRC2   Hrs_6_vs_0_up    5074.          0.727  1.66  31.5 1.42e-33 3.15e-32 0.0610 ENSG00000110330
+## 10 NFKB1   Hrs_6_vs_0_up     705.          0.985  1.98  24.1 3.94e-26 7.88e-25 0.0949 ENSG00000109320
 ## # ℹ 1 more variable: significant <chr>
 ## 
 ## $shEWS.Hrs2
 ## # A tibble: 5 × 11
-##   Feature contrast_dir   baseMean log2FoldChange    FC  stat  pvalue   padj  lfcSE ensembl_id significant
-##   <chr>   <chr>             <dbl>          <dbl> <dbl> <dbl>   <dbl>  <dbl>  <dbl> <chr>      <chr>      
-## 1 TNFAIP3 shEWS.Hrs2_do…     780.        -0.272  0.828 -4.07 4.62e-5 0.0118 0.0680 ENSG00000… *          
-## 2 IL6     shEWS.Hrs2_do…     914.        -0.204  0.868 -3.57 3.61e-4 0.0330 0.0672 ENSG00000… *          
-## 3 TGFBR1  shEWS.Hrs2_do…    3125.        -0.194  0.874 -3.55 3.88e-4 0.0330 0.0570 ENSG00000… *          
-## 4 CXCL3   shEWS.Hrs2_do…     132.        -0.0801 0.946 -3.18 1.46e-3 0.0932 0.0625 ENSG00000… *          
-## 5 CXCL8   shEWS.Hrs2_do…    1409.        -0.0896 0.940 -3.10 1.92e-3 0.0980 0.0675 ENSG00000… *          
+##   Feature contrast_dir  baseMean log2FoldChange    FC  stat  pvalue   padj   lfcSE ensembl_id significant
+##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>   <dbl>  <dbl>   <dbl> <chr>      <chr>      
+## 1 TNFAIP3 shEWS.Hrs2_d…     780.      -0.495    0.710 -1.93 4.62e-5 0.0118 0.153   ENSG00000… *          
+## 2 IL6     shEWS.Hrs2_d…     914.      -0.400    0.758 -1.48 3.61e-4 0.0330 0.156   ENSG00000… *          
+## 3 TGFBR1  shEWS.Hrs2_d…    3125.      -0.214    0.862 -1.48 3.88e-4 0.0330 0.0866  ENSG00000… *          
+## 4 CXCL3   shEWS.Hrs2_d…     132.      -0.773    0.585 -1.03 1.46e-3 0.0932 0.416   ENSG00000… *          
+## 5 CXCL8   shEWS.Hrs2_d…    1409.      -0.000781 0.999 -1.01 1.92e-3 0.0980 0.00815 ENSG00000… *          
 ## 
 ## $shEWS.Hrs6
 ## # A tibble: 1 × 11
-##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue   padj  lfcSE ensembl_id significant
-##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>  <dbl>  <dbl> <chr>      <chr>      
-## 1 FOS     shEWS.Hrs6_up     263.          0.155  1.11  3.57 0.000359 0.0916 0.0545 ENSG00000… *
+##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue   padj lfcSE ensembl_id  significant
+##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>  <dbl> <dbl> <chr>       <chr>      
+## 1 FOS     shEWS.Hrs6_up     263.          0.656  1.58  1.04 0.000359 0.0916 0.262 ENSG000001… *
 ```
 
 ### Select specific contrasts
@@ -273,11 +273,13 @@ DE(htgs,
    padj_cut       = 0.05,
    .log2FoldChange = 1) 
 ## $sh_EWS_vs_Ctrl
-## # A tibble: 2 × 11
-##   Feature contrast_dir baseMean log2FoldChange    FC  stat   pvalue     padj lfcSE ensembl_id significant
-##   <chr>   <chr>           <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl> <dbl> <chr>      <chr>      
-## 1 CXCL6   sh_EWS_vs_C…    130.           -1.65 0.318 -7.02 2.27e-12 5.54e-11 0.107 ENSG00000… *          
-## 2 C3      sh_EWS_vs_C…     49.3          -1.23 0.428 -4.78 1.76e- 6 1.67e- 5 0.138 ENSG00000… *
+## # A tibble: 3 × 11
+##   Feature contrast_dir        baseMean log2FoldChange    FC   stat   pvalue     padj lfcSE ensembl_id    
+##   <chr>   <chr>                  <dbl>          <dbl> <dbl>  <dbl>    <dbl>    <dbl> <dbl> <chr>         
+## 1 CXCL6   sh_EWS_vs_Ctrl_down    130.           -1.77 0.294 -10.3  2.27e-12 5.54e-11 0.267 ENSG000001248…
+## 2 C3      sh_EWS_vs_Ctrl_down     49.3          -1.62 0.325  -4.78 1.76e- 6 1.67e- 5 0.391 ENSG000001257…
+## 3 MAP3K9  sh_EWS_vs_Ctrl_up       26.8           1.59 3.02    3.06 1.18e- 4 8.78e- 4 0.528 ENSG000000064…
+## # ℹ 1 more variable: significant <chr>
 ```
 
 ### Look up specific genes with `hotList`
@@ -293,46 +295,47 @@ DE(htgs,
    .log2FoldChange = 0.5)
 ## $sh_EWS_vs_Ctrl
 ## # A tibble: 3 × 11
-##   Feature contrast_dir        baseMean log2FoldChange    FC   stat   pvalue     padj  lfcSE ensembl_id   
-##   <chr>   <chr>                  <dbl>          <dbl> <dbl>  <dbl>    <dbl>    <dbl>  <dbl> <chr>        
-## 1 CCL2    sh_EWS_vs_Ctrl_down   3119.          -0.945 0.519 -14.8  1.61e-49 1.37e-47 0.0474 ENSG00000108…
-## 2 IL6     sh_EWS_vs_Ctrl_down    914.          -0.462 0.726  -2.41 1.59e- 2 5.83e- 2 0.0596 ENSG00000136…
-## 3 CSF2    sh_EWS_vs_Ctrl_up       38.4          0.784 1.72    1.65 9.95e- 2 2.37e- 1 0.147  ENSG00000164…
+##   Feature contrast_dir        baseMean log2FoldChange    FC    stat   pvalue     padj  lfcSE ensembl_id  
+##   <chr>   <chr>                  <dbl>          <dbl> <dbl>   <dbl>    <dbl>    <dbl>  <dbl> <chr>       
+## 1 CCL2    sh_EWS_vs_Ctrl_down   3119.          -0.959 0.514 -46.9   1.61e-49 1.37e-47 0.0657 ENSG0000010…
+## 2 IL6     sh_EWS_vs_Ctrl_down    914.          -0.218 0.860  -1.23  1.59e- 2 5.83e- 2 0.108  ENSG0000013…
+## 3 CSF2    sh_EWS_vs_Ctrl_up       38.4          0.100 1.07    0.624 9.95e- 2 2.37e- 1 0.216  ENSG0000016…
 ## # ℹ 1 more variable: significant <chr>
 ## 
 ## $Hrs_2_vs_0
 ## # A tibble: 3 × 11
-##   Feature contrast_dir  baseMean log2FoldChange    FC  stat    pvalue      padj  lfcSE ensembl_id     
-##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>     <dbl>     <dbl>  <dbl> <chr>          
-## 1 IL6     Hrs_2_vs_0_up    914.           2.30   4.94 26.7  7.56e-157 1.93e-154 0.0725 ENSG00000136244
-## 2 CCL2    Hrs_2_vs_0_up   3119.           0.808  1.75 13.5  1.63e- 41 5.19e- 40 0.0522 ENSG00000108691
-## 3 CSF2    Hrs_2_vs_0_up     38.4          0.966  1.95  2.94 3.31e-  3 2.72e-  2 0.210  ENSG00000164400
+##   Feature contrast_dir  baseMean log2FoldChange    FC   stat    pvalue      padj  lfcSE ensembl_id     
+##   <chr>   <chr>            <dbl>          <dbl> <dbl>  <dbl>     <dbl>     <dbl>  <dbl> <chr>          
+## 1 IL6     Hrs_2_vs_0_up    914.           2.49   5.60 154.   7.56e-157 1.93e-154 0.0936 ENSG00000136244
+## 2 CCL2    Hrs_2_vs_0_up   3119.           0.812  1.76  39.3  1.63e- 41 5.19e- 40 0.0607 ENSG00000108691
+## 3 CSF2    Hrs_2_vs_0_up     38.4          1.30   2.46   1.57 3.31e-  3 2.72e-  2 0.661  ENSG00000164400
 ## # ℹ 1 more variable: significant <chr>
 ## 
 ## $Hrs_6_vs_0
 ## # A tibble: 3 × 11
 ##   Feature contrast_dir  baseMean log2FoldChange    FC  stat   pvalue     padj  lfcSE ensembl_id     
 ##   <chr>   <chr>            <dbl>          <dbl> <dbl> <dbl>    <dbl>    <dbl>  <dbl> <chr>          
-## 1 CCL2    Hrs_6_vs_0_up   3119.            1.25  2.38 20.8  3.57e-96 7.14e-94 0.0507 ENSG00000108691
-## 2 IL6     Hrs_6_vs_0_up    914.            1.73  3.32 20.0  8.93e-89 5.95e-87 0.0724 ENSG00000136244
-## 3 CSF2    Hrs_6_vs_0_up     38.4           2.15  4.43  4.99 6.13e- 7 4.09e- 6 0.232  ENSG00000164400
+## 1 CCL2    Hrs_6_vs_0_up   3119.            1.24  2.36 93.1  3.57e-96 7.14e-94 0.0600 ENSG00000108691
+## 2 IL6     Hrs_6_vs_0_up    914.            1.89  3.70 86.2  8.93e-89 5.95e-87 0.0952 ENSG00000136244
+## 3 CSF2    Hrs_6_vs_0_up     38.4           2.60  6.05  5.39 6.13e- 7 4.09e- 6 0.572  ENSG00000164400
 ## # ℹ 1 more variable: significant <chr>
 ## 
 ## $shEWS.Hrs2
 ## # A tibble: 3 × 11
-##   Feature contrast_dir  baseMean log2FoldChange    FC   stat  pvalue   padj  lfcSE ensembl_id significant
-##   <chr>   <chr>            <dbl>          <dbl> <dbl>  <dbl>   <dbl>  <dbl>  <dbl> <chr>      <chr>      
-## 1 IL6     shEWS.Hrs2_d…    914.          -0.204 0.868 -3.57  3.61e-4 0.0330 0.0672 ENSG00000… ""         
-## 2 CCL2    shEWS.Hrs2_d…   3119.          -0.107 0.929 -1.19  2.33e-1 0.983  0.0616 ENSG00000… ""         
-## 3 CSF2    shEWS.Hrs2_up     38.4          0.121 1.09   0.437 6.62e-1 0.983  0.0421 ENSG00000… ""         
+##   Feature contrast_dir    baseMean log2FoldChange    FC     stat   pvalue   padj   lfcSE ensembl_id     
+##   <chr>   <chr>              <dbl>          <dbl> <dbl>    <dbl>    <dbl>  <dbl>   <dbl> <chr>          
+## 1 IL6     shEWS.Hrs2_down    914.      -0.400     0.758 -1.48    0.000361 0.0330 0.156   ENSG00000136244
+## 2 CCL2    shEWS.Hrs2_down   3119.      -0.000981  0.999 -0.00746 0.233    0.983  0.00815 ENSG00000108691
+## 3 CSF2    shEWS.Hrs2_up       38.4      0.0000373 1.00   0.00746 0.662    0.983  0.00810 ENSG00000164400
+## # ℹ 1 more variable: significant <chr>
 ## 
 ## $shEWS.Hrs6
 ## # A tibble: 3 × 11
-##   Feature contrast_dir    baseMean log2FoldChange    FC   stat pvalue  padj  lfcSE ensembl_id significant
-##   <chr>   <chr>              <dbl>          <dbl> <dbl>  <dbl>  <dbl> <dbl>  <dbl> <chr>      <chr>      
-## 1 IL6     shEWS.Hrs6_down    914.         -0.0935 0.937 -2.48  0.0131 0.658 0.0584 ENSG00000… ""         
-## 2 CCL2    shEWS.Hrs6_up     3119.          0.0489 1.03   0.881 0.378  0.997 0.0561 ENSG00000… ""         
-## 3 CSF2    shEWS.Hrs6_up       38.4         0.123  1.09   0.672 0.501  0.997 0.0317 ENSG00000… ""
+##   Feature contrast_dir baseMean log2FoldChange    FC     stat pvalue  padj   lfcSE ensembl_id significant
+##   <chr>   <chr>           <dbl>          <dbl> <dbl>    <dbl>  <dbl> <dbl>   <dbl> <chr>      <chr>      
+## 1 IL6     shEWS.Hrs6_…    914.    -0.0000187   1.000 -0.182   0.0131 0.658 0.00144 ENSG00000… ""         
+## 2 CCL2    shEWS.Hrs6_…   3119.    -0.00000324  1.000 -0.00120 0.378  0.997 0.00144 ENSG00000… ""         
+## 3 CSF2    shEWS.Hrs6_…     38.4    0.000000956 1.00   0.00120 0.501  0.997 0.00144 ENSG00000… ""
 ```
 
 ### `Report` options
@@ -376,8 +379,8 @@ DE(htgs,
    Rank_name = "Feature",
    padj_cut  = 1) 
 ## $sh_EWS_vs_Ctrl
-##     MMP3    HMGB2     RAC1    HMGB1    MEF2D 
-## 8.804869 7.924608 6.377267 6.256207 6.249395
+##      MMP3     HMGB2      RAC1     HMGB1     MEF2D 
+## 16.251774 13.106389  8.465307  8.193452  8.193452
 ```
 
 ``` r
@@ -392,11 +395,11 @@ DE(htgs,
 ## # A tibble: 5 × 3
 ##   Feature log2FoldChange ensembl_id     
 ##   <chr>            <dbl> <chr>          
-## 1 C1R             -0.799 ENSG00000159403
-## 2 C1R             -0.799 ENSG00000288512
-## 3 CCL2            -0.945 ENSG00000108691
-## 4 C1S             -0.594 ENSG00000182326
-## 5 MMP3             0.578 ENSG00000149968
+## 1 C1R             -0.819 ENSG00000159403
+## 2 C1R             -0.819 ENSG00000288512
+## 3 CCL2            -0.959 ENSG00000108691
+## 4 C1S             -0.602 ENSG00000182326
+## 5 MMP3             0.597 ENSG00000149968
 ```
 
 ------------------------------------------------------------------------
@@ -431,17 +434,17 @@ for a set of features of interest.
 ``` r
 DECoefs(htgs, hotList = c("CSF2", "IL6", "CCL2"))
 ##      sh_EWS_vs_Ctrl_log2FoldChange sh_EWS_vs_Ctrl_stat Hrs_2_vs_0_log2FoldChange Hrs_2_vs_0_stat
-## CCL2                    -0.9454428          -14.793754                 0.8075294       13.497033
-## IL6                     -0.4620370           -2.410107                 2.3043826       26.682272
-## CSF2                     0.7835810            1.647501                 0.9656573        2.937682
+## CCL2                    -0.9588353         -46.8619299                 0.8115152       39.284892
+## IL6                     -0.2175810          -1.2341166                 2.4864430      153.714945
+## CSF2                     0.1000838           0.6243459                 1.3006816        1.565419
 ##      Hrs_6_vs_0_log2FoldChange Hrs_6_vs_0_stat shEWS.Hrs2_log2FoldChange shEWS.Hrs2_stat
-## CCL2                  1.251154       20.809222                -0.1065631      -1.1934152
-## IL6                   1.732941       19.975903                -0.2037340      -3.5671775
-## CSF2                  2.146082        4.987054                 0.1212042       0.4370389
+## CCL2                  1.240551       93.146191             -9.812312e-04    -0.007460348
+## IL6                   1.887527       86.225454             -3.995497e-01    -1.481969498
+## CSF2                  2.597729        5.388582              3.725334e-05     0.007460348
 ##      shEWS.Hrs6_log2FoldChange shEWS.Hrs6_stat
-## CCL2                0.04893024       0.8812305
-## IL6                -0.09350500      -2.4798332
-## CSF2                0.12280155       0.6723109
+## CCL2             -3.236547e-06    -0.001199919
+## IL6              -1.868006e-05    -0.181614602
+## CSF2              9.562535e-07     0.001199919
 ```
 
 ------------------------------------------------------------------------
