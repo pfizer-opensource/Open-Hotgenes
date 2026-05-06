@@ -1,4 +1,4 @@
-library(Hotgenes)
+#library(Hotgenes)
 library(shinytest2)
 #library(magick)
 #library(cli)
@@ -104,6 +104,9 @@ app <- AppDriver$new(
   width = 1600
 )
 
+# Wait for first render at 1x
+app$wait_for_value(output = "Hotgenes_A-BoxPlot-Tab1", timeout = 15000)
+
 cli::cli_alert_success("App launched successfully")
 
 # set_retina_quality -----------------------------------------------------------
@@ -116,49 +119,29 @@ app$get_chromote_session()$Emulation$setDeviceMetricsOverride(
   deviceScaleFactor = 2,
   mobile = FALSE
 )
+app$get_js("$(window).trigger('resize')")
 
 cli::cli_alert_success("Device pixel ratio set to 2x (retina quality)")
 
 # capture_boxplot_tab -----------------------------------------------------------
 
 cli::cli_h2("Capturing BoxPlot tab")
-# app$set_inputs(tabs = "Hotgenes_A-BoxPlot", wait_ = FALSE)
-#app$get_logs()
 
 if(FALSE) {
   browseURL(fig_dir)
 }
-# #Sys.sleep(20)
-# app$set_inputs(tabs = "Hotgenes_A-BoxPlot", wait_ = FALSE)
-# #app$wait_for_idle()  # Wait for all pending reactions to complete
-# 
-# #app$get_values()$output #|> names()
-# dd <- app$get_values()
-# dd$output$`Hotgenes_A-AuxAssays_A-num_aux_features`
-# dd$output$`Hotgenes_A-BoxPlot-Tab1`$src
-# #dd$output$`Hotgenes_A-BoxPlot-Tab1`$coordmap |> dplyr::bind_cols()
-# 
-# dd2 <- app$get_values()
-# #dd2$output
-# #dd2$output$`Hotgenes_A-BoxPlot-Tab1`$src
-# identical(dd2$output$`Hotgenes_A-BoxPlot-Tab1`$src, dd$output$`Hotgenes_A-BoxPlot-Tab1`$src)
-# #dd2$output$`Hotgenes_A-BoxPlot-Tab1`$coordmap |> dplyr::bind_cols()
-
-#dd$output$`Hotgenes_A-BoxPlot-Tab1`$coordmap
-#app$wait_for_js("Shiny.shinyapp.$values.output.Hotgenes_A_BoxPlot_boxplot_plot !== null")
-# 
-# MegaOmics::merge_fun_args("take_screenshot", list(
-#   app = app,
-#   tab_id = "Hotgenes_A-BoxPlot",
-#   filename = "shiny-01-boxplot_raw.png",
-#   
-#   output_dir = fig_dir,
-#   
-#   wait_time = 1
-# )) |> 
-#   list2env(globalenv())
 
 
+# Poll for 2x render
+check_v <- app$get_js("$('#Hotgenes_A-BoxPlot-Tab1').find('img').prop('naturalWidth')")
+while (is.null(check_v) || check_v <= 1195) {
+  Sys.sleep(0.5)
+  check_v <- app$get_js("$('#Hotgenes_A-BoxPlot-Tab1').find('img').prop('naturalWidth')")
+  cli::cli_inform("naturalWidth: {check_v}")
+}
+
+
+###
 take_screenshot(
   app = app,
   tab_id = "Hotgenes_A-BoxPlot",
