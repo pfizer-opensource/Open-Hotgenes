@@ -394,7 +394,7 @@ cli::cli_alert_success("Device pixel ratio set to 2x (retina quality)")
 # capture_boxplot_tab -----------------------------------------------------------
 
 cli::cli_h2("Capturing BoxPlot tab")
-app$set_inputs(tabs = "Hotgenes_A-BoxPlot", wait_ = FALSE)
+# app$set_inputs(tabs = "Hotgenes_A-BoxPlot", wait_ = FALSE)
 
 #Sys.sleep(20)
 
@@ -404,7 +404,7 @@ take_screenshot(
   filename = "shiny-01-boxplot_raw.png",
   inputs = construct_inputs("BoxPlot", NormSlot = default_expr_slot),
   output_dir = fig_dir,
-  wait_time = 1
+  wait_time = 30
 )
 
 annotate_screenshot(
