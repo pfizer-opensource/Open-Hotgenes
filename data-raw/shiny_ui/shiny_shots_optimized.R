@@ -351,7 +351,24 @@ cli::cli_inform("Figures will be saved to: {.file {fig_dir}}")
 
 cli::cli_h2("Launching Shiny app")
 
-OntologyMethods <- Hotgenes::OntologyMethods()
+# OntologyMethods <- Hotgenes::OntologyMethods()
+
+OntologyMethods <- Hotgenes::OntologyMethods(
+  Ontology_Function = list(
+    msigdbr  = Hotgenes::msigdbr_wrapper),
+  InputChoices = list(
+    msigdbr  = Hotgenes::msigdbr_wrapper_choices()$set
+  ),
+  gene_col_choices = list(
+    msigdbr  = c("gene_symbol",  "ensembl_gene")
+  ),
+  species_choices = list(
+    msigdbr  = c("human", "mouse", "rat", "dog")
+    
+  ),
+  versions = list(
+    msigdbr  = utils::packageVersion("msigdbr"))
+)
 
 app <- AppDriver$new(
   app = Shiny_Hotgenes(HotgenesObj, OntologyMethods = OntologyMethods),
@@ -377,15 +394,17 @@ cli::cli_alert_success("Device pixel ratio set to 2x (retina quality)")
 # capture_boxplot_tab -----------------------------------------------------------
 
 cli::cli_h2("Capturing BoxPlot tab")
+app$set_inputs(tabs = "Hotgenes_A-BoxPlot", wait_ = FALSE)
+
+#Sys.sleep(20)
 
 take_screenshot(
   app = app,
   tab_id = "Hotgenes_A-BoxPlot",
   filename = "shiny-01-boxplot_raw.png",
-  inputs = construct_inputs("BoxPlot", NormSlot = default_expr_slot,
-                            SampleGroups = default_coldata_col),
+  inputs = construct_inputs("BoxPlot", NormSlot = default_expr_slot),
   output_dir = fig_dir,
-  wait_time = 2
+  wait_time = 1
 )
 
 annotate_screenshot(
@@ -425,7 +444,8 @@ take_screenshot(
   tab_id = "Hotgenes_A-ExpsPlot",
   filename = "shiny-03-expsplot_raw.png",
   inputs = construct_inputs("ExpsPlot",
-                             yVar = default_feature,
+                             yVar = "CXCL8",
+                            fill = "sh",
                              xVar = default_coldata_col),
   button_id = ns_id("ExpsPlot", "makePlot"),
   output_dir = fig_dir,
@@ -488,9 +508,13 @@ take_screenshot(
   filename = "shiny-06-gsea_raw.png",
   inputs = construct_inputs("GSEA",
                              fgsea_Contrasts = default_contrast,
+                            ontology_library = "msigdbr",
+                            ontology_sets = "H",
+                           
                              input_MapperCol = all_mapper_cols[1]),
   output_dir = fig_dir,
-  wait_time = 1.5
+  button_id = "Hotgenes_A-GSEA-fgsea_Button",
+  wait_time = 10
 )
 
 annotate_screenshot(
