@@ -245,13 +245,17 @@ annotate_screenshot(
 
 cli::cli_h2("Capturing GSEA tab")
 
+# Set ontology_library first and wait for observer to populate ontology_sets
+app$set_inputs("Hotgenes_A-GSEA-ontology_library" = "msigdbr", wait_ = FALSE)
+app$wait_for_idle()
+
 take_screenshot(
   app = app,
   tab_id = "Hotgenes_A-GSEA",
   filename = "shiny-06-gsea_raw.png",
   inputs = construct_inputs("GSEA",
                              fgsea_Contrasts = default_contrast,
-                            ontology_library = "msigdbr",
+                            
                             ontology_sets = "H",
                            
                              input_MapperCol = all_mapper_cols[1]),
