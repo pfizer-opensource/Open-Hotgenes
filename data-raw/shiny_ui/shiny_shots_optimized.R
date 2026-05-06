@@ -548,7 +548,7 @@ file_info <- lapply(all_files, function(f) {
   paste0("  • {.file ", f, "} ({format(size_kb, digits = 0)} KB)")
 })
 
-cli::cli_bullets(unlist(file_info))
+cli::cli_bullets("{unlist(file_info)}")
 
 cli::cli_h2("Output directory")
 cli::cli_inform("Path: {.file {fig_dir}}")
