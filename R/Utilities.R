@@ -221,8 +221,6 @@ DE <- function(
       purrr::set_names(levels(Output_DE[[dplyr::group_vars(Output_DE)]])) %>%
       purrr::map(function(x) {
         x <- x %>%
-          
-         
           dplyr::select(dplyr::all_of(c(Rank_name_Final, "stat"))) %>%
           dplyr::distinct() %>%
           dplyr::filter(
@@ -236,8 +234,9 @@ DE <- function(
           dplyr::ungroup() %>%
           dplyr::arrange(dplyr::desc(.data$stat)) %>%
           unique() %>%
-          tibble::deframe() %>%
-          head(n = Topn) 
+          head(n = Topn) %>%
+          tibble::deframe() 
+          
 
 
         

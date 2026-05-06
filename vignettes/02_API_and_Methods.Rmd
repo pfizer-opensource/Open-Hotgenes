@@ -196,7 +196,7 @@ DE(htgs,
 ```
 
 ```{r de_ranks}
-# Ranks are sorted by the stat column (used as GSEA input)
+# Ranks are sorted (descending order) by the stat column (used as GSEA input)
 DE(htgs,
    Report    = "Ranks",
    contrasts  = "sh_EWS_vs_Ctrl",
