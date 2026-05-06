@@ -326,3 +326,4 @@ cli::cli_inform("Path: {.file {fig_dir}}")
 
 browseURL(fig_dir)
 
+#app$get_logs()
