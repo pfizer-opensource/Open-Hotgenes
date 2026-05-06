@@ -1,7 +1,7 @@
-library(Hotgenes)
+#library(Hotgenes)
 library(shinytest2)
-library(magick)
-library(cli)
+#library(magick)
+#library(cli)
 
 if(FALSE){
   # Debug block for interactive development
@@ -14,7 +14,7 @@ if(FALSE){
   fig_dir <- file.path(tempdir(), "hotgenes_figures")
 }
 
-load_hotgenes_object -----------------------------------------------------------
+# load_hotgenes_object -----------------------------------------------------------
 
 dds_Hotgenes_dir <- system.file("extdata",
                                 paste0("dds_Hotgenes", ".RDS"),
@@ -27,7 +27,7 @@ HotgenesObj <- readRDS(dds_Hotgenes_dir) %>%
 cli::cli_h1("Loaded Hotgenes object")
 cli::cli_inform(c("i" = "Object class: {.cls {class(HotgenesObj)}}"))
 
-extract_dynamic_values -----------------------------------------------------------
+# extract_dynamic_values -----------------------------------------------------------
 
 all_contrasts <- contrasts_(HotgenesObj)
 all_expr_slots <- ExpressionSlots_(HotgenesObj)
@@ -53,7 +53,7 @@ cli::cli_bullets(c(
   "Default coldata col:" = default_coldata_col
 ))
 
-helper_ns_id -----------------------------------------------------------
+# helper_ns_id -----------------------------------------------------------
 
 #' Construct namespaced input ID
 #'
@@ -73,7 +73,7 @@ ns_id <- function(tab = NULL, input_id = NULL) {
   return(paste("Hotgenes_A", tab, input_id, sep = "-"))
 }
 
-helper_construct_inputs -----------------------------------------------------------
+# helper_construct_inputs -----------------------------------------------------------
 
 #' Construct input list for app$set_inputs
 #'
@@ -99,7 +99,7 @@ construct_inputs <- function(tab = NULL, ...) {
   ))
 }
 
-helper_wait_for_render -----------------------------------------------------------
+# helper_wait_for_render -----------------------------------------------------------
 
 #' Wait for Shiny UI to stabilize and render
 #'
@@ -135,7 +135,7 @@ wait_for_render <- function(app = NULL,
   return(invisible(NULL))
 }
 
-helper_take_screenshot -----------------------------------------------------------
+# helper_take_screenshot -----------------------------------------------------------
 
 #' Capture a single screenshot from the Shiny app
 #'
@@ -219,7 +219,7 @@ take_screenshot <- function(app = NULL,
   return(invisible(FALSE))
 }
 
-helper_annotate_screenshot -----------------------------------------------------------
+# helper_annotate_screenshot -----------------------------------------------------------
 
 #' Add annotation banner to screenshot
 #'
@@ -281,7 +281,7 @@ annotate_screenshot <- function(input_path = NULL,
   })
 }
 
-helper_create_composite -----------------------------------------------------------
+# helper_create_composite -----------------------------------------------------------
 
 #' Combine multiple annotated screenshots into composite figure
 #'
@@ -339,7 +339,7 @@ create_composite <- function(png_files = NULL,
   })
 }
 
-setup_output_directory -----------------------------------------------------------
+# setup_output_directory -----------------------------------------------------------
 
 fig_dir <- file.path(tempdir(), "hotgenes_figures")
 dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
@@ -347,7 +347,7 @@ dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
 cli::cli_h2("Output directory")
 cli::cli_inform("Figures will be saved to: {.file {fig_dir}}")
 
-launch_app -----------------------------------------------------------
+# launch_app -----------------------------------------------------------
 
 cli::cli_h2("Launching Shiny app")
 
@@ -359,7 +359,7 @@ app <- AppDriver$new(
 
 cli::cli_alert_success("App launched successfully")
 
-set_retina_quality -----------------------------------------------------------
+# set_retina_quality -----------------------------------------------------------
 
 cli::cli_h2("Configuring device pixel ratio (retina 2x)")
 
@@ -372,7 +372,7 @@ app$get_chromote_session()$Emulation$setDeviceMetricsOverride(
 
 cli::cli_alert_success("Device pixel ratio set to 2x (retina quality)")
 
-capture_boxplot_tab -----------------------------------------------------------
+# capture_boxplot_tab -----------------------------------------------------------
 
 cli::cli_h2("Capturing BoxPlot tab")
 
@@ -391,7 +391,7 @@ annotate_screenshot(
   output_path = file.path(fig_dir, "shiny-01-boxplot.png")
 )
 
-capture_destats_tab -----------------------------------------------------------
+# capture_destats_tab -----------------------------------------------------------
 
 cli::cli_h2("Capturing DEstats tab")
 
@@ -413,7 +413,7 @@ annotate_screenshot(
   output_path = file.path(fig_dir, "shiny-02-destats.png")
 )
 
-capture_expsplot_tab -----------------------------------------------------------
+# capture_expsplot_tab -----------------------------------------------------------
 
 cli::cli_h2("Capturing ExpsPlot tab")
 
@@ -435,7 +435,7 @@ annotate_screenshot(
   output_path = file.path(fig_dir, "shiny-03-expsplot.png")
 )
 
-capture_pca_tab -----------------------------------------------------------
+# capture_pca_tab -----------------------------------------------------------
 
 cli::cli_h2("Capturing PCA tab")
 
@@ -455,7 +455,7 @@ annotate_screenshot(
   output_path = file.path(fig_dir, "shiny-04-pca.png")
 )
 
-capture_venn_tab -----------------------------------------------------------
+# capture_venn_tab -----------------------------------------------------------
 
 cli::cli_h2("Capturing VennDiag tab")
 
@@ -475,7 +475,7 @@ annotate_screenshot(
   output_path = file.path(fig_dir, "shiny-05-venn.png")
 )
 
-capture_gsea_tab -----------------------------------------------------------
+# capture_gsea_tab -----------------------------------------------------------
 
 cli::cli_h2("Capturing GSEA tab")
 
@@ -496,12 +496,12 @@ annotate_screenshot(
   output_path = file.path(fig_dir, "shiny-06-gsea.png")
 )
 
-stop_app -----------------------------------------------------------
+# stop_app -----------------------------------------------------------
 
 app$stop()
 cli::cli_alert_success("App stopped successfully")
 
-create_composite_figure -----------------------------------------------------------
+# create_composite_figure -----------------------------------------------------------
 
 cli::cli_h2("Creating composite figure")
 
@@ -520,7 +520,7 @@ create_composite(
   target_width = 1600 * 2
 )
 
-cleanup_raw_files -----------------------------------------------------------
+# cleanup_raw_files -----------------------------------------------------------
 
 cli::cli_h2("Cleaning up raw (unannotated) files")
 
@@ -534,7 +534,7 @@ if (n_removed > 0) {
   cli::cli_inform("No raw files found to clean up")
 }
 
-summary_and_output -----------------------------------------------------------
+# summary_and_output -----------------------------------------------------------
 
 cli::cli_h1("All done! Vignette figures ready")
 
