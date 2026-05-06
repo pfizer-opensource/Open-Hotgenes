@@ -135,25 +135,27 @@ venn_out$Intsect |> head()
 ## [1] "NFE2L2" "KEAP1"  "PDGFA"  "HDAC4"  "OXER1"  "GAPDH"  "MEF2C" 
 ## 
 ## $Hrs_6_vs_0
-##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"  
-## [11] "BCL6"   "TLR3"   "GRB2"   "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5"
-## [21] "TGFB3"  "TGFB2"  "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
+##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1" 
+##  [9] "MAP2K6" "IL1B"   "BCL6"   "TLR3"   "GRB2"   "IL6R"   "IL15"   "CREB1" 
+## [17] "IL1RN"  "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2"  "IL1A"   "CCL20" 
+## [25] "PGK1"   "MAPK3" 
 ## 
 ## $sh_EWS_vs_Ctrl
-##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"   
-## [11] "HMGN1"  "CLTC"   "GNAQ"   "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"  
-## [21] "MX1"    "OAS2"   "LTB4R2"
+##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3"
+##  [9] "ROCK2"  "MX2"    "HMGN1"  "CLTC"   "GNAQ"   "LY96"   "CD40"   "CFD"   
+## [17] "HRAS"   "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"   "LTB4R2"
 ## 
 ## $`Hrs_2_vs_0:Hrs_6_vs_0`
-##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"   
-## [10] "CXCR4"   "MAFK"    "PTGFR"   "FOS"     "MYC"     "RIPK2"   "IL2"     "MAFG"    "CSF2"   
-## [19] "TWIST2"  "IFIT1"   "FLT1"   
+##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1" 
+##  [9] "MAFF"    "CXCR4"   "MAFK"    "PTGFR"   "FOS"     "MYC"     "RIPK2"   "IL2"    
+## [17] "MAFG"    "CSF2"    "TWIST2"  "IFIT1"   "FLT1"   
 ## 
 ## $`sh_EWS_vs_Ctrl:Hrs_2_vs_0`
 ## [1] "HMGB2"  "MAP3K9" "CEBPB"  "IRF1"  
 ## 
 ## $`sh_EWS_vs_Ctrl:Hrs_6_vs_0`
-##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2" "IFI44" "CCL7"
+##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2" "IFI44"
+## [11] "CCL7"
 ```
 
 ------------------------------------------------------------------------
@@ -300,25 +302,26 @@ Inspect cluster assignments and top contributing features:
 ``` r
 FactoOutput$TopTibble   # top features per cluster
 ## # A tibble: 102 × 10
-##    Cluster Interpretation     Feature v.test `Mean in category` `Overall mean` `sd in category`
-##    <fct>   <fct>              <chr>    <dbl>              <dbl>          <dbl>            <dbl>
-##  1 1       Above average in … IFIT2     2.91              10.3            9.89           0.100 
-##  2 1       Above average in … DDIT3     2.75              10.4           10.1            0.0402
-##  3 1       Above average in … MAP3K1    2.72              10.00           9.75           0.0537
-##  4 1       Above average in … PTGFR     2.65              10.4           10.1            0.0489
-##  5 1       Above average in … PGK1      2.63              15.3           15.2            0.0224
-##  6 1       Above average in … TWIST2    2.51              13.3           13.1            0.0343
-##  7 1       Above average in … TWIST2    2.51              13.3           13.1            0.0343
-##  8 1       Above average in … IFIT3     2.51               9.09           8.85           0.0863
-##  9 1       Above average in … MKNK1     2.34              10.9           10.7            0.0904
-## 10 1       Above average in … IFIT1     2.22              10.8           10.4            0.0765
+##    Cluster Interpretation           Feature v.test `Mean in category` `Overall mean`
+##    <fct>   <fct>                    <chr>    <dbl>              <dbl>          <dbl>
+##  1 1       Above average in cluster IFIT2     2.91              10.3            9.89
+##  2 1       Above average in cluster DDIT3     2.75              10.4           10.1 
+##  3 1       Above average in cluster MAP3K1    2.72              10.00           9.75
+##  4 1       Above average in cluster PTGFR     2.65              10.4           10.1 
+##  5 1       Above average in cluster PGK1      2.63              15.3           15.2 
+##  6 1       Above average in cluster TWIST2    2.51              13.3           13.1 
+##  7 1       Above average in cluster TWIST2    2.51              13.3           13.1 
+##  8 1       Above average in cluster IFIT3     2.51               9.09           8.85
+##  9 1       Above average in cluster MKNK1     2.34              10.9           10.7 
+## 10 1       Above average in cluster IFIT1     2.22              10.8           10.4 
 ## # ℹ 92 more rows
-## # ℹ 3 more variables: `Overall sd` <dbl>, p.value <dbl>, ensembl_id <chr>
+## # ℹ 4 more variables: `sd in category` <dbl>, `Overall sd` <dbl>, p.value <dbl>,
+## #   ensembl_id <chr>
 FactoOutput$TopGroups   # cluster membership per sample
 ## # A tibble: 1 × 8
-##   Cluster Interpretation           Category  `Cla/Mod` `Mod/Cla` Global p.value v.test
-##   <fct>   <fct>                    <chr>         <dbl>     <dbl>  <dbl>   <dbl>  <dbl>
-## 1 1       Above average in cluster Hrs=Hrs_0       100       100   33.3 0.00202   3.09
+##   Cluster Interpretation          Category `Cla/Mod` `Mod/Cla` Global p.value v.test
+##   <fct>   <fct>                   <chr>        <dbl>     <dbl>  <dbl>   <dbl>  <dbl>
+## 1 1       Above average in clust… Hrs=Hrs…       100       100   33.3 0.00202   3.09
 ```
 
 ------------------------------------------------------------------------

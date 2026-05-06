@@ -137,7 +137,9 @@ log2 fold-change, and gene name.
 ### Default: all significant features across all contrasts
 
 ```{r de_details}
-DE(htgs, padj_cut = 0.05, .log2FoldChange = 1) |> head()
+DE(htgs, 
+   # limit to top 10
+   Topn = 10) 
 ```
 
 ### Select specific contrasts
