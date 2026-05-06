@@ -1,7 +1,9 @@
-#library(Hotgenes)
+library(Hotgenes)
 library(shinytest2)
 #library(magick)
 #library(cli)
+rm(list = ls()); gc()
+devtools::document(); devtools::load_all()
 
 if(FALSE){
   # Debug block for interactive development
@@ -404,7 +406,7 @@ take_screenshot(
   filename = "shiny-01-boxplot_raw.png",
   inputs = construct_inputs("BoxPlot", NormSlot = default_expr_slot),
   output_dir = fig_dir,
-  wait_time = 30
+  wait_time = 5
 )
 
 annotate_screenshot(
