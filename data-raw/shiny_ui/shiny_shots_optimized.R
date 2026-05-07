@@ -206,7 +206,9 @@ annotate_screenshot(
 # capture_destats_heatmap -----------------------------------------------------------
 
 cli::cli_h2("Capturing DEstats Heatmap tab")
-app$get_js("$('[role=\"tab\"]:contains(\"Heatmap\")').click()")
+#app$get_js("$('[role=\"tab\"]:contains(\"Heatmap\")').click()")
+app$get_js("$('#Hotgenes_A-DEstats').find('[role=\"tab\"]:contains(\"Heatmap\")').first().click()")
+
 app$wait_for_idle()
 
 #app$set_inputs(`Hotgenes_A-DEstats-DE_HotList` = NULL, wait_ = FALSE)
@@ -333,6 +335,8 @@ cli::cli_h2("Creating composite figure")
 annotated_pngs <- file.path(fig_dir, c(
   "shiny-01-boxplot.png",
   "shiny-02-destats.png",
+  "shiny-02b-volcano.png",
+  "shiny-02c-heatmap.png",
   "shiny-03-expsplot.png",
   "shiny-04-pca.png",
   "shiny-05-venn.png",
