@@ -2,13 +2,13 @@
 library(shinytest2)
 #library(magick)
 #library(cli)
-rm(list = ls()); gc()
-devtools::document(); devtools::load_all()
 
 funs_path <- file.path(getwd(), "data-raw/shiny_ui/funs_helpers.R")
 source(funs_path)
 
 if(FALSE){
+  rm(list = ls()); gc()
+  devtools::document(); devtools::load_all()
   
   file.edit(funs_path)
   # Debug block for interactive development
@@ -64,7 +64,8 @@ cli::cli_bullets(c(
 
 # setup_output_directory -----------------------------------------------------------
 
-fig_dir <- file.path(tempdir(), "hotgenes_figures")
+#fig_dir <- file.path(tempdir(), "hotgenes_figures")
+fig_dir <- file.path(getwd(), "vignettes", "figures")
 dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
 
 cli::cli_h2("Output directory")
@@ -380,6 +381,6 @@ cli::cli_bullets("{unlist(file_info)}")
 cli::cli_h2("Output directory")
 cli::cli_inform("Path: {.file {fig_dir}}")
 
-browseURL(fig_dir)
+# browseURL(fig_dir)
 
 #app$get_logs()
