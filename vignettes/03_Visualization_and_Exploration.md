@@ -173,6 +173,8 @@ DEphe(fit_Hotgenes,
       annotations       = c("Hrs", "sh"))
 ```
 
+![](03_Visualization_and_Exploration_files/figure-heatmap_1-1.png)<!-- -->
+
 Use `label_by` to replace the default Feature IDs with any alias column
 in the mapper:
 
@@ -186,6 +188,8 @@ DEphe(fit_Hotgenes,
       annotation_colors = coldata_palettes(fit_Hotgenes),
       annotations       = c("Hrs", "sh"))
 ```
+
+![](03_Visualization_and_Exploration_files/figure-heatmap_2-1.png)<!-- -->
 
 Subset samples on the fly with `SampleIDs`:
 
@@ -202,6 +206,8 @@ DEphe(fit_Hotgenes,
       arrangeby         = c("Hrs", "sh"),
       annotations       = c("Hrs", "sh"))
 ```
+
+![](03_Visualization_and_Exploration_files/figure-heatmap_3-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -300,18 +306,18 @@ Inspect cluster assignments and top contributing features:
 ``` r
 FactoOutput$TopTibble   # top features per cluster
 ## # A tibble: 102 × 10
-##    Cluster Interpretation  Feature v.test `Mean in category` `Overall mean` `sd in category` `Overall sd`
-##    <fct>   <fct>           <chr>    <dbl>              <dbl>          <dbl>            <dbl>        <dbl>
-##  1 1       Above average … IFIT2     2.91              10.3            9.89           0.100        0.339 
-##  2 1       Above average … DDIT3     2.75              10.4           10.1            0.0402       0.231 
-##  3 1       Above average … MAP3K1    2.72              10.00           9.75           0.0537       0.216 
-##  4 1       Above average … PTGFR     2.65              10.4           10.1            0.0489       0.285 
-##  5 1       Above average … PGK1      2.63              15.3           15.2            0.0224       0.0484
-##  6 1       Above average … TWIST2    2.51              13.3           13.1            0.0343       0.182 
-##  7 1       Above average … TWIST2    2.51              13.3           13.1            0.0343       0.182 
-##  8 1       Above average … IFIT3     2.51               9.09           8.85           0.0863       0.225 
-##  9 1       Above average … MKNK1     2.34              10.9           10.7            0.0904       0.126 
-## 10 1       Above average … IFIT1     2.22              10.8           10.4            0.0765       0.400 
+##    Cluster Interpretation     Feature v.test `Mean in category` `Overall mean` `sd in category` `Overall sd`
+##    <fct>   <fct>              <chr>    <dbl>              <dbl>          <dbl>            <dbl>        <dbl>
+##  1 1       Above average in … IFIT2     2.91              10.3            9.89           0.100        0.339 
+##  2 1       Above average in … DDIT3     2.75              10.4           10.1            0.0402       0.231 
+##  3 1       Above average in … MAP3K1    2.72              10.00           9.75           0.0537       0.216 
+##  4 1       Above average in … PTGFR     2.65              10.4           10.1            0.0489       0.285 
+##  5 1       Above average in … PGK1      2.63              15.3           15.2            0.0224       0.0484
+##  6 1       Above average in … TWIST2    2.51              13.3           13.1            0.0343       0.182 
+##  7 1       Above average in … TWIST2    2.51              13.3           13.1            0.0343       0.182 
+##  8 1       Above average in … IFIT3     2.51               9.09           8.85           0.0863       0.225 
+##  9 1       Above average in … MKNK1     2.34              10.9           10.7            0.0904       0.126 
+## 10 1       Above average in … IFIT1     2.22              10.8           10.4            0.0765       0.400 
 ## # ℹ 92 more rows
 ## # ℹ 2 more variables: p.value <dbl>, ensembl_id <chr>
 FactoOutput$TopGroups   # cluster membership per sample

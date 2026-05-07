@@ -25,14 +25,17 @@ library(Hotgenes)
 
 The image below shows the full Shiny interface across the main tabs.
 
-![Hotgenes Shiny app overview](figures/shiny_composite_all_tabs.png)
+<figure>
+<img src="figures/shiny_composite_all_tabs.png"
+alt="Hotgenes Shiny app overview" />
+<figcaption aria-hidden="true">Hotgenes Shiny app overview</figcaption>
+</figure>
 
 > **Regenerating screenshots**
 >
 > Screenshots were generated with
-> `data-raw/shiny_ui/shiny_shots_optimized.R`.
-> Run that script, then copy the PNGs from `tempdir()` into
-> `vignettes/figures/`.
+> `data-raw/shiny_ui/shiny_shots_optimized.R`. Run that script, then
+> copy the PNGs from `tempdir()` into `vignettes/figures/`.
 
 ------------------------------------------------------------------------
 
@@ -57,19 +60,29 @@ it by pressing **Escape** or closing the browser tab.
 ------------------------------------------------------------------------
 
 <table>
+
 <tr>
+
 <td width="55%">
 
 After launching `Shiny_Hotgenes(fit_Hotgenes)`, the app opens to the
 default expression/boxplot view.
 
 </td>
+
 <td width="45%">
 
-![BoxPlot / Expression Data tab](figures/shiny-01-boxplot.png)
+<figure>
+<img src="figures/shiny-01-boxplot.png"
+alt="BoxPlot / Expression Data tab" />
+<figcaption aria-hidden="true">BoxPlot / Expression Data
+tab</figcaption>
+</figure>
 
 </td>
+
 </tr>
+
 </table>
 
 ------------------------------------------------------------------------
@@ -80,22 +93,40 @@ Use the app launched above and navigate to **DE Stats** to inspect
 statistics, volcano, and heatmap subtabs.
 
 <table>
+
 <tr>
+
 <td width="55%">
 
 DE statistics and subtab views captured from the interactive app.
 
 </td>
+
 <td width="45%">
 
-![DE Stats / Statistics subtab](figures/shiny-02-destats.png)
+<figure>
+<img src="figures/shiny-02-destats.png"
+alt="DE Stats / Statistics subtab" />
+<figcaption aria-hidden="true">DE Stats / Statistics subtab</figcaption>
+</figure>
 
-![DE Stats / Volcano Plots subtab](figures/shiny-02b-volcano.png)
+<figure>
+<img src="figures/shiny-02b-volcano.png"
+alt="DE Stats / Volcano Plots subtab" />
+<figcaption aria-hidden="true">DE Stats / Volcano Plots
+subtab</figcaption>
+</figure>
 
-![DE Stats / Heatmap subtab](figures/shiny-02c-heatmap.png)
+<figure>
+<img src="figures/shiny-02c-heatmap.png"
+alt="DE Stats / Heatmap subtab" />
+<figcaption aria-hidden="true">DE Stats / Heatmap subtab</figcaption>
+</figure>
 
 </td>
+
 </tr>
+
 </table>
 
 ------------------------------------------------------------------------
@@ -129,18 +160,26 @@ Shiny_Hotgenes(Hotgenes_list)
 In the same app session, open the **Expression Plots** tab.
 
 <table>
+
 <tr>
+
 <td width="55%">
 
 Expression trajectory plots for selected genes and contrasts.
 
 </td>
+
 <td width="45%">
 
-![Expression Plots tab](figures/shiny-03-expsplot.png)
+<figure>
+<img src="figures/shiny-03-expsplot.png" alt="Expression Plots tab" />
+<figcaption aria-hidden="true">Expression Plots tab</figcaption>
+</figure>
 
 </td>
+
 </tr>
+
 </table>
 
 ------------------------------------------------------------------------
@@ -150,18 +189,26 @@ Expression trajectory plots for selected genes and contrasts.
 In the same app session, open the **PCA** tab.
 
 <table>
+
 <tr>
+
 <td width="55%">
 
 Principal component analysis view for sample-level exploration.
 
 </td>
+
 <td width="45%">
 
-![PCA tab](figures/shiny-04-pca.png)
+<figure>
+<img src="figures/shiny-04-pca.png" alt="PCA tab" />
+<figcaption aria-hidden="true">PCA tab</figcaption>
+</figure>
 
 </td>
+
 </tr>
+
 </table>
 
 ------------------------------------------------------------------------
@@ -171,18 +218,26 @@ Principal component analysis view for sample-level exploration.
 In the same app session, open the **Venn Diagram** tab.
 
 <table>
+
 <tr>
+
 <td width="55%">
 
 Overlap analysis across selected contrasts.
 
 </td>
+
 <td width="45%">
 
-![Venn Diagram tab](figures/shiny-05-venn.png)
+<figure>
+<img src="figures/shiny-05-venn.png" alt="Venn Diagram tab" />
+<figcaption aria-hidden="true">Venn Diagram tab</figcaption>
+</figure>
 
 </td>
+
 </tr>
+
 </table>
 
 ------------------------------------------------------------------------
@@ -190,19 +245,27 @@ Overlap analysis across selected contrasts.
 ## 7. Gene-Set Enrichment Analysis (GSEA)
 
 <table>
+
 <tr>
+
 <td width="55%">
 
-The GSEA tab in `Shiny_Hotgenes()` complements the command-line
-workflow below.
+The GSEA tab in `Shiny_Hotgenes()` complements the command-line workflow
+below.
 
 </td>
+
 <td width="45%">
 
-![GSEA tab](figures/shiny-06-gsea.png)
+<figure>
+<img src="figures/shiny-06-gsea.png" alt="GSEA tab" />
+<figcaption aria-hidden="true">GSEA tab</figcaption>
+</figure>
 
 </td>
+
 </tr>
+
 </table>
 
 ### Built-in msigdbr gene sets
@@ -327,7 +390,7 @@ Out_GSEA <- fgsea_(
   minSize  = 5,
   maxSize  = Inf
 )
-##   |                                                                                                       |                                                                                               |   0%  |                                                                                                       |=======                                                                                        |   7%  |                                                                                                       |==============                                                                                 |  14%  |                                                                                                       |====================                                                                           |  21%  |                                                                                                       |===========================                                                                    |  29%  |                                                                                                       |==================================                                                             |  36%  |                                                                                                       |=========================================                                                      |  43%  |                                                                                                       |================================================                                               |  50%  |                                                                                                       |======================================================                                         |  57%  |                                                                                                       |=============================================================                                  |  64%  |                                                                                                       |====================================================================                           |  71%  |                                                                                                       |===========================================================================                    |  79%  |                                                                                                       |=================================================================================              |  86%  |                                                                                                       |========================================================================================       |  93%  |                                                                                                       |===============================================================================================| 100%
+##   |                                                                                                          |                                                                                                  |   0%  |                                                                                                          |=======                                                                                           |   7%  |                                                                                                          |==============                                                                                    |  14%  |                                                                                                          |=====================                                                                             |  21%  |                                                                                                          |============================                                                                      |  29%  |                                                                                                          |===================================                                                               |  36%  |                                                                                                          |==========================================                                                        |  43%  |                                                                                                          |=================================================                                                 |  50%  |                                                                                                          |========================================================                                          |  57%  |                                                                                                          |===============================================================                                   |  64%  |                                                                                                          |======================================================================                            |  71%  |                                                                                                          |=============================================================================                     |  79%  |                                                                                                          |====================================================================================              |  86%  |                                                                                                          |===========================================================================================       |  93%  |                                                                                                          |==================================================================================================| 100%
 ```
 
 ### Inspecting GSEA results
@@ -342,10 +405,10 @@ Out_GSEA |>
   ) |> head()
 ## $Hrs_2_vs_0
 ## # A tibble: 2 × 9
-##   pathway                                       pval  padj log2err    ES   NES  size leadingEdge sign_NES
-##   <chr>                                        <dbl> <dbl>   <dbl> <dbl> <dbl> <int> <list>         <dbl>
-## 1 reactome_interleukin_10_signaling          4.34e-4 0.106   0.498 0.802  1.67    30 <chr [6]>          1
-## 2 kegg_medicus_pathogen_hcmv_us28_to_gnaq_p… 6.38e-4 0.106   0.477 0.963  1.56     5 <chr [2]>          1
+##   pathway                                          pval  padj log2err    ES   NES  size leadingEdge sign_NES
+##   <chr>                                           <dbl> <dbl>   <dbl> <dbl> <dbl> <int> <list>         <dbl>
+## 1 reactome_interleukin_10_signaling             4.34e-4 0.106   0.498 0.802  1.67    30 <chr [6]>          1
+## 2 kegg_medicus_pathogen_hcmv_us28_to_gnaq_plcb… 6.38e-4 0.106   0.477 0.963  1.56     5 <chr [2]>          1
 ```
 
 ``` r
