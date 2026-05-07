@@ -95,7 +95,7 @@ venn_out <- fit_Hotgenes |>
     contrasts = c("sh_EWS_vs_Ctrl", "Hrs_2_vs_0", "Hrs_6_vs_0"),
     padj_cut = 0.1
   ) |>
-  Venn_Report(set_name_size = 3, stroke_size = 0.5, text_size = 4)
+  Venn_Report(set_name_size = 4, stroke_size = 0.5, text_size = 4)
 ## Coordinate system already present.
 ## ℹ Adding new coordinate system, which will replace the existing one.
 
@@ -112,7 +112,7 @@ venn_dir_out <- fit_Hotgenes |>
     contrasts = c("sh_EWS_vs_Ctrl", "Hrs_6_vs_0"),
     padj_cut = 0.1
   ) |>
-  Venn_Report(set_name_size = 3.5)
+  Venn_Report(set_name_size = 4)
 ## Coordinate system already present.
 ## ℹ Adding new coordinate system, which will replace the existing one.
 
@@ -126,7 +126,8 @@ Retrieve the names and gene lists from the intersections:
 ``` r
 # Names of features found in all intersecting sets
 venn_out$Names
-## [1] "Hrs_2_vs_0:Hrs_6_vs_0"                "sh_EWS_vs_Ctrl:Hrs_2_vs_0"            "sh_EWS_vs_Ctrl:Hrs_6_vs_0"            "sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0"
+## [1] "Hrs_2_vs_0:Hrs_6_vs_0"                "sh_EWS_vs_Ctrl:Hrs_2_vs_0"           
+## [3] "sh_EWS_vs_Ctrl:Hrs_6_vs_0"            "sh_EWS_vs_Ctrl:Hrs_2_vs_0:Hrs_6_vs_0"
 
 # All intersection sets as a named list
 venn_out$Intsect |> head()
@@ -134,16 +135,19 @@ venn_out$Intsect |> head()
 ## [1] "NFE2L2" "KEAP1"  "PDGFA"  "HDAC4"  "OXER1"  "GAPDH"  "MEF2C" 
 ## 
 ## $Hrs_6_vs_0
-##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"   "BCL6"   "TLR3"   "GRB2"   "IL6R"   "IL15"   "CREB1"  "IL1RN" 
-## [18] "RELA"   "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2"  "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
+##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"  
+## [11] "BCL6"   "TLR3"   "GRB2"   "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5"
+## [21] "TGFB3"  "TGFB2"  "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
 ## 
 ## $sh_EWS_vs_Ctrl
-##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"    "HMGN1"  "CLTC"   "GNAQ"   "LY96"   "CD40"   "CFD"    "HRAS"  
-## [18] "RHOA"   "HPRT1"  "TCF4"   "MX1"    "OAS2"   "LTB4R2"
+##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"   
+## [11] "HMGN1"  "CLTC"   "GNAQ"   "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"  
+## [21] "MX1"    "OAS2"   "LTB4R2"
 ## 
 ## $`Hrs_2_vs_0:Hrs_6_vs_0`
-##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"    "CXCR4"   "MAFK"    "PTGFR"   "FOS"     "MYC"     "RIPK2"  
-## [16] "IL2"     "MAFG"    "CSF2"    "TWIST2"  "IFIT1"   "FLT1"   
+##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"   
+## [10] "CXCR4"   "MAFK"    "PTGFR"   "FOS"     "MYC"     "RIPK2"   "IL2"     "MAFG"    "CSF2"   
+## [19] "TWIST2"  "IFIT1"   "FLT1"   
 ## 
 ## $`sh_EWS_vs_Ctrl:Hrs_2_vs_0`
 ## [1] "HMGB2"  "MAP3K9" "CEBPB"  "IRF1"  
@@ -296,19 +300,20 @@ Inspect cluster assignments and top contributing features:
 ``` r
 FactoOutput$TopTibble   # top features per cluster
 ## # A tibble: 102 × 10
-##    Cluster Interpretation           Feature v.test `Mean in category` `Overall mean` `sd in category` `Overall sd` p.value ensembl_id     
-##    <fct>   <fct>                    <chr>    <dbl>              <dbl>          <dbl>            <dbl>        <dbl>   <dbl> <chr>          
-##  1 1       Above average in cluster IFIT2     2.91              10.3            9.89           0.100        0.339  0.00362 ENSG00000119922
-##  2 1       Above average in cluster DDIT3     2.75              10.4           10.1            0.0402       0.231  0.00593 ENSG00000175197
-##  3 1       Above average in cluster MAP3K1    2.72              10.00           9.75           0.0537       0.216  0.00660 ENSG00000095015
-##  4 1       Above average in cluster PTGFR     2.65              10.4           10.1            0.0489       0.285  0.00797 ENSG00000122420
-##  5 1       Above average in cluster PGK1      2.63              15.3           15.2            0.0224       0.0484 0.00851 ENSG00000102144
-##  6 1       Above average in cluster TWIST2    2.51              13.3           13.1            0.0343       0.182  0.0122  ENSG00000233608
-##  7 1       Above average in cluster TWIST2    2.51              13.3           13.1            0.0343       0.182  0.0122  ENSG00000288335
-##  8 1       Above average in cluster IFIT3     2.51               9.09           8.85           0.0863       0.225  0.0122  ENSG00000119917
-##  9 1       Above average in cluster MKNK1     2.34              10.9           10.7            0.0904       0.126  0.0191  ENSG00000079277
-## 10 1       Above average in cluster IFIT1     2.22              10.8           10.4            0.0765       0.400  0.0265  ENSG00000185745
+##    Cluster Interpretation           Feature v.test `Mean in category` `Overall mean` `sd in category`
+##    <fct>   <fct>                    <chr>    <dbl>              <dbl>          <dbl>            <dbl>
+##  1 1       Above average in cluster IFIT2     2.91              10.3            9.89           0.100 
+##  2 1       Above average in cluster DDIT3     2.75              10.4           10.1            0.0402
+##  3 1       Above average in cluster MAP3K1    2.72              10.00           9.75           0.0537
+##  4 1       Above average in cluster PTGFR     2.65              10.4           10.1            0.0489
+##  5 1       Above average in cluster PGK1      2.63              15.3           15.2            0.0224
+##  6 1       Above average in cluster TWIST2    2.51              13.3           13.1            0.0343
+##  7 1       Above average in cluster TWIST2    2.51              13.3           13.1            0.0343
+##  8 1       Above average in cluster IFIT3     2.51               9.09           8.85           0.0863
+##  9 1       Above average in cluster MKNK1     2.34              10.9           10.7            0.0904
+## 10 1       Above average in cluster IFIT1     2.22              10.8           10.4            0.0765
 ## # ℹ 92 more rows
+## # ℹ 3 more variables: `Overall sd` <dbl>, p.value <dbl>, ensembl_id <chr>
 FactoOutput$TopGroups   # cluster membership per sample
 ## # A tibble: 1 × 8
 ##   Cluster Interpretation           Category  `Cla/Mod` `Mod/Cla` Global p.value v.test

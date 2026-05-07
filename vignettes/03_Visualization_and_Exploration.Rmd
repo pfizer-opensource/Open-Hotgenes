@@ -103,7 +103,7 @@ venn_out <- fit_Hotgenes |>
     contrasts = c("sh_EWS_vs_Ctrl", "Hrs_2_vs_0", "Hrs_6_vs_0"),
     padj_cut = 0.1
   ) |>
-  Venn_Report(set_name_size = 3, stroke_size = 0.5, text_size = 4)
+  Venn_Report(set_name_size = 4, stroke_size = 0.5, text_size = 4)
 
 venn_out$vennD
 ```
@@ -116,7 +116,7 @@ venn_dir_out <- fit_Hotgenes |>
     contrasts = c("sh_EWS_vs_Ctrl", "Hrs_6_vs_0"),
     padj_cut = 0.1
   ) |>
-  Venn_Report(set_name_size = 3.5)
+  Venn_Report(set_name_size = 4)
 
 venn_dir_out$vennD
 ```
