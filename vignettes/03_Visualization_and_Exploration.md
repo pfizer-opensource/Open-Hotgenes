@@ -69,6 +69,7 @@ VPlot(fit_Hotgenes,
       contrasts       = "sh_EWS_vs_Ctrl",
       .log2FoldChange = 1,
       padj_cut        = 0.1,
+      point_label_size = 4,
       hotList         = "CXCL6",
       Hide_labels     = FALSE)
 ```
