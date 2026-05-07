@@ -182,8 +182,6 @@ annotate_screenshot(
 
 cli::cli_h2("Capturing DEstats Volcano tab")
 
-#app$set_inputs("Hotgenes_A-DEstats-DE_Contrasts" = default_contrast, wait_ = FALSE)
-#app$set_inputs("Hotgenes_A-DEstats-destats_subtabs" = "Hotgenes_A-DEstats-volcano", wait_ = FALSE)
 app$get_js("$('[role=\"tab\"]:contains(\"Volcano Plots\")').click()")
 
 app$wait_for_idle()
