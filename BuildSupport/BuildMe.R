@@ -50,11 +50,11 @@ list_rmds <- file.path(getwd(), "vignettes") |>
   list.files(pattern = ".Rmd", full.names = TRUE) |> 
   stringr::str_subset("0[1-9]|DILI") 
 
-list_rmds
+rendering_list_rmds <-list_rmds #[3]
 
 # file.edit(list_rmds[3])
 
-list_rmds|> 
+rendering_list_rmds|> 
   purrr::set_names(~basename(.x)) |> 
   purrr::iwalk(function(x,y){
     
@@ -67,6 +67,9 @@ list_rmds|>
                       output_file = md_name)
     
   })
+
+
+
 
 
 # rmarkdown::render(file.path(getwd(), "vignettes", "DILI_Hotgenes.Rmd"), 
