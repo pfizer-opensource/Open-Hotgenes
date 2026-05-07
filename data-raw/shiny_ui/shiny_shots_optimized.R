@@ -205,11 +205,10 @@ annotate_screenshot(
 
 cli::cli_h2("Capturing DEstats Heatmap tab")
 #app$get_js("$('[role=\"tab\"]:contains(\"Heatmap\")').click()")
-app$get_js("$('#Hotgenes_A-DEstats').find('[role=\"tab\"]:contains(\"Heatmap\")').first().click()")
-
+#app$get_js("$('#Hotgenes_A-DEstats').find('[role=\"tab\"]:contains(\"Heatmap\")').first().click()")
+app$get_js("$('.tab-pane[data-value=\"Hotgenes_A-DEstats\"] [role=\"tab\"]:contains(\"Heatmap\")').first().click()")
 app$wait_for_idle()
 
-#app$set_inputs(`Hotgenes_A-DEstats-DE_HotList` = NULL, wait_ = FALSE)
 
 take_screenshot(
   app = app,
