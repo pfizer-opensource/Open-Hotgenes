@@ -141,14 +141,14 @@ mapper_df <- filtered_exps |>
 
 head(mapper_df)
 ## # A tibble: 6 × 4
-##   Feature   Gene      Protein                   Description                                                 
-##   <chr>     <chr>     <chr>                     <chr>                                                       
-## 1 IGLV4.69  IGLV4-69  sp|A0A075B6H9|LV469_HUMAN Immunoglobulin lambda variable 4-69 OS=Homo sapiens GN=IGLV…
-## 2 IGLV4.60  IGLV4-60  sp|A0A075B6I1|LV460_HUMAN Immunoglobulin lambda variable 4-60 OS=Homo sapiens GN=IGLV…
-## 3 IGLV3.16  IGLV3-16  sp|A0A075B6K0|LV316_HUMAN Immunoglobulin lambda variable 3-16 OS=Homo sapiens GN=IGLV…
-## 4 IGLV3.10  IGLV3-10  sp|A0A075B6K4|LV310_HUMAN Immunoglobulin lambda variable 3-10 OS=Homo sapiens GN=IGLV…
-## 5 IGLV3.9   IGLV3-9   sp|A0A075B6K5|LV39_HUMAN  Immunoglobulin lambda variable 3-9 OS=Homo sapiens GN=IGLV3…
-## 6 IGKV2D.30 IGKV2D-30 sp|A0A075B6S6|KVD30_HUMAN Immunoglobulin kappa variable 2D-30 OS=Homo sapiens GN=IGKV…
+##   Feature   Gene      Protein                   Description                                                               
+##   <chr>     <chr>     <chr>                     <chr>                                                                     
+## 1 IGLV4.69  IGLV4-69  sp|A0A075B6H9|LV469_HUMAN Immunoglobulin lambda variable 4-69 OS=Homo sapiens GN=IGLV4-69 PE=1 SV=1 
+## 2 IGLV4.60  IGLV4-60  sp|A0A075B6I1|LV460_HUMAN Immunoglobulin lambda variable 4-60 OS=Homo sapiens GN=IGLV4-60 PE=3 SV=1 
+## 3 IGLV3.16  IGLV3-16  sp|A0A075B6K0|LV316_HUMAN Immunoglobulin lambda variable 3-16 OS=Homo sapiens GN=IGLV3-16 PE=3 SV=2 
+## 4 IGLV3.10  IGLV3-10  sp|A0A075B6K4|LV310_HUMAN Immunoglobulin lambda variable 3-10 OS=Homo sapiens GN=IGLV3-10 PE=3 SV=2 
+## 5 IGLV3.9   IGLV3-9   sp|A0A075B6K5|LV39_HUMAN  Immunoglobulin lambda variable 3-9 OS=Homo sapiens GN=IGLV3-9 PE=3 SV=1   
+## 6 IGKV2D.30 IGKV2D-30 sp|A0A075B6S6|KVD30_HUMAN Immunoglobulin kappa variable 2D-30 OS=Homo sapiens GN=IGKV2D-30 PE=3 SV=1
 ```
 
 ## Step 6 — Build sample metadata (coldata)

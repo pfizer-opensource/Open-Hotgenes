@@ -48,12 +48,14 @@ source(file.path(getwd(), "data-raw/shiny_ui/shiny_shots_optimized.R"))
 
 list_rmds <- file.path(getwd(), "vignettes") |> 
   list.files(pattern = ".Rmd", full.names = TRUE) |> 
-  stringr::str_subset("0[1-9]|DILI") |> 
-  purrr::set_names(~basename(.x)) 
+  stringr::str_subset("0[1-9]|DILI") 
 
 list_rmds
 
+# file.edit(list_rmds[3])
+
 list_rmds|> 
+  purrr::set_names(~basename(.x)) |> 
   purrr::iwalk(function(x,y){
     
     md_name <- y |> 
