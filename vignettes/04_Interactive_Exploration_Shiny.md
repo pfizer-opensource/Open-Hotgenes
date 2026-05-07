@@ -79,10 +79,6 @@ default expression/boxplot view.
 Use the app launched above and navigate to **DE Stats** to inspect
 statistics, volcano, and heatmap subtabs.
 
-``` r
-Shiny_Hotgenes(fit_Hotgenes)
-```
-
 <table>
 <tr>
 <td width="55%">
@@ -130,9 +126,7 @@ Shiny_Hotgenes(Hotgenes_list)
 
 ## 4. Expression Plots
 
-``` r
-Shiny_Hotgenes(fit_Hotgenes)
-```
+In the same app session, open the **Expression Plots** tab.
 
 <table>
 <tr>
@@ -153,9 +147,7 @@ Expression trajectory plots for selected genes and contrasts.
 
 ## 5. PCA
 
-``` r
-Shiny_Hotgenes(fit_Hotgenes)
-```
+In the same app session, open the **PCA** tab.
 
 <table>
 <tr>
@@ -176,9 +168,7 @@ Principal component analysis view for sample-level exploration.
 
 ## 6. Venn Diagram
 
-``` r
-Shiny_Hotgenes(fit_Hotgenes)
-```
+In the same app session, open the **Venn Diagram** tab.
 
 <table>
 <tr>
