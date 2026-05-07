@@ -21,6 +21,19 @@ into point-and-click panels:
 library(Hotgenes)
 ```
 
+## App Overview
+
+The image below shows the full Shiny interface across the main tabs.
+
+![Hotgenes Shiny app overview](figures/shiny_composite_all_tabs.png)
+
+> **Regenerating screenshots**
+>
+> Screenshots were generated with
+> `data-raw/shiny_ui/shiny_shots_optimized.R`.
+> Run that script, then copy the PNGs from `tempdir()` into
+> `vignettes/figures/`.
+
 ------------------------------------------------------------------------
 
 ## 1. Launching the App with a Single Object
@@ -43,7 +56,55 @@ it by pressing **Escape** or closing the browser tab.
 
 ------------------------------------------------------------------------
 
-## 2. Comparing Multiple Objects Side-by-Side
+<table>
+<tr>
+<td width="55%">
+
+After launching `Shiny_Hotgenes(fit_Hotgenes)`, the app opens to the
+default expression/boxplot view.
+
+</td>
+<td width="45%">
+
+![BoxPlot / Expression Data tab](figures/shiny-01-boxplot.png)
+
+</td>
+</tr>
+</table>
+
+------------------------------------------------------------------------
+
+## 2. DE Stats
+
+Use the app launched above and navigate to **DE Stats** to inspect
+statistics, volcano, and heatmap subtabs.
+
+``` r
+Shiny_Hotgenes(fit_Hotgenes)
+```
+
+<table>
+<tr>
+<td width="55%">
+
+DE statistics and subtab views captured from the interactive app.
+
+</td>
+<td width="45%">
+
+![DE Stats / Statistics subtab](figures/shiny-02-destats.png)
+
+![DE Stats / Volcano Plots subtab](figures/shiny-02b-volcano.png)
+
+![DE Stats / Heatmap subtab](figures/shiny-02c-heatmap.png)
+
+</td>
+</tr>
+</table>
+
+------------------------------------------------------------------------
+
+## 3. Comparing Multiple Objects Side-by-Side
 
 Pass a **named list** of Hotgenes objects to switch between experiments
 in the app. The names become the labels in the dataset selector:
@@ -67,7 +128,92 @@ Shiny_Hotgenes(Hotgenes_list)
 
 ------------------------------------------------------------------------
 
-## 3. Gene-Set Enrichment Analysis (GSEA)
+## 4. Expression Plots
+
+``` r
+Shiny_Hotgenes(fit_Hotgenes)
+```
+
+<table>
+<tr>
+<td width="55%">
+
+Expression trajectory plots for selected genes and contrasts.
+
+</td>
+<td width="45%">
+
+![Expression Plots tab](figures/shiny-03-expsplot.png)
+
+</td>
+</tr>
+</table>
+
+------------------------------------------------------------------------
+
+## 5. PCA
+
+``` r
+Shiny_Hotgenes(fit_Hotgenes)
+```
+
+<table>
+<tr>
+<td width="55%">
+
+Principal component analysis view for sample-level exploration.
+
+</td>
+<td width="45%">
+
+![PCA tab](figures/shiny-04-pca.png)
+
+</td>
+</tr>
+</table>
+
+------------------------------------------------------------------------
+
+## 6. Venn Diagram
+
+``` r
+Shiny_Hotgenes(fit_Hotgenes)
+```
+
+<table>
+<tr>
+<td width="55%">
+
+Overlap analysis across selected contrasts.
+
+</td>
+<td width="45%">
+
+![Venn Diagram tab](figures/shiny-05-venn.png)
+
+</td>
+</tr>
+</table>
+
+------------------------------------------------------------------------
+
+## 7. Gene-Set Enrichment Analysis (GSEA)
+
+<table>
+<tr>
+<td width="55%">
+
+The GSEA tab in `Shiny_Hotgenes()` complements the command-line
+workflow below.
+
+</td>
+<td width="45%">
+
+![GSEA tab](figures/shiny-06-gsea.png)
+
+</td>
+</tr>
+</table>
 
 ### Built-in msigdbr gene sets
 
@@ -277,7 +423,7 @@ if (nrow(sig_paths$Hrs_2_vs_0) > 0) {
 
 ------------------------------------------------------------------------
 
-## 4. Sample-wise Pathway Activity with `HotgeneSets()`
+## 8. Sample-wise Pathway Activity with `HotgeneSets()`
 
 `HotgeneSets()` runs GSVA (or ssGSEA, PLAGE, etc.) on the expression
 data to produce per-sample pathway activity scores, then returns a new
@@ -319,7 +465,7 @@ results. You can pass it directly to `Shiny_Hotgenes()`.
 
 ------------------------------------------------------------------------
 
-## 5. Custom Gene Sets in the Shiny App
+## 9. Custom Gene Sets in the Shiny App
 
 You can configure the Shiny app to use your own gene-set retrieval
 function (or expose multiple databases) via `OntologyMethods()` and
@@ -350,7 +496,7 @@ Shiny_Hotgenes(fit_Hotgenes, gene_sets = H_paths)
 
 ------------------------------------------------------------------------
 
-## 6. Tips for Large Datasets
+## 10. Tips for Large Datasets
 
 | Tip | Rationale |
 |----|----|
