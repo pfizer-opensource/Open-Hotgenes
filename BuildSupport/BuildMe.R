@@ -54,7 +54,7 @@ list_rmds
 
 # file.edit(list_rmds[3])
 
-list_rmds[3]|> 
+list_rmds|> 
   purrr::set_names(~basename(.x)) |> 
   purrr::iwalk(function(x,y){
     

@@ -109,7 +109,7 @@ venn_out <- fit_Hotgenes |>
 venn_out$vennD
 ```
 
-```{r venn_dir, fig.height=6, fig.width=10}
+```{r venn_dir, fig.height=8, fig.width=10}
 # Including directionality (up/down) for two contrasts
 venn_dir_out <- fit_Hotgenes |>
   DE(
