@@ -39,13 +39,22 @@ devtools::document(); devtools::load_all()
 rmarkdown::render("README.Rmd", 
                   output_file="README.md")
 
+rm(list = ls()); gc()
+devtools::document(); devtools::load_all()
+
+# build images
+source(file.path(getwd(), "data-raw/shiny_ui/shiny_shots_optimized.R"))
 
 
 list_rmds <- file.path(getwd(), "vignettes") |> 
   list.files(pattern = ".Rmd", full.names = TRUE) |> 
   stringr::str_subset("0[1-9]|DILI") |> 
-  purrr::set_names(~basename(.x)) |> 
-  purrr::imap(function(x,y){
+  purrr::set_names(~basename(.x)) 
+
+list_rmds
+
+list_rmds|> 
+  purrr::iwalk(function(x,y){
     
     md_name <- y |> 
       stringr::str_replace("[.]Rmd", ".md") 

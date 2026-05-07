@@ -36,6 +36,7 @@ cli::cli_inform(c("i" = "Object class: {.cls {class(HotgenesObj)}}"))
 
 # extract_dynamic_values -----------------------------------------------------------
 
+all_DE_features <-DE(HotgenesObj, Topn = 1) |> unlist(use.names = FALSE) |> unique()
 all_contrasts <- contrasts_(HotgenesObj)
 all_expr_slots <- ExpressionSlots_(HotgenesObj)
 all_coldata_cols <- coldata_names(HotgenesObj)
@@ -45,7 +46,7 @@ all_mapper_cols <- names(Mapper_(HotgenesObj))
 default_contrast <- all_contrasts[1]
 default_expr_slot <- all_expr_slots[1]
 default_coldata_col <- all_coldata_cols[3]
-default_feature <- all_features[1]
+default_feature <- all_DE_features[1]
 venn_contrasts <- all_contrasts[seq_len(min(2, length(all_contrasts)))]
 pca_contrasts <- all_contrasts[seq_len(min(3, length(all_contrasts)))]
 
@@ -233,12 +234,13 @@ annotate_screenshot(
 
 cli::cli_h2("Capturing ExpsPlot tab")
 
+
 take_screenshot(
   app = app,
   tab_id = "Hotgenes_A-ExpsPlot",
   filename = "shiny-03-expsplot_raw.png",
   inputs = construct_inputs("ExpsPlot",
-                             yVar = "CXCL8",
+                             yVar = default_feature,
                             fill = "sh",
                              xVar = default_coldata_col),
   button_id = ns_id("ExpsPlot", "makePlot"),
