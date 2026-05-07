@@ -178,6 +178,57 @@ annotate_screenshot(
   output_path = file.path(fig_dir, "shiny-02-destats.png")
 )
 
+# capture_destats_volcano -----------------------------------------------------------
+
+cli::cli_h2("Capturing DEstats Volcano tab")
+
+#app$set_inputs("Hotgenes_A-DEstats-DE_Contrasts" = default_contrast, wait_ = FALSE)
+#app$set_inputs("Hotgenes_A-DEstats-destats_subtabs" = "Hotgenes_A-DEstats-volcano", wait_ = FALSE)
+app$get_js("$('[role=\"tab\"]:contains(\"Volcano Plots\")').click()")
+
+app$wait_for_idle()
+
+take_screenshot(
+  app = app,
+  tab_id = "Hotgenes_A-DEstats",
+  filename = "shiny-02b-volcano_raw.png",
+  inputs = list("Hotgenes_A-DEstats-DE_Contrasts" = default_contrast),
+  output_dir = fig_dir,
+  wait_time = 1.5
+)
+
+annotate_screenshot(
+  input_path = file.path(fig_dir, "shiny-02b-volcano_raw.png"),
+  label = paste0("B2  Volcano Plot — contrast: ", default_contrast),
+  output_path = file.path(fig_dir, "shiny-02b-volcano.png")
+)
+
+# capture_destats_heatmap -----------------------------------------------------------
+
+cli::cli_h2("Capturing DEstats Heatmap tab")
+app$get_js("$('[role=\"tab\"]:contains(\"Heatmap\")').click()")
+app$wait_for_idle()
+
+#app$set_inputs(`Hotgenes_A-DEstats-DE_HotList` = NULL, wait_ = FALSE)
+
+take_screenshot(
+  app = app,
+  tab_id = "Hotgenes_A-DEstats",
+  filename = "shiny-02c-heatmap_raw.png",
+  inputs = construct_inputs("DEstats",
+                            DE_Contrasts = default_contrast,
+                            #DE_HotList = NULL,
+                            padj_cut_DE_tables = 0.1),
+  output_dir = fig_dir,
+  wait_time = 2
+)
+
+annotate_screenshot(
+  input_path = file.path(fig_dir, "shiny-02c-heatmap_raw.png"),
+  label = paste0("B3  DE Heatmap — contrast: ", default_contrast),
+  output_path = file.path(fig_dir, "shiny-02c-heatmap.png")
+)
+
 # capture_expsplot_tab -----------------------------------------------------------
 
 cli::cli_h2("Capturing ExpsPlot tab")
