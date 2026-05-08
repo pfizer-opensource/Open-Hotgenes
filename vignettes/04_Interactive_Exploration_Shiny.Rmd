@@ -43,13 +43,6 @@ The image below shows the full Shiny interface across the main tabs.
 
 ![Hotgenes Shiny app overview](figures/shiny_composite_all_tabs.png)
 
-> **Regenerating screenshots**
->
-> Screenshots were generated with
-> `data-raw/shiny_ui/shiny_shots_optimized.R`.
-> Run that script, then copy the PNGs from `tempdir()` into
-> `vignettes/figures/`.
-
 ---
 
 ## 1. Launching the App with a Single Object
