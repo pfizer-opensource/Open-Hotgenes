@@ -58,6 +58,7 @@ Suggests:
     airway,
     apeglm,
     ashr,
+    BiocParallel,
     edgeR,
     devtools,
     GEOquery,
