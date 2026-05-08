@@ -218,7 +218,7 @@ take_screenshot(
   filename = "shiny-02c-heatmap_raw.png",
   inputs = construct_inputs("DEstats",
                             DE_Contrasts = default_contrast,
-                            
+                            `A-row_cut` = 1,
                             `A-annotations` = c("sh", "Hrs"),
                             `A-W`           = 8,
                             
@@ -278,7 +278,7 @@ take_screenshot(
 
 annotate_screenshot(
   input_path  = file.path(fig_dir, "shiny-04-pca_raw.png"),
-  label       = "D  PCA — contrast: Hrs_6_vs_0",
+  label       = glue::glue("D  PCA — contrast: {default_contrast}"),
   output_path = file.path(fig_dir, "shiny-04-pca.png")
 )
 
@@ -316,7 +316,7 @@ take_screenshot(
 
 annotate_screenshot(
   input_path  = file.path(fig_dir, "shiny-04b-pca_quali_raw.png"),
-  label       = "D2  PCA Clustered Quali Vars — cluster 5",
+  label       = "D2  PCA Clustered Quali Vars",
   output_path = file.path(fig_dir, "shiny-04b-pca_quali.png")
 )
 
@@ -347,7 +347,7 @@ take_screenshot(
 
 annotate_screenshot(
   input_path  = file.path(fig_dir, "shiny-04c-pca_features_raw.png"),
-  label       = "D3  PCA Clustered Features — top 7 rows",
+  label       = "D3  PCA Clustered Features — top rows",
   output_path = file.path(fig_dir, "shiny-04c-pca_features.png")
 )
 
@@ -374,7 +374,7 @@ take_screenshot(
 
 annotate_screenshot(
   input_path  = file.path(fig_dir, "shiny-04d-pca_heatmap_raw.png"),
-  label       = "D4  PCA Heatmap — design: sh + Hrs, cell width 8",
+  label       = "D4  PCA Heatmap",
   output_path = file.path(fig_dir, "shiny-04d-pca_heatmap.png")
 )
 
