@@ -72,12 +72,6 @@ rendering_list_rmds|>
 
 
 
-# rmarkdown::render(file.path(getwd(), "vignettes", "DILI_Hotgenes.Rmd"), 
-#                   output_dir = file.path(getwd(), "vignettes"),
-#                   
-#                   output_file = "DILI_Hotgenes.md")
-
-
 devtools::test(stop_on_failure = TRUE)
 
 # lifecycle::last_lifecycle_warnings()

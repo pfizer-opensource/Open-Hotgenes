@@ -111,7 +111,7 @@ fgsea_Server_module(
   SampleIDs = shiny::reactive(NULL),
   OntologyMethods = OntologyMethods(),
   Mapper_choices = names(Mapper_(Hotgenes)),
-  parallel.sz = 1
+  nproc = 0
 )
 
 ExpsPlot_UI_inputs_support(id = NULL, tabsetPanel_id = "tabs")
@@ -246,7 +246,7 @@ Mapper_ columns that should be used to map expression data
 to ontology gene identifiers. Default is names(Mapper_(Hotgenes)).
 A named vector may be used, as well.}
 
-\item{parallel.sz}{Number of threads of execution
+\item{nproc}{Number of threads of execution
 to use when doing the calculations in parallel.}
 
 \item{v_plot_width}{numeric, width of interactive plot.}

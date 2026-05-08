@@ -23,13 +23,15 @@ if(FALSE){
 
 # load_hotgenes_object -----------------------------------------------------------
 
-dds_Hotgenes_dir <- system.file("extdata",
-                                paste0("dds_Hotgenes", ".RDS"),
-                                package = "Hotgenes",
-                                mustWork = TRUE)
-
-HotgenesObj <- readRDS(dds_Hotgenes_dir) %>%
+HotgenesObj <- readRDS(
+  system.file("extdata", "fit_Hotgenes.RDS",
+              package = "Hotgenes",
+              mustWork = TRUE)
+) %>%
   Hotgenes::update_object()
+
+
+
 
 cli::cli_h1("Loaded Hotgenes object")
 cli::cli_inform(c("i" = "Object class: {.cls {class(HotgenesObj)}}"))
@@ -43,12 +45,14 @@ all_coldata_cols <- coldata_names(HotgenesObj)
 all_features <- Background_(HotgenesObj, Col = "Feature")
 all_mapper_cols <- names(Mapper_(HotgenesObj))
 
-default_contrast <- all_contrasts[1]
+default_contrast <- all_contrasts |> 
+  stringr::str_subset("sh_EWS_vs_Ctrl")
+
 default_expr_slot <- all_expr_slots[1]
 default_coldata_col <- all_coldata_cols[3]
 default_feature <- all_DE_features[1]
 venn_contrasts <- all_contrasts[seq_len(min(2, length(all_contrasts)))]
-pca_contrasts <- all_contrasts[seq_len(min(3, length(all_contrasts)))]
+pca_contrasts <- default_contrast
 
 cli::cli_h2("Extracted dynamic values")
 cli::cli_bullets(c(
@@ -100,8 +104,11 @@ OntologyMethods <- Hotgenes::OntologyMethods(
     msigdbr  = utils::packageVersion("msigdbr"))
 )
 
+
 app <- AppDriver$new(
-  app = Shiny_Hotgenes(HotgenesObj, OntologyMethods = OntologyMethods),
+  app = Shiny_Hotgenes(HotgenesObj, 
+                       OntologyMethods = OntologyMethods,
+                       nproc = 0),
   height = 1000,
   width = 1600
 )
@@ -194,7 +201,7 @@ take_screenshot(
   filename = "shiny-02b-volcano_raw.png",
   inputs = list("Hotgenes_A-DEstats-DE_Contrasts" = default_contrast),
   output_dir = fig_dir,
-  wait_time = 1.5
+  wait_time = 1
 )
 
 annotate_screenshot(
@@ -224,7 +231,7 @@ take_screenshot(
                             
                             padj_cut_DE_tables = 0.1),
   output_dir = fig_dir,
-  wait_time = 2
+  wait_time = 1
 )
 
 annotate_screenshot(
@@ -248,7 +255,7 @@ take_screenshot(
                              xVar = default_coldata_col),
   button_id = ns_id("ExpsPlot", "makePlot"),
   output_dir = fig_dir,
-  wait_time = 1.5
+  wait_time = 1
 )
 
 annotate_screenshot(
@@ -273,7 +280,7 @@ take_screenshot(
                             Quali = c("sh", "Hrs", "Bio_Rep")),
   button_id = ns_id("PCA", "goButton2"),
   output_dir = fig_dir,
-  wait_time = 3
+  wait_time = 1
 )
 
 annotate_screenshot(
@@ -402,24 +409,57 @@ annotate_screenshot(
 
 cli::cli_h2("Capturing GSEA tab")
 
-# Set ontology_library first and wait for observer to populate ontology_sets
-app$set_inputs("Hotgenes_A-GSEA-ontology_library" = "msigdbr", wait_ = FALSE)
+# Set tab and ontology_library first and wait for observer to populate ontology_sets
+app$set_inputs(tabs = "Hotgenes_A-GSEA",
+               wait_ = FALSE)
+
+app$wait_for_idle()
+
+# Set tab and ontology_library first and wait for observer to populate ontology_sets
+app$set_inputs(
+               "Hotgenes_A-GSEA-ontology_library" = "msigdbr",
+               wait_ = FALSE)
+
+app$wait_for_idle()
+
+# then set params
+app$set_inputs(
+  "Hotgenes_A-GSEA-fgsea_Contrasts" = default_contrast,
+  "Hotgenes_A-GSEA-ontology_sets" = "H",
+  "Hotgenes_A-GSEA-input_MapperCol" = all_mapper_cols[1],
+   wait_ = FALSE)
+
+app$wait_for_idle()
+
+# trigger analysis
+app$click("Hotgenes_A-GSEA-fgsea_Button", timeout_ = 20000)
+app$wait_for_idle()
+
+# app$get_logs()
+
+# Hotgenes::Shiny_Hotgenes(fit_Hotgenes)
+#app$wait_for_value()
+
+# set table threshold
+app$set_inputs("Hotgenes_A-GSEA-metabaseR_FDR_cutoff" = 0.2, wait_ = FALSE)
 app$wait_for_idle()
 
 take_screenshot(
   app = app,
   tab_id = "Hotgenes_A-GSEA",
   filename = "shiny-06-gsea_raw.png",
-  inputs = construct_inputs("GSEA",
-                             fgsea_Contrasts = default_contrast,
-                            
-                            ontology_sets = "H",
-                            FDR_cutoff  = 0.1,
-                             input_MapperCol = all_mapper_cols[1]),
+  # inputs = construct_inputs("GSEA",
+  #                            fgsea_Contrasts = default_contrast,
+  #                           
+  #                           ontology_sets = "H",
+  #                           
+  #                            input_MapperCol = all_mapper_cols[1]),
   output_dir = fig_dir,
-  button_id = "Hotgenes_A-GSEA-fgsea_Button",
-  wait_time = 10
+  #button_id = "Hotgenes_A-GSEA-fgsea_Button",
+  wait_time = 1
 )
+
+
 
 annotate_screenshot(
   input_path = file.path(fig_dir, "shiny-06-gsea_raw.png"),
