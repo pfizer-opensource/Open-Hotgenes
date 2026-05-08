@@ -414,7 +414,7 @@ take_screenshot(
                              fgsea_Contrasts = default_contrast,
                             
                             ontology_sets = "H",
-                           
+                            FDR_cutoff  = 0.1,
                              input_MapperCol = all_mapper_cols[1]),
   output_dir = fig_dir,
   button_id = "Hotgenes_A-GSEA-fgsea_Button",

@@ -401,18 +401,17 @@ Out_GSEA |>
     mode      = "D"
   ) |> head()
 ## $sh_EWS_vs_Ctrl
-## # A tibble: 9 × 9
-##   pathway                                 pval     padj log2err     ES   NES  size leadingEdge sign_NES
-##   <chr>                                  <dbl>    <dbl>   <dbl>  <dbl> <dbl> <int> <list>         <dbl>
-## 1 hallmark_apical_junction           0.0671    0.191      0.249  0.733  1.49     6 <chr [3]>          1
-## 2 hallmark_apoptosis                 0.0749    0.191      0.234  0.548  1.46    17 <chr [5]>          1
-## 3 hallmark_coagulation               0.0650    0.191      0.249 -0.585 -1.44    16 <chr [4]>         -1
-## 4 hallmark_il6_jak_stat3_signaling   0.0606    0.191      0.253 -0.530 -1.45    24 <chr [13]>        -1
-## 5 hallmark_allograft_rejection       0.0158    0.0727     0.352 -0.474 -1.52    54 <chr [22]>        -1
-## 6 hallmark_interferon_alpha_response 0.00643   0.0370     0.407 -0.736 -1.78    14 <chr [8]>         -1
-## 7 hallmark_inflammatory_response     0.00192   0.0147     0.455 -0.580 -1.80    43 <chr [20]>        -1
-## 8 hallmark_complement                0.00125   0.0144     0.455 -0.708 -1.85    20 <chr [9]>         -1
-## 9 hallmark_interferon_gamma_response 0.0000120 0.000276   0.593 -0.700 -2.11    37 <chr [16]>        -1
+## # A tibble: 8 × 9
+##   pathway                                  pval     padj log2err     ES   NES  size leadingEdge sign_NES
+##   <chr>                                   <dbl>    <dbl>   <dbl>  <dbl> <dbl> <int> <list>         <dbl>
+## 1 hallmark_apical_junction           0.0586     0.199      0.266  0.733  1.51     6 <chr [3]>          1
+## 2 hallmark_apoptosis                 0.0656     0.199      0.253  0.548  1.46    17 <chr [5]>          1
+## 3 hallmark_il6_jak_stat3_signaling   0.0694     0.199      0.238 -0.530 -1.45    24 <chr [13]>        -1
+## 4 hallmark_allograft_rejection       0.00968    0.0445     0.381 -0.474 -1.54    54 <chr [22]>        -1
+## 5 hallmark_interferon_alpha_response 0.00481    0.0276     0.407 -0.736 -1.75    14 <chr [8]>         -1
+## 6 hallmark_inflammatory_response     0.000561   0.00645    0.477 -0.580 -1.80    43 <chr [20]>        -1
+## 7 hallmark_complement                0.00219    0.0168     0.432 -0.708 -1.84    20 <chr [9]>         -1
+## 8 hallmark_interferon_gamma_response 0.00000970 0.000223   0.593 -0.700 -2.10    37 <chr [16]>        -1
 ```
 
 ``` r
@@ -429,9 +428,6 @@ Out_GSEA |>
 ## 
 ## $sh_EWS_vs_Ctrl$hallmark_apoptosis
 ## [1] "HMGB2"  "JUN"    "BCL2L1" "SMAD7"  "IL18"  
-## 
-## $sh_EWS_vs_Ctrl$hallmark_coagulation
-## [1] "C1R" "C1S" "C3"  "CFD"
 ## 
 ## $sh_EWS_vs_Ctrl$hallmark_il6_jak_stat3_signaling
 ##  [1] "IL1R1"  "STAT1"  "CSF1"   "CCL7"   "IL6"    "IRF1"   "CXCL1"  "STAT2"  "IL10RB" "CCR1"   "TLR2"  

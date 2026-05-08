@@ -1633,13 +1633,13 @@ shiny::fluidRow(
 shiny::column(
 width = 2,
 shiny::numericInput(
-inputId = "metabaseR_FDR_cutoff" %>% ns(),
+inputId = "FDR_cutoff" %>% ns(),
 label = "padj cut off:", value = 1,
 min = 0, max = 1, step = 0.01
 )
 ),
 shiny::column(2, shiny::numericInput(
-inputId = "metabaseR_top_num_paths" %>% ns(),
+inputId = "top_num_paths" %>% ns(),
 label = "Top n results:", value = 3,
 min = 0, max = 50, step = 1
 ), offset = 1)
@@ -1938,10 +1938,10 @@ shiny::req(input$fgsea_Contrasts %in% names(Output_fgsea_reactive()$Results))
 
 fg_plot <- Output_fgsea_reactive() %>%
 GSEA_Plots(
-padj_cut = input$metabaseR_FDR_cutoff,
+padj_cut = input$FDR_cutoff,
 contrasts = input$fgsea_Contrasts,
 width = input$MetaBasePlotLabelBreaks,
-Topn = input$metabaseR_top_num_paths
+Topn = input$top_num_paths
 )
 
 fg_plot[[1]] +
@@ -2032,8 +2032,8 @@ shiny::req(input$fgsea_Contrasts %in% names(Output_fgsea_reactive()$Results))
 
 Output_fgsea_reactive() %>%
 fgsea_Results(
-padj_cut = input$metabaseR_FDR_cutoff,
-Topn = input$metabaseR_top_num_paths,
+padj_cut = input$FDR_cutoff,
+Topn = input$top_num_paths,
 contrasts = input$fgsea_Contrasts,
 mode = "D"
 ) %>%
