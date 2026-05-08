@@ -283,7 +283,7 @@ Clustering on Principal Components).
 ``` r
 FactoOutput <- FactoWrapper(
   fit_Hotgenes,
-  contrasts   = "Hrs_6_vs_0",
+  contrasts   = "sh_EWS_vs_Ctrl",
   coldata_ids = c("Hrs", "sh"),
   biplot      = FALSE
 )
@@ -300,26 +300,27 @@ Inspect cluster assignments and top contributing features:
 
 ``` r
 FactoOutput$TopTibble   # top features per cluster
-## # A tibble: 102 × 10
-##    Cluster Interpretation           Feature v.test `Mean in category` `Overall mean` `sd in category`
-##    <fct>   <fct>                    <chr>    <dbl>              <dbl>          <dbl>            <dbl>
-##  1 1       Above average in cluster IFIT2     2.91              10.3            9.89           0.100 
-##  2 1       Above average in cluster DDIT3     2.75              10.4           10.1            0.0402
-##  3 1       Above average in cluster MAP3K1    2.72              10.00           9.75           0.0537
-##  4 1       Above average in cluster PTGFR     2.65              10.4           10.1            0.0489
-##  5 1       Above average in cluster PGK1      2.63              15.3           15.2            0.0224
-##  6 1       Above average in cluster TWIST2    2.51              13.3           13.1            0.0343
-##  7 1       Above average in cluster TWIST2    2.51              13.3           13.1            0.0343
-##  8 1       Above average in cluster IFIT3     2.51               9.09           8.85           0.0863
-##  9 1       Above average in cluster MKNK1     2.34              10.9           10.7            0.0904
-## 10 1       Above average in cluster IFIT1     2.22              10.8           10.4            0.0765
-## # ℹ 92 more rows
+## # A tibble: 66 × 10
+##    Cluster Interpretation           Feature  v.test `Mean in category` `Overall mean` `sd in category`
+##    <fct>   <fct>                    <chr>     <dbl>              <dbl>          <dbl>            <dbl>
+##  1 1       Above average in cluster IL1R1      2.35              12.1           11.6           0.0251 
+##  2 1       Above average in cluster IFI44      1.98               8.57           8.22          0.0245 
+##  3 1       Below average in cluster TRAF2     -2.09               9.20           9.59          0.00175
+##  4 1       Below average in cluster JUN       -2.10              11.1           11.7           0.116  
+##  5 1       Below average in cluster CD40      -2.15               8.47           8.67          0.139  
+##  6 1       Below average in cluster CXCL2     -2.34               6.92           7.93          0.110  
+##  7 1       Below average in cluster MEF2D     -2.43              10.5           10.9           0.0225 
+##  8 1       Below average in cluster MEF2D     -2.43              10.5           10.9           0.0225 
+##  9 1       Below average in cluster MAP3K9    -2.55               4.52           5.68          0.0814 
+## 10 1       Below average in cluster MAPKAPK2  -2.62              12.4           12.6           0.0394 
+## # ℹ 56 more rows
 ## # ℹ 3 more variables: `Overall sd` <dbl>, p.value <dbl>, ensembl_id <chr>
 FactoOutput$TopGroups   # cluster membership per sample
-## # A tibble: 1 × 8
-##   Cluster Interpretation           Category  `Cla/Mod` `Mod/Cla` Global p.value v.test
-##   <fct>   <fct>                    <chr>         <dbl>     <dbl>  <dbl>   <dbl>  <dbl>
-## 1 1       Above average in cluster Hrs=Hrs_0       100       100   33.3 0.00202   3.09
+## # A tibble: 2 × 8
+##   Cluster Interpretation           Category `Cla/Mod` `Mod/Cla` Global p.value v.test
+##   <fct>   <fct>                    <chr>        <dbl>     <dbl>  <dbl>   <dbl>  <dbl>
+## 1 5       Above average in cluster sh=EWS        66.7       100     50  0.0303   2.17
+## 2 5       Below average in cluster sh=Ctrl        0           0     50  0.0303  -2.17
 ```
 
 ------------------------------------------------------------------------

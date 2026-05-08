@@ -248,7 +248,7 @@ Clustering on Principal Components).
 ```{r pca_run, echo=TRUE, results='hide'}
 FactoOutput <- FactoWrapper(
   fit_Hotgenes,
-  contrasts   = "Hrs_6_vs_0",
+  contrasts   = "sh_EWS_vs_Ctrl",
   coldata_ids = c("Hrs", "sh"),
   biplot      = FALSE
 )
