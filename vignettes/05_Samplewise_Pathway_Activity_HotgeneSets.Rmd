@@ -42,7 +42,7 @@ fit_Hotgenes <- readRDS(
 ```{r genesets, message=FALSE, warning=FALSE}
 H_paths <- msigdbr_wrapper(
   species  = "human",
-  set      = c("CP:KEGG"),
+  set      = c("CP:KEGG_MEDICUS"),
   gene_col = "gene_symbol"
 )
 

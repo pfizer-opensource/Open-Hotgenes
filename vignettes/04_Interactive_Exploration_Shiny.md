@@ -3,12 +3,12 @@ Using Shiny to Prioritize Genes of Interest
 
 ## Overview
 
-`Shiny_Hotgenes()` can be used not only to explore results interactively,
-but also to prioritize genes of interest from multiple complementary
-perspectives. A typical workflow starts with differential expression
-results, then refines candidates with multivariate structure from PCA,
-overlap across contrasts from Venn diagrams, and pathway-level context
-from the GSEA tab.
+`Shiny_Hotgenes()` can be used not only to explore results
+interactively, but also to prioritize genes of interest from multiple
+complementary perspectives. A typical workflow starts with differential
+expression results, then refines candidates with multivariate structure
+from PCA, overlap across contrasts from Venn diagrams, and pathway-level
+context from the GSEA tab.
 
 ``` r
 library(Hotgenes)
@@ -140,7 +140,8 @@ subtab](figures/shiny-04d-pca_heatmap.png)
 
 The **Venn Diagram** tab helps narrow broad DE lists by identifying:
 
-- genes shared across selected contrasts (with or without directionality),
+- genes shared across selected contrasts (with or without
+  directionality),
 - genes specific to one contrast,
 - smaller intersection sets that are easier to prioritize.
 
