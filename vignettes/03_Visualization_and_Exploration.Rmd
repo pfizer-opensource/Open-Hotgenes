@@ -65,7 +65,7 @@ DEPlot(fit_Hotgenes,
 are coloured by significance and fold-change. Labels are added for the
 top hits (or for features in `hotList`).
 
-```{r vplot_1}
+```{r vplot_1, fig.height=8, fig.width=8}
 VPlot(fit_Hotgenes,
       contrasts       = "sh_EWS_vs_Ctrl",
       .log2FoldChange = 1,
@@ -74,12 +74,13 @@ VPlot(fit_Hotgenes,
 
 Highlight a gene of interest with `hotList`:
 
-```{r vplot_2}
+```{r vplot_2, fig.height=8, fig.width=8}
 VPlot(fit_Hotgenes,
       contrasts       = "sh_EWS_vs_Ctrl",
       .log2FoldChange = 1,
       padj_cut        = 0.1,
-      hotList         = "CSF2",
+      point_label_size = 4,
+      hotList         = "CXCL6",
       Hide_labels     = FALSE)
 ```
 
@@ -95,7 +96,7 @@ Use `Report = "Features"` to overlap by feature name (ignoring
 direction), or `Report = "contrast_dir"` to treat up- and down-regulated
 hits as separate sets (maximum two contrasts).
 
-```{r venn_features, fig.height=6, fig.width=6}
+```{r venn_features, fig.height=8, fig.width=8}
 # Overlapping features (ignoring direction) across three contrasts
 venn_out <- fit_Hotgenes |>
   DE(
@@ -108,7 +109,7 @@ venn_out <- fit_Hotgenes |>
 venn_out$vennD
 ```
 
-```{r venn_dir, fig.height=6, fig.width=6}
+```{r venn_dir, fig.height=8, fig.width=10}
 # Including directionality (up/down) for two contrasts
 venn_dir_out <- fit_Hotgenes |>
   DE(
@@ -116,7 +117,7 @@ venn_dir_out <- fit_Hotgenes |>
     contrasts = c("sh_EWS_vs_Ctrl", "Hrs_6_vs_0"),
     padj_cut = 0.1
   ) |>
-  Venn_Report(set_name_size = 3.5)
+  Venn_Report(set_name_size = 4)
 
 venn_dir_out$vennD
 ```
@@ -189,7 +190,7 @@ data and coldata are joined automatically.
 ```{r exps_1}
 ExpsPlot(fit_Hotgenes,
          xVar    = "Hrs",
-         yVar    = c("CSF2", "IL6"),
+         yVar    = c("CXCL6", "IL6"),
          fill    = "Hrs",
          boxplot = TRUE)
 ```
@@ -199,7 +200,7 @@ Filter samples on the fly with `filter_eval`:
 ```{r exps_2}
 ExpsPlot(fit_Hotgenes,
          xVar        = "Hrs",
-         yVar        = c("CSF2", "IL6"),
+         yVar        = c("CXCL6", "IL6"),
          fill        = "Hrs",
          boxplot     = TRUE,
          filter_eval = Hrs != 2)
@@ -210,7 +211,7 @@ Reorder factor levels using `named_levels`:
 ```{r exps_3}
 ExpsPlot(fit_Hotgenes,
          xVar         = "Hrs",
-         yVar         = c("CSF2", "IL6"),
+         yVar         = c("CXCL6", "IL6"),
          boxplot      = TRUE,
          fill         = "Hrs",
          named_levels = list(Feature = "IL6",
@@ -247,7 +248,7 @@ Clustering on Principal Components).
 ```{r pca_run, echo=TRUE, results='hide'}
 FactoOutput <- FactoWrapper(
   fit_Hotgenes,
-  contrasts   = "Hrs_6_vs_0",
+  contrasts   = "sh_EWS_vs_Ctrl",
   coldata_ids = c("Hrs", "sh"),
   biplot      = FALSE
 )

@@ -1685,13 +1685,12 @@ shiny::plotOutput("enrichmentPlot" %>% ns())
 #' @inheritParams DE_pheServer
 #' @inheritParams fgsea_
 #' @inheritParams Shiny_Hotgenes_Server
-#' @importFrom BiocParallel MulticoreParam
 #' @param OntologyMethods output of OntologyMethods function.
 #' @param Mapper_choices vector containing names of
 #' Mapper_ columns that should be used to map expression data
 #' to ontology gene identifiers. Default is names(Mapper_(Hotgenes)).
 #' A named vector may be used, as well.
-#' @param parallel.sz Number of threads of execution
+#' @param nproc Number of threads of execution
 #' to use when doing the calculations in parallel.
 #' @param PCA_TopTibble reactive object containing the TopTibble slots returned
 #' by PCA.
@@ -1708,7 +1707,7 @@ ExpressionSlots = shiny::reactive(NULL),
 SampleIDs = shiny::reactive(NULL),
 OntologyMethods = OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
-parallel.sz = 1) {
+nproc = 0) {
 shiny::moduleServer(
 id,
 function(input, output, session) {
@@ -1812,10 +1811,12 @@ input$fgsea_Button
 
 # must be observed
 shiny::observe({
-paste0(
-"Setting GSEA ini_fgsea() = ",
-ini_fgsea()
-) 
+# this_message <- paste0(
+# "Setting GSEA ini_fgsea() = ",
+# ini_fgsea()
+# )
+
+  cli::cli_inform("Setting GSEA ini_fgsea() = {ini_fgsea()}")
 })
 
 
@@ -1906,26 +1907,17 @@ if(gs_check == 0) {
 shiny::req(gs_check > 0)
 
 
-shinybusy::update_modal_spinner(
-paste0(
-"Checking ",
-length(pthyways),
-" pathways"
-),
-session = session
-)
-
-
 OutPut_fgsea <- fgsea_(
 Ranks = list_Ranks,
 pathways = pthyways,
-BPPARAM = BiocParallel::MulticoreParam(workers = parallel.sz),
+nproc = nproc,
 minSize = input$minSize_Onto,
 maxSize = input$maxSize_Onto
 )
 
 
 shinybusy::remove_modal_spinner(session = session)
+
 
 return(OutPut_fgsea)
 })

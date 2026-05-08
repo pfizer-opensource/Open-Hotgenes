@@ -39,29 +39,36 @@ devtools::document(); devtools::load_all()
 rmarkdown::render("README.Rmd", 
                   output_file="README.md")
 
+rm(list = ls()); gc()
+devtools::document(); devtools::load_all()
+
+# build images
+source(file.path(getwd(), "data-raw/shiny_ui/shiny_shots_optimized.R"))
 
 
 list_rmds <- file.path(getwd(), "vignettes") |> 
   list.files(pattern = ".Rmd", full.names = TRUE) |> 
-  stringr::str_subset("0[1-9]|DILI") |> 
+  stringr::str_subset("0[1-9]|DILI") 
+
+rendering_list_rmds <-list_rmds #[4]
+
+# file.edit(list_rmds[3])
+
+rendering_list_rmds|> 
   purrr::set_names(~basename(.x)) |> 
-  purrr::imap(function(x,y){
+  purrr::iwalk(function(x,y){
     
     md_name <- y |> 
       stringr::str_replace("[.]Rmd", ".md") 
     
-    rmarkdown::render(x, 
-                      output_dir = file.path(getwd(), "vignettes"),
-                      
-                      output_file = md_name)
+rmarkdown::render(x, 
+output_dir = file.path(getwd(), "vignettes"),
+output_file = md_name)
     
   })
 
 
-# rmarkdown::render(file.path(getwd(), "vignettes", "DILI_Hotgenes.Rmd"), 
-#                   output_dir = file.path(getwd(), "vignettes"),
-#                   
-#                   output_file = "DILI_Hotgenes.md")
+
 
 
 devtools::test(stop_on_failure = TRUE)

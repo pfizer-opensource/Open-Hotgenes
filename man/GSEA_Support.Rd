@@ -21,7 +21,7 @@ fgsea_(
   pathways = NULL,
   minSize = 1,
   maxSize = Inf,
-  nproc = 1,
+  nproc = 0,
   verbose = FALSE,
   ...
 )

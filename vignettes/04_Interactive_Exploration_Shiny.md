@@ -21,6 +21,22 @@ into point-and-click panels:
 library(Hotgenes)
 ```
 
+## App Overview
+
+The image below shows the full Shiny interface across the main tabs.
+
+<figure>
+<img src="figures/shiny_composite_all_tabs.png"
+alt="Hotgenes Shiny app overview" />
+<figcaption aria-hidden="true">Hotgenes Shiny app overview</figcaption>
+</figure>
+
+> **Regenerating screenshots**
+>
+> Screenshots were generated with
+> `data-raw/shiny_ui/shiny_shots_optimized.R`. Run that script, then
+> copy the PNGs from `tempdir()` into `vignettes/figures/`.
+
 ------------------------------------------------------------------------
 
 ## 1. Launching the App with a Single Object
@@ -43,7 +59,79 @@ it by pressing **Escape** or closing the browser tab.
 
 ------------------------------------------------------------------------
 
-## 2. Comparing Multiple Objects Side-by-Side
+<table>
+
+<tr>
+
+<td width="55%">
+
+After launching `Shiny_Hotgenes(fit_Hotgenes)`, the app opens to the
+default expression/boxplot view.
+
+</td>
+
+<td width="45%">
+
+<figure>
+<img src="figures/shiny-01-boxplot.png"
+alt="BoxPlot / Expression Data tab" />
+<figcaption aria-hidden="true">BoxPlot / Expression Data
+tab</figcaption>
+</figure>
+
+</td>
+
+</tr>
+
+</table>
+
+------------------------------------------------------------------------
+
+## 2. DE Stats
+
+Use the app launched above and navigate to **DE Stats** to inspect
+statistics, volcano, and heatmap subtabs.
+
+<table>
+
+<tr>
+
+<td width="55%">
+
+DE statistics and subtab views captured from the interactive app.
+
+</td>
+
+<td width="45%">
+
+<figure>
+<img src="figures/shiny-02-destats.png"
+alt="DE Stats / Statistics subtab" />
+<figcaption aria-hidden="true">DE Stats / Statistics subtab</figcaption>
+</figure>
+
+<figure>
+<img src="figures/shiny-02b-volcano.png"
+alt="DE Stats / Volcano Plots subtab" />
+<figcaption aria-hidden="true">DE Stats / Volcano Plots
+subtab</figcaption>
+</figure>
+
+<figure>
+<img src="figures/shiny-02c-heatmap.png"
+alt="DE Stats / Heatmap subtab" />
+<figcaption aria-hidden="true">DE Stats / Heatmap subtab</figcaption>
+</figure>
+
+</td>
+
+</tr>
+
+</table>
+
+------------------------------------------------------------------------
+
+## 3. Comparing Multiple Objects In The Same App
 
 Pass a **named list** of Hotgenes objects to switch between experiments
 in the app. The names become the labels in the dataset selector:
@@ -67,7 +155,124 @@ Shiny_Hotgenes(Hotgenes_list)
 
 ------------------------------------------------------------------------
 
-## 3. Gene-Set Enrichment Analysis (GSEA)
+## 4. Expression Plots
+
+In the same app session, open the **Expression Plots** tab.
+
+<table>
+
+<tr>
+
+<td width="55%">
+
+Expression trajectory plots for selected genes and contrasts.
+
+</td>
+
+<td width="45%">
+
+<figure>
+<img src="figures/shiny-03-expsplot.png" alt="Expression Plots tab" />
+<figcaption aria-hidden="true">Expression Plots tab</figcaption>
+</figure>
+
+</td>
+
+</tr>
+
+</table>
+
+------------------------------------------------------------------------
+
+## 5. PCA
+
+In the same app session, open the **PCA** tab.
+
+<table>
+
+<tr>
+
+<td width="55%">
+
+The **PCA** tab provides sample-level principal component analysis.
+Subtabs include:
+
+- **PCA** — scatter plot coloured by sample group
+- **Clustered Quali Vars** — qualitative variable contributions
+- **Clustered Features** — top contributing features per cluster
+- **PCA Heatmap** — heatmap of clustered features
+
+</td>
+
+<td width="45%">
+
+![PCA scatter plot](figures/shiny-04-pca.png) ![Clustered Quali Vars
+subtab](figures/shiny-04b-pca_quali.png) ![Clustered Features
+subtab](figures/shiny-04c-pca_features.png) ![PCA Heatmap
+subtab](figures/shiny-04d-pca_heatmap.png)
+
+</td>
+
+</tr>
+
+</table>
+
+------------------------------------------------------------------------
+
+## 6. Venn Diagram
+
+In the same app session, open the **Venn Diagram** tab.
+
+<table>
+
+<tr>
+
+<td width="55%">
+
+Overlap analysis across selected contrasts.
+
+</td>
+
+<td width="45%">
+
+<figure>
+<img src="figures/shiny-05-venn.png" alt="Venn Diagram tab" />
+<figcaption aria-hidden="true">Venn Diagram tab</figcaption>
+</figure>
+
+</td>
+
+</tr>
+
+</table>
+
+------------------------------------------------------------------------
+
+## 7. Gene-Set Enrichment Analysis (GSEA)
+
+<table>
+
+<tr>
+
+<td width="55%">
+
+The GSEA tab in `Shiny_Hotgenes()` complements the command-line workflow
+below.
+
+</td>
+
+<td width="45%">
+
+<figure>
+<img src="figures/shiny-06-gsea.png" alt="GSEA tab" />
+<figcaption aria-hidden="true">GSEA tab</figcaption>
+</figure>
+
+</td>
+
+</tr>
+
+</table>
 
 ### Built-in msigdbr gene sets
 
@@ -79,18 +284,16 @@ can be used.
 # Retrieve KEGG and Reactome pathways for human
 H_paths <- msigdbr_wrapper(
   species  = "human",
-  set      = c("CP:KEGG_MEDICUS", "CP:REACTOME"),
+  set      = c("H"),
   gene_col = "gene_symbol"
 )
 
 length(H_paths)
-## [1] 2445
+## [1] 50
 H_paths |> names() |> head(5)
-## [1] "kegg_medicus_env_factor_arsenic_to_electron_transfer_in_complex_iv"        
-## [2] "kegg_medicus_env_factor_benzo_a_pyrenre_to_cyp_mediated_metabolism"        
-## [3] "kegg_medicus_env_factor_dce_to_dna_adducts"                                
-## [4] "kegg_medicus_env_factor_e2_to_nuclear_initiated_estrogen_signaling_pathway"
-## [5] "kegg_medicus_env_factor_e2_to_ras_erk_signaling_pathway"
+## [1] "hallmark_adipogenesis"        "hallmark_allograft_rejection"
+## [3] "hallmark_androgen_response"   "hallmark_angiogenesis"       
+## [5] "hallmark_apical_junction"
 ```
 
 ### Running GSEA with `fgsea_()`
@@ -109,77 +312,99 @@ fit_Hotgenes <- readRDS(
 InputRanks <- fit_Hotgenes |>
   DE(
     Report    = "Ranks",
-    contrasts  = "Hrs_2_vs_0",
+    contrasts  = "sh_EWS_vs_Ctrl",
     Rank_name = "Feature",
     padj_cut  = 1
   )
 
 head(InputRanks)
-## $Hrs_2_vs_0
-##          IL6        CXCL8      TNFAIP3        CXCL1         IL11        PTGS2        SMAD7         CCL2 
-##  31.12496750  25.98004282  24.94190259  21.79835914  21.68592604  17.06293651  16.53569829  15.09389281 
-##          JUN        CXCL3        CXCL2         RELB       TGFBR1         MAFF        CXCR4        MEF2A 
-##  10.79581607   9.98782193   9.58885588   8.05432282   6.03321917   5.88144562   5.31761244   4.84732648 
-##        MEF2D        NFKB1         MAFK         IRF1        CEBPB          MYC        RIPK2        BIRC2 
-##   4.66315159   4.64960062   4.48330579   4.36800296   4.27929921   4.27606698   4.17890356   4.09494057 
-##         MAFG       NFE2L2         CSF2        PDGFA        HDAC4     MAPKAPK2         FLT1        MEF2C 
-##   3.82674300   3.44868294   3.28577631   3.16633965   3.06653719   2.62093557   2.59949823   2.57700686 
-##       MAP3K9         DAXX         CCL7         CD40        TGFB2      CYSLTR1        RIPK1        CXCL6 
-##   2.57592560   2.35944166   2.12431215   2.10168182   2.08248372   1.99075732   1.98105227   1.97979662 
-##        NR3C1        IL1RN        MAPK8        ITGB2          TNF        TGFB3         ATF2         IL18 
-##   1.86633763   1.75080224   1.68287265   1.62711874   1.56196039   1.55687452   1.55042432   1.53454768 
-##       PTGER4         IL1B        TRAF2       MAP3K7         IRF5        CXCL5         BCL6         CSF3 
-##   1.53086397   1.47488188   1.42852372   1.42600506   1.41808658   1.41371692   1.29608890   1.26819074 
-##         RELA         IL13         TSLP        ROCK2        CCL11         AREG       CD40LG        HIF1A 
-##   1.20207429   1.16175600   1.12117917   1.11632983   1.11359676   1.11086439   1.09751873   1.04609103 
-##       PTGER1       BCL2L1          IL3         KNG1         C1QA         CCL5       CXCL10        FASLG 
-##   1.02055444   1.00501404   0.98515137   0.97556954   0.92585162   0.89375856   0.88421812   0.87868647 
-##           C9          IL5          C4A       TOLLIP        PTGIR        MASP2        LTB4R          LTB 
-##   0.87023418   0.82511049   0.82109288   0.78525478   0.70358778   0.70316793   0.68159414   0.68083127 
-##        CCL16        IL23R         PTK2       MAP2K4         TLR5         TLR9       IL1RAP           C7 
-##   0.65466413   0.63867324   0.63012487   0.61883216   0.57534014   0.56226334   0.55233024   0.53236635 
-##        TREM2        C3AR1        CXCR1         GNAQ         MMP9        HSPB1        CCL21         IL15 
-##   0.52071474   0.50014818   0.48109112   0.45347915   0.44974208   0.44366304   0.43900239   0.41940831 
-##         IRF3         RAF1          IL7        IL12B           C3     MAPKAPK5      IL22RA2       LTB4R2 
-##   0.40929786   0.39512511   0.38803903   0.36208872   0.35733936   0.33255213   0.32966420   0.29329595 
-##         CCR2         CFL1        CCL13         HRAS        PLCB1        DEFA1         CCR3        NLRP3 
-##   0.29026796   0.28392971   0.24997558   0.23750510   0.23233514   0.22152530   0.19425589   0.17691775 
-##        IL12A       ALOX12       MAP3K5         IL10         CD55     PPP1R12B       TYROBP         IL21 
-##   0.17192731   0.11803544   0.11257715   0.07049029   0.04164493   0.03273288   0.01908684  -0.02715473 
-##      RAPGEF2       PTGER2          MX1     HLA-DRB1          MAX        TGFB1        CDC42         CCR4 
-##  -0.03573188  -0.07132734  -0.10711170  -0.11494404  -0.12702207  -0.13446055  -0.13944059  -0.16273839 
-##       TBXA2R          IL9        PRKCB         MBL2         OAS2       NFATC3        HSH2D       MAP2K6 
-##  -0.16578701  -0.17175030  -0.18321154  -0.18909605  -0.19586590  -0.22109960  -0.22322920  -0.24672365 
-##        CCL17         GNB1        CCL23           C2      CYSLTR2         CD86         GUSB         CCR7 
-##  -0.27558901  -0.27905203  -0.30109387  -0.31284412  -0.31859902  -0.32658781  -0.36504898  -0.39340560 
-##         CCL3         CLTC         ELK1         CCL4          C8A           C6         MRC1         IL6R 
-##  -0.40932555  -0.41360125  -0.43477737  -0.43495584  -0.43542633  -0.45037882  -0.46454007  -0.48483912 
-##          CRP        MAPK3        TRADD          CD4        STAT3          MX2       IL10RB         IFNG 
-##  -0.49506116  -0.49670809  -0.49724695  -0.50015465  -0.51248203  -0.51665070  -0.52107615  -0.52166257 
-##         TLR3        IFNB1         CCR1        LIMK1         C1QB         MMP3       MAP2K1        IFNA1 
-##  -0.52490834  -0.52527964  -0.52705610  -0.55040763  -0.55464127  -0.55534166  -0.56742483  -0.58595021 
-##         NOX1      PLA2G4A        IFI44         CSF1       PTGDR2          C8B      RPS6KA5         TCF4 
-##  -0.60318503  -0.60425065  -0.62374840  -0.63139792  -0.67323500  -0.67599752  -0.69570555  -0.71761744 
-##        MAPK1        CCL24        CREB1         MYL2        HPRT1        ALOX5         IL22          CFD 
-##  -0.72154128  -0.77324856  -0.77854898  -0.78028772  -0.79434697  -0.81096726  -0.81179754  -0.83837087 
-##      TNFSF14        IL17A        IL23A         NOD2         NOS2         RAC1         CCL8           C5 
-##  -0.84693770  -0.85326865  -0.89927905  -0.92879070  -0.94735857  -0.95538776  -0.96622714  -0.96804286 
-##         TLR2        CD163        MASP1         AGER      IL18RAP       MAPK14        PRKCA         TLR6 
-##  -0.97592725  -0.99995455  -1.02607220  -1.02921647  -1.03206040  -1.03729998  -1.04227818  -1.07145456 
-##         TUBB         GRB2        CCL22          LTA         LY96       ALOX15        PTGS1         TLR4 
-##  -1.08436819  -1.12146944  -1.13229480  -1.13355234  -1.22559844  -1.22726457  -1.26261845  -1.29013001 
-##         PGK1         IRF7      PIK3C2G         SHC1         GNAS         OASL         TLR1         TLR8 
-##  -1.29127909  -1.30993072  -1.32230865  -1.33245671  -1.34368612  -1.34534883  -1.35958553  -1.36288599 
-##        STAT1        HMGN1      HLA-DRA          IL4        CCL20         IL1A        GNGT1        CCL19 
-##  -1.39027600  -1.40517148  -1.43907514  -1.45850756  -1.50499836  -1.51250737  -1.51984271  -1.52691540 
-##          CFB         ARG1         NOD1         RHOA          C1S        HSPB2 BORCS8-MEF2B       PTGER3 
-##  -1.55175627  -1.56398496  -1.67734955  -1.70876245  -1.71233411  -1.73419783  -1.78969599  -1.81009125 
-##        CXCR2        IFIT3        MYD88          C1R        HMGB1        MKNK1        CXCL9         TLR7 
-##  -1.81332048  -1.95111436  -2.00239473  -2.00785510  -2.01203200  -2.08879664  -2.15427180  -2.17742739 
-##        FXYD2        STAT2       MAP3K1        GAPDH        IFIT1        OXER1        IL1R1       TWIST2 
-##  -2.17969776  -2.29396992  -2.47976806  -2.79400322  -2.90411648  -2.92293349  -3.11975099  -3.26092491 
-##        KEAP1          IL2          FOS        PTGFR        HMGB2        IFIT2        DDIT3 
-##  -3.41035505  -3.81521305  -4.38854261  -4.45107850  -5.18000992  -6.77641373  -6.77716432
+## $sh_EWS_vs_Ctrl
+##         MMP3        HMGB2        MEF2D        PTGS1          JUN        HMGB1 
+##   9.23196931   8.63826832   6.91859713   6.55635291   6.05519763   5.63392842 
+##         RAC1       MAP3K9         GNB1         TUBB       BCL2L1       PTGER3 
+##   5.34665347   5.22983101   4.93340815   4.75746470   4.69675031   4.44199537 
+##        BIRC2        ROCK2        CXCL3        HMGN1        MEF2A         CLTC 
+##   4.05478250   4.03982126   3.99791138   3.81714901   3.53935236   3.28231690 
+##         GNAQ        TRAF2         CD40        CXCL2         HRAS        HPRT1 
+##   3.25811676   3.22697764   3.15857799   2.99626024   2.92880736   2.88052300 
+##        SMAD7         RHOA         TCF4     MAPKAPK2       LTB4R2         IL18 
+##   2.84888019   2.84571370   2.73163608   2.72155543   2.54990152   2.43811463 
+##        RIPK2        PLCB1         RAF1       MAP3K5        HSPB2        C3AR1 
+##   2.34153355   2.29249232   2.21308496   2.10088683   2.06498990   2.04691182 
+##         SHC1         FLT1        MAPK1        PRKCA         AGER         BCL6 
+##   1.99753727   1.99178517   1.97835698   1.97268600   1.91980175   1.88135779 
+##       MAPK14        NR3C1       ALOX12         CCR3       MAP2K1         RELA 
+##   1.87734699   1.87308583   1.81846355   1.76542547   1.75116207   1.74003567 
+##        MAPK8         CSF2        MEF2C        PTGS2      RPS6KA5         NOD1 
+##   1.70248065   1.69619991   1.66302886   1.65918469   1.57702114   1.57475870 
+##        CCL16      TNFAIP3         KNG1          IL7        HDAC4         CFL1 
+##   1.52998464   1.52016828   1.45713906   1.37151983   1.36197518   1.35910547 
+##        IL1RN         GNAS       MAP2K6           C9        TGFB1        CXCR4 
+##   1.28807643   1.13923758   1.13682039   1.11379029   1.10907917   1.08688136 
+##         TLR9       NFATC3       PTGER4        CREB1        PRKCB        PDGFA 
+##   1.04211822   0.99403714   0.96579934   0.92827009   0.90364739   0.88111963 
+##          IL5        CCL11         IL13        CCL23       TBXA2R        CXCR1 
+##   0.85638689   0.83872011   0.83608986   0.78379499   0.78371335   0.73907642 
+##          IL9          MYC        CDC42          CD4        IFNA1         MAFF 
+##   0.68440559   0.68283007   0.64149979   0.63458716   0.63349190   0.63345455 
+##         CSF3           C5       MAP3K7         C1QA         IL21          TNF 
+##   0.61981183   0.58409989   0.57212744   0.57136316   0.56323090   0.56185131 
+##        IFNB1       TOLLIP         IL10         IRF5         CCR4         CD86 
+##   0.55960333   0.53718110   0.52533802   0.50062435   0.39346853   0.36857620 
+##         PGK1        ITGB2       PTGER2      CYSLTR1       PTGER1         TSLP 
+##   0.35051302   0.34742610   0.32246173   0.29637546   0.27127102   0.26369319 
+##         CCR2        FXYD2        LIMK1         IL1B        GAPDH         TLR5 
+##   0.25680206   0.24915511   0.22882858   0.21907742   0.20411311   0.18423028 
+##          IL3           C7         GUSB        KEAP1         MAFG        LTB4R 
+##   0.17969763   0.14711371   0.14167607   0.12396588   0.11430101   0.10602917 
+##         AREG        GNGT1          C8A         PTK2        IL12A         OASL 
+##   0.08918235   0.07272003   0.06829105   0.06355101   0.03876954   0.03663648 
+##        OXER1         CCR7       CXCL10         MRC1         ATF2        TREM2 
+##   0.01481433  -0.04508789  -0.05451975  -0.08015497  -0.09419450  -0.11124414 
+##        TGFB3        CXCR2        CXCL8         NOS2      IL22RA2         ELK1 
+##  -0.11444802  -0.17076714  -0.18936019  -0.20298377  -0.21307741  -0.22752012 
+##        HSPB1        TGFB2          C4A         MMP9       MAP2K4           C2 
+##  -0.24608467  -0.25794332  -0.31284137  -0.37912828  -0.46437909  -0.48184256 
+##         IRF3          CRP       TYROBP        ALOX5     PPP1R12B      CYSLTR2 
+##  -0.48844459  -0.49206283  -0.52135089  -0.56020537  -0.57878816  -0.63191174 
+##         CCL8        IL12B        MYD88         MYL2        FASLG        CXCL5 
+##  -0.63357891  -0.64198240  -0.65038405  -0.66616429  -0.66761332  -0.66884649 
+##       ALOX15        CCL20        NLRP3         IL15         DAXX         IL22 
+##  -0.67378904  -0.70258198  -0.70696634  -0.71178944  -0.71290303  -0.73049341 
+##         MAFK        IL23R         GRB2          FOS       IL1RAP         CCL4 
+##  -0.73646359  -0.73752846  -0.73811230  -0.74235993  -0.80163491  -0.80245589 
+##         C1QB         ARG1        IFIT3       TWIST2       TGFBR1      HLA-DRA 
+##  -0.80999697  -0.84137555  -0.84535559  -0.84602905  -0.85655367  -0.85924057 
+##         CCL3          C8B        IL23A         NOX1         MBL2        RIPK1 
+##  -0.87792208  -0.90576344  -0.90860054  -0.91454048  -0.91689183  -0.94899158 
+##         IL11        CCL21       PTGDR2      PIK3C2G           C6        CCL24 
+##  -0.95395457  -0.98968590  -0.99050188  -1.00519745  -1.01649649  -1.03806427 
+##       CD40LG        CD163        CCL17        PTGFR        DDIT3     MAPKAPK5 
+##  -1.07576140  -1.08307756  -1.08502447  -1.09841469  -1.10025860  -1.10643401 
+##      PLA2G4A          LTB        MASP2        CCL13         TLR3        IFIT1 
+##  -1.10773788  -1.11457576  -1.12837981  -1.12849322  -1.16468731  -1.17471821 
+##       NFE2L2        CCL22     HLA-DRB1       MAP3K1        IL17A        TRADD 
+##  -1.18422620  -1.19042278  -1.19395048  -1.23714807  -1.29525695  -1.34336734 
+##          LTA      IL18RAP      RAPGEF2        STAT3        DEFA1        CXCL9 
+##  -1.36731548  -1.46906485  -1.49059634  -1.56494743  -1.61268606  -1.61341813 
+##         TLR4 BORCS8-MEF2B      TNFSF14         NOD2         CCL5         TLR2 
+##  -1.69536667  -1.69979746  -1.76729005  -1.84041264  -1.86370115  -1.86684727 
+##         IL6R          IL2         TLR1         IL1A         CD55          MAX 
+##  -1.89635505  -1.90345655  -1.90718059  -1.94654165  -1.96167937  -1.99302345 
+##          IL4         CCR1        IFIT2         IFNG        MAPK3       IL10RB 
+##  -1.99733859  -2.02165377  -2.02397947  -2.03671124  -2.07009927  -2.08532800 
+##        CCL19        STAT2        PTGIR          CFB         IRF7         TLR8 
+##  -2.08885030  -2.12890080  -2.13014814  -2.13209391  -2.15587530  -2.17897238 
+##         TLR7         TLR6        HSH2D        CXCL1        MKNK1         RELB 
+##  -2.21150790  -2.25866406  -2.28351885  -2.34192970  -2.43354751  -2.51879480 
+##         OAS2          MX1        NFKB1         IRF1          IL6         CCL7 
+##  -2.62802391  -2.68294859  -2.84916512  -2.84978596  -2.92081969  -2.94422937 
+##        IFI44          CFD         LY96          MX2        CEBPB        MASP1 
+##  -3.06755028  -3.13692189  -3.22665502  -3.93543312  -4.55119889  -4.56206849 
+##         CSF1           C3        HIF1A        STAT1        IL1R1        CXCL6 
+##  -4.66393919  -6.29401804  -7.17057201  -7.55684379  -7.99412875  -8.77610451 
+##          C1S         CCL2          C1R 
+## -12.28407654 -15.82342065 -16.73515625
 ```
 
 ``` r
@@ -191,7 +416,7 @@ Out_GSEA <- fgsea_(
   minSize  = 5,
   maxSize  = Inf
 )
-##   |                                                                                                       |                                                                                               |   0%  |                                                                                                       |=======                                                                                        |   7%  |                                                                                                       |==============                                                                                 |  14%  |                                                                                                       |====================                                                                           |  21%  |                                                                                                       |===========================                                                                    |  29%  |                                                                                                       |==================================                                                             |  36%  |                                                                                                       |=========================================                                                      |  43%  |                                                                                                       |================================================                                               |  50%  |                                                                                                       |======================================================                                         |  57%  |                                                                                                       |=============================================================                                  |  64%  |                                                                                                       |====================================================================                           |  71%  |                                                                                                       |===========================================================================                    |  79%  |                                                                                                       |=================================================================================              |  86%  |                                                                                                       |========================================================================================       |  93%  |                                                                                                       |===============================================================================================| 100%
+##   |                                                                                    |                                                                            |   0%  |                                                                                    |===============                                                             |  20%  |                                                                                    |==============================                                              |  40%  |                                                                                    |==============================================                              |  60%  |                                                                                    |=============================================================               |  80%  |                                                                                    |============================================================================| 100%
 ```
 
 ### Inspecting GSEA results
@@ -200,32 +425,62 @@ Out_GSEA <- fgsea_(
 # Tabular summary of significant pathways
 Out_GSEA |>
   fgsea_Results(
-    contrasts = "Hrs_2_vs_0",
+    contrasts = "sh_EWS_vs_Ctrl",
     padj_cut  = 0.2,
     mode      = "D"
   ) |> head()
-## $Hrs_2_vs_0
-## # A tibble: 2 × 9
-##   pathway                                       pval  padj log2err    ES   NES  size leadingEdge sign_NES
-##   <chr>                                        <dbl> <dbl>   <dbl> <dbl> <dbl> <int> <list>         <dbl>
-## 1 reactome_interleukin_10_signaling          4.34e-4 0.106   0.498 0.802  1.67    30 <chr [6]>          1
-## 2 kegg_medicus_pathogen_hcmv_us28_to_gnaq_p… 6.38e-4 0.106   0.477 0.963  1.56     5 <chr [2]>          1
+## $sh_EWS_vs_Ctrl
+## # A tibble: 8 × 9
+##   pathway                 pval    padj log2err     ES   NES  size leadingEdge sign_NES
+##   <chr>                  <dbl>   <dbl>   <dbl>  <dbl> <dbl> <int> <list>         <dbl>
+## 1 hallmark_apical_jun… 5.46e-2 1.74e-1   0.266  0.733  1.46     6 <chr [3]>          1
+## 2 hallmark_apoptosis   6.04e-2 1.74e-1   0.262  0.548  1.46    17 <chr [5]>          1
+## 3 hallmark_il6_jak_st… 5.50e-2 1.74e-1   0.266 -0.530 -1.46    24 <chr [13]>        -1
+## 4 hallmark_allograft_… 1.49e-2 6.85e-2   0.381 -0.474 -1.55    54 <chr [22]>        -1
+## 5 hallmark_interferon… 3.75e-3 2.15e-2   0.432 -0.736 -1.75    14 <chr [8]>         -1
+## 6 hallmark_inflammato… 7.71e-4 8.06e-3   0.477 -0.580 -1.81    43 <chr [20]>        -1
+## 7 hallmark_complement  1.05e-3 8.06e-3   0.455 -0.708 -1.85    20 <chr [9]>         -1
+## 8 hallmark_interferon… 1.20e-5 2.77e-4   0.593 -0.700 -2.14    37 <chr [16]>        -1
 ```
 
 ``` r
 # Leading-edge genes for one pathway
 Out_GSEA |>
   fgsea_Results(
-    contrasts = "Hrs_2_vs_0",
+    contrasts = "sh_EWS_vs_Ctrl",
     padj_cut  = 0.2,
     mode      = "leadingEdge"
   ) |> head()
-## $Hrs_2_vs_0
-## $Hrs_2_vs_0$reactome_interleukin_10_signaling
-## [1] "IL6"   "CXCL8" "CXCL1" "PTGS2" "CCL2"  "CXCL2"
+## $sh_EWS_vs_Ctrl
+## $sh_EWS_vs_Ctrl$hallmark_apical_junction
+## [1] "HRAS"   "SHC1"   "MAPK14"
 ## 
-## $Hrs_2_vs_0$kegg_medicus_pathogen_hcmv_us28_to_gnaq_plcb_g_calcineurin_signaling_pathway
-## [1] "CXCL8" "PTGS2"
+## $sh_EWS_vs_Ctrl$hallmark_apoptosis
+## [1] "HMGB2"  "JUN"    "BCL2L1" "SMAD7"  "IL18"  
+## 
+## $sh_EWS_vs_Ctrl$hallmark_il6_jak_stat3_signaling
+##  [1] "IL1R1"  "STAT1"  "CSF1"   "CCL7"   "IL6"    "IRF1"   "CXCL1"  "STAT2"  "IL10RB"
+## [10] "CCR1"   "TLR2"   "CXCL9"  "STAT3" 
+## 
+## $sh_EWS_vs_Ctrl$hallmark_allograft_rejection
+##  [1] "CCL2"    "STAT1"   "HIF1A"   "CSF1"    "CCL7"    "IL6"     "TLR6"    "IRF7"   
+##  [9] "CCL19"   "IFNG"    "CCR1"    "IL4"     "TLR1"    "IL2"     "TLR2"    "CCL5"   
+## [17] "CXCL9"   "IL18RAP" "CCL22"   "TLR3"    "CCL13"   "LTB"    
+## 
+## $sh_EWS_vs_Ctrl$hallmark_interferon_alpha_response
+## [1] "C1S"   "CSF1"  "IFI44" "IRF1"  "MX1"   "IRF7"  "STAT2" "IFIT2"
+## 
+## $sh_EWS_vs_Ctrl$hallmark_inflammatory_response
+##  [1] "CCL2"    "CXCL6"   "IL1R1"   "HIF1A"   "CSF1"    "CCL7"    "IL6"     "IRF1"   
+##  [9] "NFKB1"   "IRF7"    "PTGIR"   "CD55"    "IL1A"    "TLR1"    "TLR2"    "CCL5"   
+## [17] "NOD2"    "CXCL9"   "IL18RAP" "LTA"    
+## 
+## $sh_EWS_vs_Ctrl$hallmark_complement
+## [1] "C1R"   "C1S"   "C3"    "CEBPB" "IL6"   "IRF1"  "CXCL1" "IRF7"  "CFB"  
+## 
+## $sh_EWS_vs_Ctrl$hallmark_interferon_gamma_response
+##  [1] "C1R"   "CCL2"  "C1S"   "STAT1" "HIF1A" "MX2"   "IFI44" "CCL7"  "IL6"   "IRF1" 
+## [11] "NFKB1" "MX1"   "OAS2"  "IRF7"  "CFB"   "STAT2"
 ```
 
 ### Visualizing GSEA results
@@ -233,12 +488,12 @@ Out_GSEA |>
 ``` r
 Out_GSEA |>
   GSEA_Plots(
-    contrasts = "Hrs_2_vs_0",
+    contrasts = "sh_EWS_vs_Ctrl",
     padj_cut  = 0.2,
     Topn      = 3,
     width     = 20
   )
-## $Hrs_2_vs_0
+## $sh_EWS_vs_Ctrl
 ```
 
 ![](04_Interactive_Exploration_Shiny_files/figure-gsea_plots-1.png)<!-- -->
@@ -247,37 +502,37 @@ Out_GSEA |>
 # Enrichment plot for a single pathway
 # (replace with a pathway name present in your results)
 sig_paths <- Out_GSEA |>
-  fgsea_Results(contrasts = "Hrs_2_vs_0",
+  fgsea_Results(contrasts = "sh_EWS_vs_Ctrl",
                 padj_cut  = 0.2,
                 mode      = "D")
 
-if (nrow(sig_paths$Hrs_2_vs_0) > 0) {
-  first_geneset_name <- sig_paths$Hrs_2_vs_0$pathway[1]
+if (nrow(sig_paths$sh_EWS_vs_Ctrl) > 0) {
+  first_geneset_name <- sig_paths$sh_EWS_vs_Ctrl$pathway[1]
   
-  plotEnrichment_(fgseaRes = Out_GSEA, contrast = "Hrs_2_vs_0", 
+  plotEnrichment_(fgseaRes = Out_GSEA, contrast = "sh_EWS_vs_Ctrl", 
                 genesetName = first_geneset_name)
 
 }
-## Leading edge genes for reactome_interleukin_10_signaling:
-## ℹ IL6, CXCL8, CXCL1, PTGS2, CCL2, CXCL2
+## Leading edge genes for hallmark_apical_junction:
+## ℹ HRAS, SHC1, MAPK14
 ```
 
 ![](04_Interactive_Exploration_Shiny_files/figure-gsea_enrich-1.png)<!-- -->
 
 ``` r
 # Retrieve the leading-edge gene list for one pathway
-if (nrow(sig_paths$Hrs_2_vs_0) > 0) {
-    first_geneset_name <- sig_paths$Hrs_2_vs_0$pathway[1]
+if (nrow(sig_paths$sh_EWS_vs_Ctrl) > 0) {
+    first_geneset_name <- sig_paths$sh_EWS_vs_Ctrl$pathway[1]
 
-  leadingGenes(fgseaRes = Out_GSEA, contrast = "Hrs_2_vs_0", 
+  leadingGenes(fgseaRes = Out_GSEA, contrast = "sh_EWS_vs_Ctrl", 
                 genesetName = first_geneset_name)
 }
-## [1] "IL6"   "CXCL8" "CXCL1" "PTGS2" "CCL2"  "CXCL2"
+## [1] "HRAS"   "SHC1"   "MAPK14"
 ```
 
 ------------------------------------------------------------------------
 
-## 4. Sample-wise Pathway Activity with `HotgeneSets()`
+## 8. Sample-wise Pathway Activity with `HotgeneSets()`
 
 `HotgeneSets()` runs GSVA (or ssGSEA, PLAGE, etc.) on the expression
 data to produce per-sample pathway activity scores, then returns a new
@@ -301,11 +556,11 @@ HotgeneSets_out
 ## Differential expression (default thresholds): 
 ## |contrast       | total|
 ## |:--------------|-----:|
-## |Hrs_2_vs_0     |   496|
-## |Hrs_6_vs_0     |   548|
-## |sh_EWS_vs_Ctrl |   147|
-## |shEWS.Hrs2     |     5|
-## |shEWS.Hrs6     |    87|
+## |Hrs_2_vs_0     |    20|
+## |Hrs_6_vs_0     |    22|
+## |sh_EWS_vs_Ctrl |     9|
+## |shEWS.Hrs2     |     4|
+## |shEWS.Hrs6     |     2|
 ## 
 ## Available feature mapping:  Feature, original_features, size 
 ## ExpressionSlots:  ssgsea 
@@ -319,7 +574,7 @@ results. You can pass it directly to `Shiny_Hotgenes()`.
 
 ------------------------------------------------------------------------
 
-## 5. Custom Gene Sets in the Shiny App
+## 9. Custom Gene Sets in the Shiny App
 
 You can configure the Shiny app to use your own gene-set retrieval
 function (or expose multiple databases) via `OntologyMethods()` and
@@ -341,16 +596,9 @@ Custom_db <- OntologyMethods(
 Shiny_Hotgenes(fit_Hotgenes, OntologyDB = Custom_db)
 ```
 
-To supply pre-computed gene sets (bypassing in-app database queries):
-
-``` r
-# Use the pathways list returned by msigdbr_wrapper()
-Shiny_Hotgenes(fit_Hotgenes, gene_sets = H_paths)
-```
-
 ------------------------------------------------------------------------
 
-## 6. Tips for Large Datasets
+## 10. Tips for Large Datasets
 
 | Tip | Rationale |
 |----|----|

@@ -26,7 +26,7 @@ Shiny_Hotgenes_Server(
   Hotgenes = NULL,
   OntologyMethods = Hotgenes::OntologyMethods(),
   Mapper_choices = names(Mapper_(Hotgenes)),
-  parallel.sz = 1L,
+  nproc = 1L,
   max_col_levels = Inf,
   selected_fillby = "",
   remove_modal_spinner = TRUE
@@ -37,7 +37,7 @@ Shiny_Hotgenes(
   OntologyMethods = Hotgenes::OntologyMethods(),
   Mapper_choices = names(Mapper_(Hotgenes)),
   theme = shinythemes::shinytheme("united"),
-  parallel.sz = 1L,
+  nproc = 1L,
   max_col_levels = Inf
 )
 
@@ -46,7 +46,7 @@ Shiny_Hotgenes(
   OntologyMethods = Hotgenes::OntologyMethods(),
   Mapper_choices = names(Mapper_(Hotgenes)),
   theme = shinythemes::shinytheme("united"),
-  parallel.sz = 1L,
+  nproc = 1L,
   max_col_levels = Inf
 )
 
@@ -55,7 +55,7 @@ Shiny_Hotgenes(
   OntologyMethods = Hotgenes::OntologyMethods(),
   Mapper_choices = names(Mapper_(Hotgenes)),
   theme = shinythemes::shinytheme("united"),
-  parallel.sz = 1L,
+  nproc = 1L,
   max_col_levels = Inf
 )
 }
@@ -91,7 +91,7 @@ Mapper_ columns that should be used to map expression data
 to ontology gene identifiers. Default is names(Mapper_(Hotgenes)).
 A named vector may be used, as well.}
 
-\item{parallel.sz}{Number of threads of execution
+\item{nproc}{Number of threads of execution
 to use when doing the calculations in parallel.}
 
 \item{max_col_levels}{integer setting the maximum

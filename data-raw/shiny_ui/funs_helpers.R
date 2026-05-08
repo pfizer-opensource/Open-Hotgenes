@@ -96,6 +96,7 @@ wait_for_render <- function(app = NULL,
 #' @param timeout numeric for time in seconds for time out of output_name
 #' @param max_retries Integer. Number of retry attempts on failure (default: 3).
 #' @param overwrite logical if TRUE file will be overwritten
+#' @param button_timeout numeric for time to wait for buttons.
 #' @return Invisible logical. TRUE if successful, FALSE otherwise.
 #'
 #' @keywords internal
@@ -104,6 +105,7 @@ take_screenshot <- function(app = NULL,
                             filename = NULL,
                             inputs = list(),
                             button_id = NULL,
+                            button_timeout = 20000,
                             output_name = NULL,  # NEW
                             timeout = NULL,
                             wait_element = NULL,  # NEW
@@ -161,7 +163,7 @@ take_screenshot <- function(app = NULL,
       }
       
       if (!is.null(button_id)) {
-        app$click(button_id)
+        app$click(button_id, timeout_ = button_timeout)
         wait_for_render(app, wait_base = wait_time * 2)
       }
       

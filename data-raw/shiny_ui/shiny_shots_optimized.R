@@ -2,13 +2,13 @@
 library(shinytest2)
 #library(magick)
 #library(cli)
-rm(list = ls()); gc()
-devtools::document(); devtools::load_all()
 
 funs_path <- file.path(getwd(), "data-raw/shiny_ui/funs_helpers.R")
 source(funs_path)
 
 if(FALSE){
+  rm(list = ls()); gc()
+  devtools::document(); devtools::load_all()
   
   file.edit(funs_path)
   # Debug block for interactive development
@@ -23,31 +23,36 @@ if(FALSE){
 
 # load_hotgenes_object -----------------------------------------------------------
 
-dds_Hotgenes_dir <- system.file("extdata",
-                                paste0("dds_Hotgenes", ".RDS"),
-                                package = "Hotgenes",
-                                mustWork = TRUE)
-
-HotgenesObj <- readRDS(dds_Hotgenes_dir) %>%
+HotgenesObj <- readRDS(
+  system.file("extdata", "fit_Hotgenes.RDS",
+              package = "Hotgenes",
+              mustWork = TRUE)
+) %>%
   Hotgenes::update_object()
+
+
+
 
 cli::cli_h1("Loaded Hotgenes object")
 cli::cli_inform(c("i" = "Object class: {.cls {class(HotgenesObj)}}"))
 
 # extract_dynamic_values -----------------------------------------------------------
 
+all_DE_features <-DE(HotgenesObj, Topn = 1) |> unlist(use.names = FALSE) |> unique()
 all_contrasts <- contrasts_(HotgenesObj)
 all_expr_slots <- ExpressionSlots_(HotgenesObj)
 all_coldata_cols <- coldata_names(HotgenesObj)
 all_features <- Background_(HotgenesObj, Col = "Feature")
 all_mapper_cols <- names(Mapper_(HotgenesObj))
 
-default_contrast <- all_contrasts[1]
+default_contrast <- all_contrasts |> 
+  stringr::str_subset("sh_EWS_vs_Ctrl")
+
 default_expr_slot <- all_expr_slots[1]
 default_coldata_col <- all_coldata_cols[3]
-default_feature <- all_features[1]
+default_feature <- all_DE_features[1]
 venn_contrasts <- all_contrasts[seq_len(min(2, length(all_contrasts)))]
-pca_contrasts <- all_contrasts[seq_len(min(3, length(all_contrasts)))]
+pca_contrasts <- default_contrast
 
 cli::cli_h2("Extracted dynamic values")
 cli::cli_bullets(c(
@@ -64,7 +69,8 @@ cli::cli_bullets(c(
 
 # setup_output_directory -----------------------------------------------------------
 
-fig_dir <- file.path(tempdir(), "hotgenes_figures")
+#fig_dir <- file.path(tempdir(), "hotgenes_figures")
+fig_dir <- file.path(getwd(), "vignettes", "figures")
 dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
 
 cli::cli_h2("Output directory")
@@ -98,8 +104,11 @@ OntologyMethods <- Hotgenes::OntologyMethods(
     msigdbr  = utils::packageVersion("msigdbr"))
 )
 
+
 app <- AppDriver$new(
-  app = Shiny_Hotgenes(HotgenesObj, OntologyMethods = OntologyMethods),
+  app = Shiny_Hotgenes(HotgenesObj, 
+                       OntologyMethods = OntologyMethods,
+                       nproc = 0),
   height = 1000,
   width = 1600
 )
@@ -192,7 +201,7 @@ take_screenshot(
   filename = "shiny-02b-volcano_raw.png",
   inputs = list("Hotgenes_A-DEstats-DE_Contrasts" = default_contrast),
   output_dir = fig_dir,
-  wait_time = 1.5
+  wait_time = 1
 )
 
 annotate_screenshot(
@@ -216,10 +225,13 @@ take_screenshot(
   filename = "shiny-02c-heatmap_raw.png",
   inputs = construct_inputs("DEstats",
                             DE_Contrasts = default_contrast,
-                            #DE_HotList = NULL,
+                            `A-row_cut` = 1,
+                            `A-annotations` = c("sh", "Hrs"),
+                            `A-W`           = 8,
+                            
                             padj_cut_DE_tables = 0.1),
   output_dir = fig_dir,
-  wait_time = 2
+  wait_time = 1
 )
 
 annotate_screenshot(
@@ -232,17 +244,18 @@ annotate_screenshot(
 
 cli::cli_h2("Capturing ExpsPlot tab")
 
+
 take_screenshot(
   app = app,
   tab_id = "Hotgenes_A-ExpsPlot",
   filename = "shiny-03-expsplot_raw.png",
   inputs = construct_inputs("ExpsPlot",
-                             yVar = "CXCL8",
+                             yVar = default_feature,
                             fill = "sh",
                              xVar = default_coldata_col),
   button_id = ns_id("ExpsPlot", "makePlot"),
   output_dir = fig_dir,
-  wait_time = 1.5
+  wait_time = 1
 )
 
 annotate_screenshot(
@@ -254,21 +267,122 @@ annotate_screenshot(
 # capture_pca_tab -----------------------------------------------------------
 
 cli::cli_h2("Capturing PCA tab")
+# app$set_inputs(tabs = "Hotgenes_A-PCA", wait_ = FALSE)
+
+# app$get_js("$('.tab-pane[data-value=\"Hotgenes_A-PCA\"] [role=\"tab\"]")
 
 take_screenshot(
   app = app,
   tab_id = "Hotgenes_A-PCA",
   filename = "shiny-04-pca_raw.png",
-  inputs = construct_inputs("PCA", PCA_contrasts = pca_contrasts),
+  inputs = construct_inputs("PCA",
+                            PCA_contrasts  = default_contrast,
+                            Quali = c("sh", "Hrs", "Bio_Rep")),
   button_id = ns_id("PCA", "goButton2"),
   output_dir = fig_dir,
-  wait_time = 1.5
+  wait_time = 1
 )
 
 annotate_screenshot(
-  input_path = file.path(fig_dir, "shiny-04-pca_raw.png"),
-  label = "D  Principal Component Analysis",
+  input_path  = file.path(fig_dir, "shiny-04-pca_raw.png"),
+  label       = glue::glue("D  PCA — contrast: {default_contrast}"),
   output_path = file.path(fig_dir, "shiny-04-pca.png")
+)
+
+# capture_pca_quali_vars -----------------------------------------------------------
+
+cli::cli_h2("Capturing PCA Clustered Quali Vars tab")
+
+app$get_js("$('.tab-pane[data-value=\"Hotgenes_A-PCA\"] [role=\"tab\"]:contains(\"Clustered Quali Vars\")').first().click()")
+app$wait_for_idle()
+
+
+# Click row 1 in the Quali Vars DataTable
+app$get_js("
+  var row = $('#Hotgenes_A-PCA-Tab2_PCA_quali_sup').find('tbody tr:nth-child(1)');
+  row.trigger('mousedown').trigger('mouseup').trigger('click');
+")
+Sys.sleep(2)
+
+app$get_values()$input[["Hotgenes_A-PCA-Tab2_PCA_quali_sup_rows_selected"]]
+
+
+# get all DT names
+if(FALSE) {
+app$get_js("$('table.dataTable').map(function(){return $(this).closest('.shiny-bound-output').attr('id')}).get()")
+}
+
+
+take_screenshot(
+  app = app,
+  tab_id = "Hotgenes_A-PCA",
+  filename = "shiny-04b-pca_quali_raw.png",
+  output_dir = fig_dir,
+  wait_time = 1
+)
+
+annotate_screenshot(
+  input_path  = file.path(fig_dir, "shiny-04b-pca_quali_raw.png"),
+  label       = "D2  PCA Clustered Quali Vars",
+  output_path = file.path(fig_dir, "shiny-04b-pca_quali.png")
+)
+
+# capture_pca_features -----------------------------------------------------------
+
+cli::cli_h2("Capturing PCA Clustered Features tab")
+
+app$get_js("$('.tab-pane[data-value=\"Hotgenes_A-PCA\"] [role=\"tab\"]:contains(\"Clustered Features\")').first().click()")
+app$wait_for_idle()
+
+app$get_js("
+  var rows = $('#Hotgenes_A-PCA-Clustered_Features').find('tbody tr');
+  rows.slice(0, 7).each(function() {
+    $(this).trigger('mousedown').trigger('mouseup').trigger('click');
+  });
+")
+Sys.sleep(2)
+
+app$get_values()$input[["Hotgenes_A-PCA-Clustered_Features_rows_selected"]]
+
+take_screenshot(
+  app = app,
+  tab_id = "Hotgenes_A-PCA",
+  filename = "shiny-04c-pca_features_raw.png",
+  output_dir = fig_dir,
+  wait_time = 2
+)
+
+annotate_screenshot(
+  input_path  = file.path(fig_dir, "shiny-04c-pca_features_raw.png"),
+  label       = "D3  PCA Clustered Features — top rows",
+  output_path = file.path(fig_dir, "shiny-04c-pca_features.png")
+)
+
+# capture_pca_heatmap -----------------------------------------------------------
+
+cli::cli_h2("Capturing PCA Heatmap tab")
+
+d1 <-app$get_js("$('.tab-pane[data-value=\"Hotgenes_A-PCA\"] [role=\"tab\"]:contains(\"PCA Heatmap\")').first().click()")
+app$wait_for_idle()
+
+#app$get_js("$('.tab-pane[data-value=\"Hotgenes_A-PCA\"] [role=\"tab\"]').map(function(){return $(this).text()}).get()")
+
+take_screenshot(
+  app      = app,
+  tab_id   = "Hotgenes_A-PCA",
+  filename = "shiny-04d-pca_heatmap_raw.png",
+  inputs   = construct_inputs("PCA",
+                              `C-annotations` = c("sh", "Hrs"),
+                              `C-W`           = 8),
+  output_dir = fig_dir,
+  wait_time  = 2
+)
+
+
+annotate_screenshot(
+  input_path  = file.path(fig_dir, "shiny-04d-pca_heatmap_raw.png"),
+  label       = "D4  PCA Heatmap",
+  output_path = file.path(fig_dir, "shiny-04d-pca_heatmap.png")
 )
 
 # capture_venn_tab -----------------------------------------------------------
@@ -295,24 +409,57 @@ annotate_screenshot(
 
 cli::cli_h2("Capturing GSEA tab")
 
-# Set ontology_library first and wait for observer to populate ontology_sets
-app$set_inputs("Hotgenes_A-GSEA-ontology_library" = "msigdbr", wait_ = FALSE)
+# Set tab and ontology_library first and wait for observer to populate ontology_sets
+app$set_inputs(tabs = "Hotgenes_A-GSEA",
+               wait_ = FALSE)
+
+app$wait_for_idle()
+
+# Set tab and ontology_library first and wait for observer to populate ontology_sets
+app$set_inputs(
+               "Hotgenes_A-GSEA-ontology_library" = "msigdbr",
+               wait_ = FALSE)
+
+app$wait_for_idle()
+
+# then set params
+app$set_inputs(
+  "Hotgenes_A-GSEA-fgsea_Contrasts" = default_contrast,
+  "Hotgenes_A-GSEA-ontology_sets" = "H",
+  "Hotgenes_A-GSEA-input_MapperCol" = all_mapper_cols[1],
+   wait_ = FALSE)
+
+app$wait_for_idle()
+
+# trigger analysis
+app$click("Hotgenes_A-GSEA-fgsea_Button", timeout_ = 20000)
+app$wait_for_idle()
+
+# app$get_logs()
+
+# Hotgenes::Shiny_Hotgenes(fit_Hotgenes)
+#app$wait_for_value()
+
+# set table threshold
+app$set_inputs("Hotgenes_A-GSEA-metabaseR_FDR_cutoff" = 0.2, wait_ = FALSE)
 app$wait_for_idle()
 
 take_screenshot(
   app = app,
   tab_id = "Hotgenes_A-GSEA",
   filename = "shiny-06-gsea_raw.png",
-  inputs = construct_inputs("GSEA",
-                             fgsea_Contrasts = default_contrast,
-                            
-                            ontology_sets = "H",
-                           
-                             input_MapperCol = all_mapper_cols[1]),
+  # inputs = construct_inputs("GSEA",
+  #                            fgsea_Contrasts = default_contrast,
+  #                           
+  #                           ontology_sets = "H",
+  #                           
+  #                            input_MapperCol = all_mapper_cols[1]),
   output_dir = fig_dir,
-  button_id = "Hotgenes_A-GSEA-fgsea_Button",
-  wait_time = 10
+  #button_id = "Hotgenes_A-GSEA-fgsea_Button",
+  wait_time = 1
 )
+
+
 
 annotate_screenshot(
   input_path = file.path(fig_dir, "shiny-06-gsea_raw.png"),
@@ -380,6 +527,6 @@ cli::cli_bullets("{unlist(file_info)}")
 cli::cli_h2("Output directory")
 cli::cli_inform("Path: {.file {fig_dir}}")
 
-browseURL(fig_dir)
+# browseURL(fig_dir)
 
 #app$get_logs()
