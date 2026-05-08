@@ -217,8 +217,11 @@ take_screenshot(
   tab_id = "Hotgenes_A-DEstats",
   filename = "shiny-02c-heatmap_raw.png",
   inputs = construct_inputs("DEstats",
-                            DE_Contrasts = c,
-                            #DE_HotList = NULL,
+                            DE_Contrasts = default_contrast,
+                            
+                            `A-annotations` = c("sh", "Hrs"),
+                            `A-W`           = 8,
+                            
                             padj_cut_DE_tables = 0.1),
   output_dir = fig_dir,
   wait_time = 2

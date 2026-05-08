@@ -414,14 +414,14 @@ Out_GSEA |>
 ## # A tibble: 8 × 9
 ##   pathway                                 pval    padj log2err     ES   NES  size leadingEdge sign_NES
 ##   <chr>                                  <dbl>   <dbl>   <dbl>  <dbl> <dbl> <int> <list>         <dbl>
-## 1 hallmark_apical_junction           0.0546    1.74e-1   0.266  0.733  1.46     6 <chr [3]>          1
-## 2 hallmark_apoptosis                 0.0604    1.74e-1   0.262  0.548  1.46    17 <chr [5]>          1
-## 3 hallmark_il6_jak_stat3_signaling   0.0550    1.74e-1   0.266 -0.530 -1.46    24 <chr [13]>        -1
-## 4 hallmark_allograft_rejection       0.0149    6.85e-2   0.381 -0.474 -1.55    54 <chr [22]>        -1
-## 5 hallmark_interferon_alpha_response 0.00375   2.15e-2   0.432 -0.736 -1.75    14 <chr [8]>         -1
-## 6 hallmark_inflammatory_response     0.000771  8.06e-3   0.477 -0.580 -1.81    43 <chr [20]>        -1
-## 7 hallmark_complement                0.00105   8.06e-3   0.455 -0.708 -1.85    20 <chr [9]>         -1
-## 8 hallmark_interferon_gamma_response 0.0000120 2.77e-4   0.593 -0.700 -2.14    37 <chr [16]>        -1
+## 1 hallmark_apical_junction             5.81e-2 1.86e-1   0.266  0.733  1.51     6 <chr [3]>          1
+## 2 hallmark_apoptosis                   5.49e-2 1.86e-1   0.277  0.548  1.46    17 <chr [5]>          1
+## 3 hallmark_il6_jak_stat3_signaling     6.48e-2 1.86e-1   0.245 -0.530 -1.47    24 <chr [13]>        -1
+## 4 hallmark_allograft_rejection         2.23e-2 1.03e-1   0.352 -0.474 -1.54    54 <chr [22]>        -1
+## 5 hallmark_interferon_alpha_response   6.72e-3 3.87e-2   0.407 -0.736 -1.76    14 <chr [8]>         -1
+## 6 hallmark_inflammatory_response       2.46e-3 1.89e-2   0.432 -0.580 -1.81    43 <chr [20]>        -1
+## 7 hallmark_complement                  1.54e-3 1.77e-2   0.455 -0.708 -1.88    20 <chr [9]>         -1
+## 8 hallmark_interferon_gamma_response   5.54e-6 1.28e-4   0.611 -0.700 -2.11    37 <chr [16]>        -1
 ```
 
 ``` r
