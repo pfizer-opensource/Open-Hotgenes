@@ -136,25 +136,26 @@ venn_out$Intsect |> head()
 ## [1] "NFE2L2" "KEAP1"  "PDGFA"  "HDAC4"  "OXER1"  "GAPDH"  "MEF2C" 
 ## 
 ## $Hrs_6_vs_0
-##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6" "IL1B"  
-## [11] "BCL6"   "TLR3"   "GRB2"   "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"   "IFIT3"  "MAP3K5"
-## [21] "TGFB3"  "TGFB2"  "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
+##  [1] "CXCL5"  "STAT2"  "NR3C1"  "MAP3K1" "HSPB2"  "MAPK8"  "DAXX"   "MKNK1"  "MAP2K6"
+## [10] "IL1B"   "BCL6"   "TLR3"   "GRB2"   "IL6R"   "IL15"   "CREB1"  "IL1RN"  "RELA"  
+## [19] "IFIT3"  "MAP3K5" "TGFB3"  "TGFB2"  "IL1A"   "CCL20"  "PGK1"   "MAPK3" 
 ## 
 ## $sh_EWS_vs_Ctrl
-##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2"  "MX2"   
-## [11] "HMGN1"  "CLTC"   "GNAQ"   "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"   "HPRT1"  "TCF4"  
-## [21] "MX1"    "OAS2"   "LTB4R2"
+##  [1] "HIF1A"  "C3"     "RAC1"   "GNB1"   "TUBB"   "BCL2L1" "CSF1"   "PTGER3" "ROCK2" 
+## [10] "MX2"    "HMGN1"  "CLTC"   "GNAQ"   "LY96"   "CD40"   "CFD"    "HRAS"   "RHOA"  
+## [19] "HPRT1"  "TCF4"   "MX1"    "OAS2"   "LTB4R2"
 ## 
 ## $`Hrs_2_vs_0:Hrs_6_vs_0`
-##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1"  "MAFF"   
-## [10] "CXCR4"   "MAFK"    "PTGFR"   "FOS"     "MYC"     "RIPK2"   "IL2"     "MAFG"    "CSF2"   
-## [19] "TWIST2"  "IFIT1"   "FLT1"   
+##  [1] "CXCL8"   "TNFAIP3" "CXCL1"   "IL11"    "PTGS2"   "DDIT3"   "IFIT2"   "TGFBR1" 
+##  [9] "MAFF"    "CXCR4"   "MAFK"    "PTGFR"   "FOS"     "MYC"     "RIPK2"   "IL2"    
+## [17] "MAFG"    "CSF2"    "TWIST2"  "IFIT1"   "FLT1"   
 ## 
 ## $`sh_EWS_vs_Ctrl:Hrs_2_vs_0`
 ## [1] "HMGB2"  "MAP3K9" "CEBPB"  "IRF1"  
 ## 
 ## $`sh_EWS_vs_Ctrl:Hrs_6_vs_0`
-##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2" "IFI44" "CCL7"
+##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2" "IFI44"
+## [11] "CCL7"
 ```
 
 ------------------------------------------------------------------------
@@ -174,6 +175,8 @@ DEphe(fit_Hotgenes,
       annotations       = c("Hrs", "sh"))
 ```
 
+![](03_Visualization_and_Exploration_files/figure-heatmap_1-1.png)<!-- -->
+
 Use `label_by` to replace the default Feature IDs with any alias column
 in the mapper:
 
@@ -187,6 +190,8 @@ DEphe(fit_Hotgenes,
       annotation_colors = coldata_palettes(fit_Hotgenes),
       annotations       = c("Hrs", "sh"))
 ```
+
+![](03_Visualization_and_Exploration_files/figure-heatmap_2-1.png)<!-- -->
 
 Subset samples on the fly with `SampleIDs`:
 
@@ -203,6 +208,8 @@ DEphe(fit_Hotgenes,
       arrangeby         = c("Hrs", "sh"),
       annotations       = c("Hrs", "sh"))
 ```
+
+![](03_Visualization_and_Exploration_files/figure-heatmap_3-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -301,20 +308,21 @@ Inspect cluster assignments and top contributing features:
 ``` r
 FactoOutput$TopTibble   # top features per cluster
 ## # A tibble: 66 × 10
-##    Cluster Interpretation           Feature  v.test `Mean in category` `Overall mean` `sd in category`
-##    <fct>   <fct>                    <chr>     <dbl>              <dbl>          <dbl>            <dbl>
-##  1 1       Above average in cluster IL1R1      2.35              12.1           11.6           0.0251 
-##  2 1       Above average in cluster IFI44      1.98               8.57           8.22          0.0245 
-##  3 1       Below average in cluster TRAF2     -2.09               9.20           9.59          0.00175
-##  4 1       Below average in cluster JUN       -2.10              11.1           11.7           0.116  
-##  5 1       Below average in cluster CD40      -2.15               8.47           8.67          0.139  
-##  6 1       Below average in cluster CXCL2     -2.34               6.92           7.93          0.110  
-##  7 1       Below average in cluster MEF2D     -2.43              10.5           10.9           0.0225 
-##  8 1       Below average in cluster MEF2D     -2.43              10.5           10.9           0.0225 
-##  9 1       Below average in cluster MAP3K9    -2.55               4.52           5.68          0.0814 
-## 10 1       Below average in cluster MAPKAPK2  -2.62              12.4           12.6           0.0394 
+##    Cluster Interpretation           Feature  v.test `Mean in category` `Overall mean`
+##    <fct>   <fct>                    <chr>     <dbl>              <dbl>          <dbl>
+##  1 1       Above average in cluster IL1R1      2.35              12.1           11.6 
+##  2 1       Above average in cluster IFI44      1.98               8.57           8.22
+##  3 1       Below average in cluster TRAF2     -2.09               9.20           9.59
+##  4 1       Below average in cluster JUN       -2.10              11.1           11.7 
+##  5 1       Below average in cluster CD40      -2.15               8.47           8.67
+##  6 1       Below average in cluster CXCL2     -2.34               6.92           7.93
+##  7 1       Below average in cluster MEF2D     -2.43              10.5           10.9 
+##  8 1       Below average in cluster MEF2D     -2.43              10.5           10.9 
+##  9 1       Below average in cluster MAP3K9    -2.55               4.52           5.68
+## 10 1       Below average in cluster MAPKAPK2  -2.62              12.4           12.6 
 ## # ℹ 56 more rows
-## # ℹ 3 more variables: `Overall sd` <dbl>, p.value <dbl>, ensembl_id <chr>
+## # ℹ 4 more variables: `sd in category` <dbl>, `Overall sd` <dbl>, p.value <dbl>,
+## #   ensembl_id <chr>
 FactoOutput$TopGroups   # cluster membership per sample
 ## # A tibble: 2 × 8
 ##   Cluster Interpretation           Category `Cla/Mod` `Mod/Cla` Global p.value v.test
