@@ -356,6 +356,149 @@ coldata_palettes(fit_Hotgenes)
 
 ------------------------------------------------------------------------
 
+## 9. Gene-set Enrichment with `msigdbr_wrapper()` and `fgsea_()`
+
+### Built-in `msigdbr` gene sets
+
+`msigdbr_wrapper()` returns a named list of gene sets sourced from
+MSigDB via the `msigdbr` package.
+
+``` r
+H_paths <- msigdbr_wrapper(
+  species  = "human",
+  set      = c("H"),
+  gene_col = "gene_symbol"
+)
+
+length(H_paths)
+H_paths |> names() |> head(5)
+```
+
+### Running GSEA with `fgsea_()`
+
+`fgsea_()` accepts ranked vectors returned by
+`DE(..., Report = "Ranks")`.
+
+``` r
+InputRanks <- fit_Hotgenes |>
+  DE(
+    Report    = "Ranks",
+    contrasts = "sh_EWS_vs_Ctrl",
+    Rank_name = "Feature",
+    padj_cut  = 1
+  )
+
+head(InputRanks)
+```
+
+``` r
+Out_GSEA <- fgsea_(
+  Ranks    = InputRanks,
+  pathways = H_paths,
+  nproc    = 1,
+  minSize  = 5,
+  maxSize  = Inf
+)
+```
+
+### Inspecting GSEA results
+
+``` r
+Out_GSEA |>
+  fgsea_Results(
+    contrasts = "sh_EWS_vs_Ctrl",
+    padj_cut  = 0.2,
+    mode      = "D"
+  ) |> head()
+```
+
+``` r
+Out_GSEA |>
+  fgsea_Results(
+    contrasts = "sh_EWS_vs_Ctrl",
+    padj_cut  = 0.2,
+    mode      = "leadingEdge"
+  ) |> head()
+```
+
+### Visualizing GSEA results
+
+``` r
+Out_GSEA |>
+  GSEA_Plots(
+    contrasts = "sh_EWS_vs_Ctrl",
+    padj_cut  = 0.2,
+    Topn      = 3,
+    width     = 20
+  )
+```
+
+``` r
+sig_paths <- Out_GSEA |>
+  fgsea_Results(
+    contrasts = "sh_EWS_vs_Ctrl",
+    padj_cut  = 0.2,
+    mode      = "D"
+  )
+
+if (nrow(sig_paths$sh_EWS_vs_Ctrl) > 0) {
+  first_geneset_name <- sig_paths$sh_EWS_vs_Ctrl$pathway[1]
+
+  plotEnrichment_(
+    fgseaRes    = Out_GSEA,
+    contrast    = "sh_EWS_vs_Ctrl",
+    genesetName = first_geneset_name
+  )
+}
+```
+
+``` r
+if (nrow(sig_paths$sh_EWS_vs_Ctrl) > 0) {
+  first_geneset_name <- sig_paths$sh_EWS_vs_Ctrl$pathway[1]
+
+  leadingGenes(
+    fgseaRes    = Out_GSEA,
+    contrast    = "sh_EWS_vs_Ctrl",
+    genesetName = first_geneset_name
+  )
+}
+```
+
+------------------------------------------------------------------------
+
+## 10. Custom Gene Set Configuration (Non-Shiny)
+
+`OntologyMethods()` and `OntologyFunctions()` can define and retrieve
+custom gene-set sources independently of the Shiny app.
+
+``` r
+Custom_db <- OntologyMethods(
+  Ontology_Function = list("msigdbr" = msigdbr_wrapper),
+  InputChoices = list("msigdbr" = c("CP:REACTOME", "CP:KEGG", "H")),
+  gene_col_choices = list("msigdbr" = c(
+    "gene_symbol", "entrez_gene", "ensembl_gene"
+  )),
+  species_choices = list("msigdbr" = c("human", "mouse", "rat")),
+  versions = list("msigdbr" = packageVersion("msigdbr"))
+)
+
+custom_paths <- OntologyFunctions(
+  Methods  = Custom_db,
+  db       = "msigdbr",
+  species  = "human",
+  set      = c("CP:REACTOME", "CP:KEGG"),
+  gene_col = "gene_symbol"
+)
+
+length(custom_paths)
+names(custom_paths)[1:5]
+```
+
+`custom_paths` can be passed directly to `fgsea_()` or `HotgeneSets()`
+in downstream enrichment and pathway activity workflows.
+
+------------------------------------------------------------------------
+
 ## Summary of Visualization Functions
 
 | Function             | Purpose                                     |
@@ -368,3 +511,10 @@ coldata_palettes(fit_Hotgenes)
 | `BoxPlot()`          | Sample-level expression boxplots (QC)       |
 | `FactoWrapper()`     | PCA + HCPC clustering                       |
 | `coldata_palettes()` | Colour palettes for metadata factors        |
+| `msigdbr_wrapper()` | Retrieve MSigDB gene sets for enrichment    |
+| `fgsea_()` | Run GSEA from ranked DE vectors                         |
+| `fgsea_Results()` | Extract enrichment tables or leading-edge genes |
+| `GSEA_Plots()` | Plot top enriched pathways                           |
+| `plotEnrichment_()` | Plot one pathway enrichment curve               |
+| `leadingGenes()` | Return leading-edge genes for one pathway         |
+| `OntologyMethods()` / `OntologyFunctions()` | Configure and retrieve custom gene-set sources |

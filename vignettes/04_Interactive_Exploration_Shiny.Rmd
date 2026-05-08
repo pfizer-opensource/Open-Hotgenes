@@ -1,29 +1,22 @@
 ---
-title: "Interactive Exploration with Shiny"
+title: "Using Shiny to Prioritize Genes of Interest"
 output:
   github_document:
     html_preview: false
 vignette: >
-  %\VignetteIndexEntry{Interactive Exploration with Shiny}
+  %\VignetteIndexEntry{Using Shiny to Prioritize Genes of Interest}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 ## Overview
 
-`Shiny_Hotgenes()` launches an interactive web application that lets you
-explore any Hotgenes object—or a named list of Hotgenes objects—without
-writing additional code.  The app bundles the most common analysis tasks
-into point-and-click panels:
-
-* **DE Summary** — filterable table of differential expression results
-* **Volcano plots** — interactive volcano plots per contrast
-* **Heatmaps** — top-hit heatmaps with flexible sample/gene selection
-* **Expression plots** — per-gene trajectory plots
-* **Venn diagrams** — overlap across contrasts
-* **GSEA** — gene-set enrichment via `fgsea` with `msigdbr` or custom
-  gene sets
-* **GSVA** — sample-wise pathway activity scores via GSVA/ssGSEA
+`Shiny_Hotgenes()` can be used not only to explore results interactively,
+but also to prioritize genes of interest from multiple complementary
+perspectives. A typical workflow starts with differential expression
+results, then refines candidates with multivariate structure from PCA,
+overlap across contrasts from Venn diagrams, and pathway-level context
+from the GSEA tab.
 
 ```{r set, eval=TRUE, include=FALSE}
 knitr::opts_chunk$set(
@@ -72,28 +65,13 @@ Stop it by pressing **Escape** or closing the browser tab.
 
 ---
 
-<table>
-<tr>
-<td width="55%">
+## 2. Start with DE Stats
 
-After launching `Shiny_Hotgenes(fit_Hotgenes)`, the app opens to the
-default expression/boxplot view.
-
-</td>
-<td width="45%">
-
-![BoxPlot / Expression Data tab](figures/shiny-01-boxplot.png)
-
-</td>
-</tr>
-</table>
-
----
-
-## 2. DE Stats
-
-Use the app launched above and navigate to **DE Stats** to inspect
-statistics, volcano, and heatmap subtabs.
+The **DE Stats** tab is often the first step for identifying candidate
+genes. Filters on adjusted p-value, fold change, and labels provide a
+fast first-pass shortlist, and the heatmap subtab helps review global
+expression patterns across samples. In strong contrasts, this step can
+still produce long candidate lists.
 
 <table>
 <tr>
@@ -116,10 +94,112 @@ DE statistics and subtab views captured from the interactive app.
 
 ---
 
-## 3. Comparing Multiple Objects In The Same App
+## 3. Refine Candidates with PCA
+
+The **PCA** tab helps refine candidate genes by revealing structure
+linked to key biological conditions.
+
+- **PCA** shows sample separation patterns.
+- **Clustered Quali Vars** links metadata variables to dominant axes.
+- **Clustered Features** highlights features driving those patterns
+  (and can be shared to the GSEA tab).
+- **PCA Heatmap** provides a compact annotated view of clustered features.
+
+<table>
+<tr>
+<td width="55%">
+
+The **PCA** tab provides sample-level principal component analysis.
+
+</td>
+<td width="45%">
+
+![PCA scatter plot](figures/shiny-04-pca.png)
+![Clustered Quali Vars subtab](figures/shiny-04b-pca_quali.png)
+![Clustered Features subtab](figures/shiny-04c-pca_features.png)
+![PCA Heatmap subtab](figures/shiny-04d-pca_heatmap.png)
+
+</td>
+</tr>
+</table>
+
+---
+
+## 4. Compare Key Contrasts with Venn Diagram
+
+The **Venn Diagram** tab helps narrow broad DE lists by identifying:
+
+- genes shared across selected contrasts (with or without directionality),
+- genes specific to one contrast,
+- smaller intersection sets that are easier to prioritize.
+
+<table>
+<tr>
+<td width="55%">
+
+Overlap analysis across selected contrasts.
+
+</td>
+<td width="45%">
+
+![Venn Diagram tab](figures/shiny-05-venn.png)
+
+</td>
+</tr>
+</table>
+
+---
+
+## 5. Link Genes to Biology with GSEA
+
+The **GSEA** tab connects DE patterns to biological pathways. This step
+helps move from statistically significant genes to biologically grounded
+candidates by inspecting enriched pathways and leading-edge genes.
+
+<table>
+<tr>
+<td width="55%">
+
+GSEA tab for pathway-level interpretation and leading-edge exploration.
+
+</td>
+<td width="45%">
+
+![GSEA tab](figures/shiny-06-gsea.png)
+
+</td>
+</tr>
+</table>
+
+---
+
+## 6. Visualize Selected Genes with Expression Plots
+
+Once genes are prioritized, the **Expression Plots** tab is useful to
+inspect expression trajectories for selected genes across samples and
+conditions.
+
+<table>
+<tr>
+<td width="55%">
+
+Expression trajectory plots for selected genes and contrasts.
+
+</td>
+<td width="45%">
+
+![Expression Plots tab](figures/shiny-03-expsplot.png)
+
+</td>
+</tr>
+</table>
+
+---
+
+## 7. Comparing Multiple Objects in the Same App
 
 Pass a **named list** of Hotgenes objects to switch between experiments
-in the app. The names become the labels in the dataset selector:
+in the app. The names become labels in the dataset selector.
 
 ```{r shiny_list, eval=FALSE}
 # Load a second object (DESeq2-based example)
@@ -140,272 +220,15 @@ Shiny_Hotgenes(Hotgenes_list)
 
 ---
 
-## 4. Expression Plots
-
-In the same app session, open the **Expression Plots** tab.
-
-<table>
-<tr>
-<td width="55%">
-
-Expression trajectory plots for selected genes and contrasts.
-
-</td>
-<td width="45%">
-
-![Expression Plots tab](figures/shiny-03-expsplot.png)
-
-</td>
-</tr>
-</table>
-
----
-
-## 5. PCA
-
-In the same app session, open the **PCA** tab.
-
-<table>
-<tr>
-<td width="55%">
-
-The **PCA** tab provides sample-level principal component analysis.
-Subtabs include:
-
-- **PCA** — scatter plot coloured by sample group
-- **Clustered Quali Vars** — qualitative variable contributions
-- **Clustered Features** — top contributing features per cluster
-- **PCA Heatmap** — heatmap of clustered features
-
-</td>
-<td width="45%">
-
-![PCA scatter plot](figures/shiny-04-pca.png)
-![Clustered Quali Vars subtab](figures/shiny-04b-pca_quali.png)
-![Clustered Features subtab](figures/shiny-04c-pca_features.png)
-![PCA Heatmap subtab](figures/shiny-04d-pca_heatmap.png)
-
-</td>
-</tr>
-</table>
-
----
-
-## 6. Venn Diagram
-
-In the same app session, open the **Venn Diagram** tab.
-
-<table>
-<tr>
-<td width="55%">
-
-Overlap analysis across selected contrasts.
-
-</td>
-<td width="45%">
-
-![Venn Diagram tab](figures/shiny-05-venn.png)
-
-</td>
-</tr>
-</table>
-
----
-
-## 7. Gene-Set Enrichment Analysis (GSEA)
-
-<table>
-<tr>
-<td width="55%">
-
-The GSEA tab in `Shiny_Hotgenes()` complements the command-line
-workflow below.
-
-</td>
-<td width="45%">
-
-![GSEA tab](figures/shiny-06-gsea.png)
-
-</td>
-</tr>
-</table>
-
-### Built-in msigdbr gene sets
-
-`msigdbr_wrapper()` returns a named list of gene sets sourced from
-the MSigDB via the `msigdbr` package. Any collection supported by
-`msigdbr` can be used.
-
-```{r msigdbr, message=FALSE, warning=FALSE}
-# Retrieve KEGG and Reactome pathways for human
-H_paths <- msigdbr_wrapper(
-  species  = "human",
-  set      = c("H"),
-  gene_col = "gene_symbol"
-)
-
-length(H_paths)
-H_paths |> names() |> head(5)
-```
-
-### Running GSEA with `fgsea_()`
-
-`fgsea_()` is a wrapper around `fgsea::fgsea()` that accepts the ranked
-vector returned by `DE(..., Report = "Ranks")`:
-
-```{r gsea_ranks, message=FALSE}
-fit_Hotgenes <- readRDS(
-  system.file("extdata", "fit_Hotgenes.RDS",
-              package = "Hotgenes",
-              mustWork = TRUE)
-)
-
-# Get ranked statistics for one contrast
-InputRanks <- fit_Hotgenes |>
-  DE(
-    Report    = "Ranks",
-    contrasts  = "sh_EWS_vs_Ctrl",
-    Rank_name = "Feature",
-    padj_cut  = 1
-  )
-
-head(InputRanks)
-```
-
-```{r gsea_run, message=FALSE, warning=FALSE}
-# Run GSEA
-Out_GSEA <- fgsea_(
-  Ranks    = InputRanks,
-  pathways = H_paths,
-  nproc    = 1,
-  minSize  = 5,
-  maxSize  = Inf
-)
-```
-
-### Inspecting GSEA results
-
-```{r gsea_results}
-# Tabular summary of significant pathways
-Out_GSEA |>
-  fgsea_Results(
-    contrasts = "sh_EWS_vs_Ctrl",
-    padj_cut  = 0.2,
-    mode      = "D"
-  ) |> head()
-```
-
-```{r gsea_leading}
-# Leading-edge genes for one pathway
-Out_GSEA |>
-  fgsea_Results(
-    contrasts = "sh_EWS_vs_Ctrl",
-    padj_cut  = 0.2,
-    mode      = "leadingEdge"
-  ) |> head()
-```
-
-### Visualizing GSEA results
-
-```{r gsea_plots, fig.width=10, fig.height=4}
-Out_GSEA |>
-  GSEA_Plots(
-    contrasts = "sh_EWS_vs_Ctrl",
-    padj_cut  = 0.2,
-    Topn      = 3,
-    width     = 20
-  )
-```
-
-```{r gsea_enrich, fig.width=6, fig.height=4}
-# Enrichment plot for a single pathway
-# (replace with a pathway name present in your results)
-sig_paths <- Out_GSEA |>
-  fgsea_Results(contrasts = "sh_EWS_vs_Ctrl",
-                padj_cut  = 0.2,
-                mode      = "D")
-
-if (nrow(sig_paths$sh_EWS_vs_Ctrl) > 0) {
-  first_geneset_name <- sig_paths$sh_EWS_vs_Ctrl$pathway[1]
-  
-  plotEnrichment_(fgseaRes = Out_GSEA, contrast = "sh_EWS_vs_Ctrl", 
-                genesetName = first_geneset_name)
-
-}
-```
-
-```{r gsea_leading_genes}
-# Retrieve the leading-edge gene list for one pathway
-if (nrow(sig_paths$sh_EWS_vs_Ctrl) > 0) {
-    first_geneset_name <- sig_paths$sh_EWS_vs_Ctrl$pathway[1]
-
-  leadingGenes(fgseaRes = Out_GSEA, contrast = "sh_EWS_vs_Ctrl", 
-                genesetName = first_geneset_name)
-}
-```
-
----
-
-## 8. Sample-wise Pathway Activity with `HotgeneSets()`
-
-`HotgeneSets()` runs GSVA (or ssGSEA, PLAGE, etc.) on the expression
-data to produce per-sample pathway activity scores, then returns a new
-Hotgenes object with the pathway scores as the expression matrix.
-
-```{r gsva, message=FALSE, warning=FALSE}
-# Use the same gene sets as above
-HotgeneSets_out <- HotgeneSets(
-  Hotgenes = fit_Hotgenes,
-  geneSets = H_paths,
-  kcdf     = "Gaussian",
-  method   = "ssgsea",
-  minSize  = 2,
-  maxSize  = Inf
-)
-
-HotgeneSets_out
-```
-
-The result is a Hotgenes object whose expression matrix rows are pathway
-names and whose DE slot contains pathway-level differential activity
-results. You can pass it directly to `Shiny_Hotgenes()`.
-
----
-
-## 9. Custom Gene Sets in the Shiny App
-
-You can configure the Shiny app to use your own gene-set retrieval
-function (or expose multiple databases) via `OntologyMethods()` and
-`OntologyFunctions()`:
-
-```{r custom_gsea, eval=FALSE}
-# Define custom database functions
-Custom_db <- OntologyMethods(
-  Ontology_Function  = list("msigdbr" = msigdbr_wrapper),
-  InputChoices       = list("msigdbr" = c("CP:REACTOME", "CP:KEGG", "H")),
-  gene_col_choices   = list("msigdbr" = c("gene_symbol",
-                                           "entrez_gene",
-                                           "ensembl_gene")),
-  species_choices    = list("msigdbr" = c("human", "mouse", "rat")),
-  versions           = list("msigdbr" = packageVersion("msigdbr"))
-)
-
-# Pass to Shiny app
-Shiny_Hotgenes(fit_Hotgenes, OntologyDB = Custom_db)
-```
-
----
-
-## 10. Tips for Large Datasets
+## 8. Tips for Large Datasets
 
 | Tip | Rationale |
 |---|---|
 | Store objects as `.RDS` files and load them with `readRDS()` | Avoids re-running expensive analyses every session |
 | Use `update_object()` when loading saved objects | Ensures slot structure matches the current package version |
-| Subset contrasts with `contrasts = c("A_vs_B")` | Reduces memory usage in `DE()` and plot functions |
-| Set `padj_cut` and `.log2FoldChange` tightly | Speeds up Venn diagrams and heatmaps for large gene lists |
-| Prefer `method = "ssgsea"` over `"gsva"` for sparse data | ssGSEA is more robust when many zeros are present |
-| Pre-compute GSEA results and pass `Out_GSEA` to the app | Avoids waiting for `fgsea_` inside the app for large pathway databases |
+| Subset contrasts with `contrasts = c("A_vs_B")` | Reduces memory usage in app tables and plots |
+| Set `padj_cut` and `.log2FoldChange` tightly | Speeds up Venn and heatmap calculations for large feature spaces |
+| Pre-compute GSEA results before launching the app | Reduces waiting time during pathway exploration |
 
 ---
 
@@ -413,27 +236,21 @@ Shiny_Hotgenes(fit_Hotgenes, OntologyDB = Custom_db)
 
 ```{r summary_table, echo=FALSE}
 summary_tbl <- data.frame(
-  Function = c(
-    "Shiny_Hotgenes()",
-    "msigdbr_wrapper()",
-    "fgsea_()",
-    "fgsea_Results()",
-    "GSEA_Plots()",
-    "plotEnrichment_()",
-    "leadingGenes()",
-    "HotgeneSets()",
-    "OntologyMethods()"
+  Tab_or_Feature = c(
+    "DE Stats",
+    "PCA",
+    "Venn Diagram",
+    "GSEA",
+    "Expression Plots",
+    "Multi-object selector"
   ),
-  Purpose = c(
-    "Launch the interactive Shiny app",
-    "Retrieve MSigDB gene sets via msigdbr",
-    "Run fgsea gene-set enrichment",
-    "Extract GSEA results table",
-    "Bar plot of top enriched pathways",
-    "Enrichment curve for one pathway",
-    "Leading-edge genes for one pathway",
-    "Compute GSVA/ssGSEA pathway activity",
-    "Define custom gene-set database methods for Shiny"
+  Role_in_prioritization = c(
+    "First-pass filtering by DE statistics and thresholds",
+    "Refines candidates using multivariate sample/feature structure",
+    "Finds shared vs contrast-specific candidates",
+    "Links candidate genes to enriched biological pathways",
+    "Validates expression behavior of selected genes",
+    "Compares candidate behavior across Hotgenes objects"
   )
 )
 knitr::kable(summary_tbl)
