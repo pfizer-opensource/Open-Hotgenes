@@ -154,8 +154,7 @@ venn_out$Intsect |> head()
 ## [1] "HMGB2"  "MAP3K9" "CEBPB"  "IRF1"  
 ## 
 ## $`sh_EWS_vs_Ctrl:Hrs_6_vs_0`
-##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2" "IFI44"
-## [11] "CCL7"
+##  [1] "C1R"   "C1S"   "MMP3"  "CXCL6" "STAT1" "PTGS1" "HMGB1" "MASP1" "TRAF2" "IFI44" "CCL7"
 ```
 
 ------------------------------------------------------------------------
@@ -308,21 +307,20 @@ Inspect cluster assignments and top contributing features:
 ``` r
 FactoOutput$TopTibble   # top features per cluster
 ## # A tibble: 66 × 10
-##    Cluster Interpretation           Feature  v.test `Mean in category` `Overall mean`
-##    <fct>   <fct>                    <chr>     <dbl>              <dbl>          <dbl>
-##  1 1       Above average in cluster IL1R1      2.35              12.1           11.6 
-##  2 1       Above average in cluster IFI44      1.98               8.57           8.22
-##  3 1       Below average in cluster TRAF2     -2.09               9.20           9.59
-##  4 1       Below average in cluster JUN       -2.10              11.1           11.7 
-##  5 1       Below average in cluster CD40      -2.15               8.47           8.67
-##  6 1       Below average in cluster CXCL2     -2.34               6.92           7.93
-##  7 1       Below average in cluster MEF2D     -2.43              10.5           10.9 
-##  8 1       Below average in cluster MEF2D     -2.43              10.5           10.9 
-##  9 1       Below average in cluster MAP3K9    -2.55               4.52           5.68
-## 10 1       Below average in cluster MAPKAPK2  -2.62              12.4           12.6 
+##    Cluster Interpretation   Feature v.test `Mean in category` `Overall mean` `sd in category`
+##    <fct>   <fct>            <chr>    <dbl>              <dbl>          <dbl>            <dbl>
+##  1 1       Above average i… IL1R1     2.35              12.1           11.6           0.0251 
+##  2 1       Above average i… IFI44     1.98               8.57           8.22          0.0245 
+##  3 1       Below average i… TRAF2    -2.09               9.20           9.59          0.00175
+##  4 1       Below average i… JUN      -2.10              11.1           11.7           0.116  
+##  5 1       Below average i… CD40     -2.15               8.47           8.67          0.139  
+##  6 1       Below average i… CXCL2    -2.34               6.92           7.93          0.110  
+##  7 1       Below average i… MEF2D    -2.43              10.5           10.9           0.0225 
+##  8 1       Below average i… MEF2D    -2.43              10.5           10.9           0.0225 
+##  9 1       Below average i… MAP3K9   -2.55               4.52           5.68          0.0814 
+## 10 1       Below average i… MAPKAP…  -2.62              12.4           12.6           0.0394 
 ## # ℹ 56 more rows
-## # ℹ 4 more variables: `sd in category` <dbl>, `Overall sd` <dbl>, p.value <dbl>,
-## #   ensembl_id <chr>
+## # ℹ 3 more variables: `Overall sd` <dbl>, p.value <dbl>, ensembl_id <chr>
 FactoOutput$TopGroups   # cluster membership per sample
 ## # A tibble: 2 × 8
 ##   Cluster Interpretation           Category `Cla/Mod` `Mod/Cla` Global p.value v.test
