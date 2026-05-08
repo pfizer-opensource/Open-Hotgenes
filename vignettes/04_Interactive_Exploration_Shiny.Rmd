@@ -169,12 +169,21 @@ In the same app session, open the **PCA** tab.
 <tr>
 <td width="55%">
 
-Principal component analysis view for sample-level exploration.
+The **PCA** tab provides sample-level principal component analysis.
+Subtabs include:
+
+- **PCA** — scatter plot coloured by sample group
+- **Clustered Quali Vars** — qualitative variable contributions
+- **Clustered Features** — top contributing features per cluster
+- **PCA Heatmap** — heatmap of clustered features
 
 </td>
 <td width="45%">
 
-![PCA tab](figures/shiny-04-pca.png)
+![PCA scatter plot](figures/shiny-04-pca.png)
+![Clustered Quali Vars subtab](figures/shiny-04b-pca_quali.png)
+![Clustered Features subtab](figures/shiny-04c-pca_features.png)
+![PCA Heatmap subtab](figures/shiny-04d-pca_heatmap.png)
 
 </td>
 </tr>
