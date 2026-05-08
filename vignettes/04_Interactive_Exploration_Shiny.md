@@ -1,21 +1,22 @@
-Interactive Exploration with Shiny
+Using Shiny to Prioritize Genes of Interest
 ================
 
 ## Overview
 
-`Shiny_Hotgenes()` launches an interactive web application that lets you
-explore any Hotgenes object—or a named list of Hotgenes objects—without
-writing additional code. The app bundles the most common analysis tasks
-into point-and-click panels:
+`Shiny_Hotgenes()` is not only an interactive viewer for Hotgenes results;
+it can also be used as a practical workflow for prioritizing genes of
+interest. A typical workflow starts with differential expression, then
+refines candidates using multivariate structure in PCA, overlap patterns
+across conditions, and pathway-level enrichment.
 
-- **DE Summary** — filterable table of differential expression results
-- **Volcano plots** — interactive volcano plots per contrast
-- **Heatmaps** — top-hit heatmaps with flexible sample/gene selection
-- **Expression plots** — per-gene trajectory plots
-- **Venn diagrams** — overlap across contrasts
-- **GSEA** — gene-set enrichment via `fgsea` with `msigdbr` or custom
-  gene sets
-- **GSVA** — sample-wise pathway activity scores via GSVA/ssGSEA
+This vignette is organized around that sequence:
+
+1. **DE Stats** for first-pass candidate selection
+2. **PCA** to refine candidates linked to dominant biological structure
+3. **Venn Diagram** to compare shared and condition-specific genes
+4. **GSEA** to link candidates to biological pathways and leading-edge
+   genes
+5. **Expression Plots** to review selected genes across samples
 
 ``` r
 library(Hotgenes)
@@ -87,10 +88,16 @@ tab</figcaption>
 
 ------------------------------------------------------------------------
 
-## 2. DE Stats
+## 2. Start with DE Stats
 
-Use the app launched above and navigate to **DE Stats** to inspect
-statistics, volcano, and heatmap subtabs.
+**DE Stats** is often the first step to identify candidate genes. Filters
+on adjusted p-value, fold change, and labels allow rapid prioritization
+within a selected contrast. The statistics, volcano, and heatmap subtabs
+provide complementary views, and the heatmap offers an annotated view of
+global expression changes across samples.
+
+This basic strategy is useful for quickly surfacing candidates, but in
+many contrasts it can still return large gene lists.
 
 <table>
 
@@ -131,60 +138,7 @@ alt="DE Stats / Heatmap subtab" />
 
 ------------------------------------------------------------------------
 
-## 3. Comparing Multiple Objects In The Same App
-
-Pass a **named list** of Hotgenes objects to switch between experiments
-in the app. The names become the labels in the dataset selector:
-
-``` r
-# Load a second object (DESeq2-based example)
-dds_Hotgenes <- readRDS(
-  system.file("extdata", "dds_Hotgenes.RDS",
-              package = "Hotgenes",
-              mustWork = TRUE)
-) |> update_object()
-
-# Combine into a named list
-Hotgenes_list <- list(
-  limma_Ewing  = fit_Hotgenes,
-  DESeq2_Ewing = dds_Hotgenes
-)
-
-Shiny_Hotgenes(Hotgenes_list)
-```
-
-------------------------------------------------------------------------
-
-## 4. Expression Plots
-
-In the same app session, open the **Expression Plots** tab.
-
-<table>
-
-<tr>
-
-<td width="55%">
-
-Expression trajectory plots for selected genes and contrasts.
-
-</td>
-
-<td width="45%">
-
-<figure>
-<img src="figures/shiny-03-expsplot.png" alt="Expression Plots tab" />
-<figcaption aria-hidden="true">Expression Plots tab</figcaption>
-</figure>
-
-</td>
-
-</tr>
-
-</table>
-
-------------------------------------------------------------------------
-
-## 5. PCA
+## 3. Refine Candidates with PCA
 
 In the same app session, open the **PCA** tab.
 
@@ -194,13 +148,18 @@ In the same app session, open the **PCA** tab.
 
 <td width="55%">
 
-The **PCA** tab provides sample-level principal component analysis.
+The **PCA** tab highlights sample structure driven by dominant biological
+conditions and helps refine candidate genes beyond DE filtering alone.
 Subtabs include:
 
 - **PCA** — scatter plot coloured by sample group
-- **Clustered Quali Vars** — qualitative variable contributions
-- **Clustered Features** — top contributing features per cluster
-- **PCA Heatmap** — heatmap of clustered features
+- **Clustered Quali Vars** — metadata variables associated with dominant
+  axes
+- **Clustered Features** — genes contributing strongly to these patterns
+- **PCA Heatmap** — annotated heatmap of clustered features
+
+Feature clusters from this step can also be carried into downstream
+interpretation, including the **GSEA** tab.
 
 </td>
 
@@ -219,7 +178,7 @@ subtab](figures/shiny-04d-pca_heatmap.png)
 
 ------------------------------------------------------------------------
 
-## 6. Venn Diagram
+## 4. Compare Key Contrasts with Venn Diagram
 
 In the same app session, open the **Venn Diagram** tab.
 
@@ -229,7 +188,10 @@ In the same app session, open the **Venn Diagram** tab.
 
 <td width="55%">
 
-Overlap analysis across selected contrasts.
+Use this tab to identify genes shared across conditions (with or without
+directionality) and condition-specific candidates. This is useful for
+narrowing broad DE results into smaller, interpretable sets that can be
+reviewed in heatmap or expression views.
 
 </td>
 
@@ -248,7 +210,7 @@ Overlap analysis across selected contrasts.
 
 ------------------------------------------------------------------------
 
-## 7. Gene-Set Enrichment Analysis (GSEA)
+## 5. Link Genes to Biology with GSEA
 
 <table>
 
@@ -256,8 +218,12 @@ Overlap analysis across selected contrasts.
 
 <td width="55%">
 
-The GSEA tab in `Shiny_Hotgenes()` complements the command-line workflow
-below.
+Use the **GSEA** tab to connect DE contrasts to pathways and biological
+processes. In this step, leading-edge genes help prioritize features that
+are biologically grounded, moving from statistically significant hits to
+more biologically interpretable candidates.
+
+The app view below complements the command-line workflow that follows.
 
 </td>
 
@@ -528,6 +494,61 @@ if (nrow(sig_paths$sh_EWS_vs_Ctrl) > 0) {
                 genesetName = first_geneset_name)
 }
 ## [1] "HRAS"   "SHC1"   "MAPK14"
+```
+
+------------------------------------------------------------------------
+
+## 6. Visualize Selected Genes
+
+Once genes are prioritized from DE Stats, PCA, Venn overlap, or GSEA, use
+the **Expression Plots** tab to inspect selected genes individually across
+samples and conditions.
+
+<table>
+
+<tr>
+
+<td width="55%">
+
+Expression trajectory plots for selected genes and contrasts.
+
+</td>
+
+<td width="45%">
+
+<figure>
+<img src="figures/shiny-03-expsplot.png" alt="Expression Plots tab" />
+<figcaption aria-hidden="true">Expression Plots tab</figcaption>
+</figure>
+
+</td>
+
+</tr>
+
+</table>
+
+------------------------------------------------------------------------
+
+## 7. Working with Multiple Objects in the Same App
+
+Pass a **named list** of Hotgenes objects to switch between experiments in
+the app. The names become the labels in the dataset selector:
+
+``` r
+# Load a second object (DESeq2-based example)
+dds_Hotgenes <- readRDS(
+  system.file("extdata", "dds_Hotgenes.RDS",
+              package = "Hotgenes",
+              mustWork = TRUE)
+) |> update_object()
+
+# Combine into a named list
+Hotgenes_list <- list(
+  limma_Ewing  = fit_Hotgenes,
+  DESeq2_Ewing = dds_Hotgenes
+)
+
+Shiny_Hotgenes(Hotgenes_list)
 ```
 
 ------------------------------------------------------------------------
