@@ -387,7 +387,7 @@ Out_GSEA <- fgsea_(
   minSize  = 5,
   maxSize  = Inf
 )
-##   |                                                                                                           |                                                                                                   |   0%  |                                                                                                           |================                                                                                   |  17%  |                                                                                                           |=================================                                                                  |  33%  |                                                                                                           |==================================================                                                 |  50%  |                                                                                                           |==================================================================                                 |  67%  |                                                                                                           |==================================================================================                 |  83%  |                                                                                                           |===================================================================================================| 100%
+##   |                                                                                                           |                                                                                                   |   0%  |                                                                                                           |====================                                                                               |  20%  |                                                                                                           |========================================                                                           |  40%  |                                                                                                           |===========================================================                                        |  60%  |                                                                                                           |===============================================================================                    |  80%  |                                                                                                           |===================================================================================================| 100%
 ```
 
 ### Inspecting GSEA results
@@ -401,20 +401,18 @@ Out_GSEA |>
     mode      = "D"
   ) |> head()
 ## $sh_EWS_vs_Ctrl
-## # A tibble: 11 × 9
-##    pathway                                  pval     padj log2err     ES   NES  size leadingEdge sign_NES
-##    <chr>                                   <dbl>    <dbl>   <dbl>  <dbl> <dbl> <int> <list>         <dbl>
-##  1 hallmark_apical_junction           0.0609     0.190      0.322  0.733  1.51     6 <chr [3]>          1
-##  2 hallmark_apoptosis                 0.0660     0.190      0.253  0.548  1.50    17 <chr [5]>          1
-##  3 hallmark_pi3k_akt_mtor_signaling   0.0911     0.195      0.217  0.470  1.36    23 <chr [13]>         1
-##  4 hallmark_tnfa_signaling_via_nfkb   0.0931     0.195      0.198 -0.437 -1.33    37 <chr [9]>         -1
-##  5 hallmark_coagulation               0.0752     0.192      0.231 -0.585 -1.45    16 <chr [4]>         -1
-##  6 hallmark_il6_jak_stat3_signaling   0.0507     0.190      0.277 -0.530 -1.46    24 <chr [13]>        -1
-##  7 hallmark_allograft_rejection       0.0185     0.0850     0.352 -0.474 -1.55    54 <chr [22]>        -1
-##  8 hallmark_interferon_alpha_response 0.00416    0.0239     0.407 -0.736 -1.79    14 <chr [8]>         -1
-##  9 hallmark_inflammatory_response     0.000818   0.00940    0.477 -0.580 -1.83    43 <chr [20]>        -1
-## 10 hallmark_complement                0.00253    0.0194     0.432 -0.708 -1.87    20 <chr [9]>         -1
-## 11 hallmark_interferon_gamma_response 0.00000751 0.000173   0.611 -0.700 -2.14    37 <chr [16]>        -1
+## # A tibble: 9 × 9
+##   pathway                                 pval     padj log2err     ES   NES  size leadingEdge sign_NES
+##   <chr>                                  <dbl>    <dbl>   <dbl>  <dbl> <dbl> <int> <list>         <dbl>
+## 1 hallmark_apical_junction           0.0671    0.191      0.249  0.733  1.49     6 <chr [3]>          1
+## 2 hallmark_apoptosis                 0.0749    0.191      0.234  0.548  1.46    17 <chr [5]>          1
+## 3 hallmark_coagulation               0.0650    0.191      0.249 -0.585 -1.44    16 <chr [4]>         -1
+## 4 hallmark_il6_jak_stat3_signaling   0.0606    0.191      0.253 -0.530 -1.45    24 <chr [13]>        -1
+## 5 hallmark_allograft_rejection       0.0158    0.0727     0.352 -0.474 -1.52    54 <chr [22]>        -1
+## 6 hallmark_interferon_alpha_response 0.00643   0.0370     0.407 -0.736 -1.78    14 <chr [8]>         -1
+## 7 hallmark_inflammatory_response     0.00192   0.0147     0.455 -0.580 -1.80    43 <chr [20]>        -1
+## 8 hallmark_complement                0.00125   0.0144     0.455 -0.708 -1.85    20 <chr [9]>         -1
+## 9 hallmark_interferon_gamma_response 0.0000120 0.000276   0.593 -0.700 -2.11    37 <chr [16]>        -1
 ```
 
 ``` r
@@ -431,13 +429,6 @@ Out_GSEA |>
 ## 
 ## $sh_EWS_vs_Ctrl$hallmark_apoptosis
 ## [1] "HMGB2"  "JUN"    "BCL2L1" "SMAD7"  "IL18"  
-## 
-## $sh_EWS_vs_Ctrl$hallmark_pi3k_akt_mtor_signaling
-##  [1] "RAC1"   "CLTC"   "TRAF2"  "HRAS"   "PLCB1"  "RAF1"   "MAPK1"  "MAPK8"  "NOD1"   "CFL1"   "MAP2K6"
-## [12] "CXCR4"  "PRKCB" 
-## 
-## $sh_EWS_vs_Ctrl$hallmark_tnfa_signaling_via_nfkb
-## [1] "CCL2"  "CXCL6" "CSF1"  "CEBPB" "IL6"   "IRF1"  "NFKB1" "RELB"  "CXCL1"
 ## 
 ## $sh_EWS_vs_Ctrl$hallmark_coagulation
 ## [1] "C1R" "C1S" "C3"  "CFD"
