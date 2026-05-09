@@ -171,9 +171,9 @@ Overlap analysis across selected contrasts.
 
 The **GSEA** tab connects DE patterns to biological pathways. This step
 helps move from statistically significant genes to biologically grounded
-candidates by inspecting enriched pathways and leading-edge genes.
-Genes prioritized from enriched pathways or leading-edge results can
-then be reviewed in the **Heatmap** subtab (within **GSEA**) and the
+candidates by inspecting enriched pathways and leading-edge genes. Genes
+prioritized from enriched pathways or leading-edge results can then be
+reviewed in the **Heatmap** subtab (within **GSEA**) and the
 **Expression Plots** tab.
 
 <table>

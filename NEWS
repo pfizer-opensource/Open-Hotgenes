@@ -3,6 +3,13 @@
       names from export.
     - Fixed HotgenesDEseq2() issue not supporting stat col generation for "ashr"
     - Updates to DE() to stabilize Topn behavoir across Report types.
+    - Reorganized the package vignettes into a clearer 01–05 documentation suite.
+    - Expanded the visualization vignette to include GSEA, msigdbr_wrapper(),
+      and custom gene-set configuration examples.
+    - Refocused the Shiny vignette on using the app to prioritize genes of
+      interest across DE, PCA, Venn, GSEA, and expression views.
+    - Added a separate vignette for sample-wise pathway activity with
+      HotgeneSets().
 
 # version 0.0.54:
     - Replaced base R messaging/error calls (stop(), warning(), message(),
