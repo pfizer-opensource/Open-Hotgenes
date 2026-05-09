@@ -1,0 +1,107 @@
+---
+title: "Sample-wise Pathway Activity with HotgeneSets"
+output:
+  github_document:
+    html_preview: false
+vignette: >
+  %\VignetteIndexEntry{Sample-wise Pathway Activity with HotgeneSets}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Overview
+
+`HotgeneSets()` computes pathway-level activity scores for each sample
+(using GSVA/ssGSEA-family methods) and returns a new Hotgenes object.
+This keeps pathway activity analysis separate from the Shiny workflow and
+makes it easy to reuse downstream plotting and DE utilities on pathway
+features.
+
+```{r set, eval=TRUE, include=FALSE}
+knitr::opts_chunk$set(
+  collapse  = TRUE,
+  fig.path  = "05_Samplewise_Pathway_Activity_HotgeneSets_files/figure-",
+  fig.height = 4, fig.width = 6
+)
+```
+
+```{r load, message=FALSE}
+library(Hotgenes)
+
+fit_Hotgenes <- readRDS(
+  system.file("extdata", "fit_Hotgenes.RDS",
+              package = "Hotgenes",
+              mustWork = TRUE)
+)
+```
+
+---
+
+## 1. Retrieve Gene Sets
+
+```{r genesets, message=FALSE, warning=FALSE}
+H_paths <- msigdbr_wrapper(
+  species  = "human",
+  set      = c("CP:KEGG_MEDICUS"),
+  gene_col = "gene_symbol"
+)
+
+length(H_paths)
+names(H_paths)[1:5]
+```
+
+---
+
+## 2. Compute Sample-wise Pathway Activity
+
+```{r hotgenesets, message=FALSE, warning=FALSE}
+HotgeneSets_out <- HotgeneSets(
+  Hotgenes = fit_Hotgenes,
+  geneSets = H_paths,
+  kcdf     = "Gaussian",
+  method   = "ssgsea",
+  minSize  = 2,
+  maxSize  = Inf
+)
+
+HotgeneSets_out
+```
+
+The resulting object stores pathway scores in the expression slot and
+supports the same downstream functions used for gene-level analyses.
+
+---
+
+## 3. Explore Pathway-level Differential Activity
+
+```{r pathway_deplot}
+DEPlot(HotgeneSets_out, .log2FoldChange = 0, padj_cut = 0.1)
+```
+
+```{r pathway_heatmap, fig.height=8, fig.width=8}
+DEphe(
+  HotgeneSets_out,
+  contrasts         = "sh_EWS_vs_Ctrl",
+  Topn              = 5,
+  annotations       = c("Hrs", "sh"),
+  annotation_colors = coldata_palettes(HotgeneSets_out)
+)
+```
+
+---
+
+## 4. Retrieve Leading Pathway Names for Downstream Use
+
+```{r pathway_names}
+pathway_hits <- HotgeneSets_out |>
+  DE(
+    Report    = "Features",
+    contrasts = "sh_EWS_vs_Ctrl",
+    padj_cut  = 0.2
+  )
+
+head(pathway_hits$sh_EWS_vs_Ctrl)
+```
+
+These pathway names can be used directly in additional plots,
+reporting, or to initialize a focused Shiny session if needed.
