@@ -1,4 +1,4 @@
-Visualization and Exploration
+Visualization, Exploration, and Enrichment
 ================
 
 ## Overview
@@ -497,18 +497,17 @@ Out_GSEA |>
     mode      = "D"
   ) |> head()
 ## $sh_EWS_vs_Ctrl
-## # A tibble: 9 × 9
+## # A tibble: 8 × 9
 ##   pathway                    pval    padj log2err     ES   NES  size leadingEdge sign_NES
 ##   <chr>                     <dbl>   <dbl>   <dbl>  <dbl> <dbl> <int> <list>         <dbl>
-## 1 hallmark_apical_juncti… 6.95e-2 1.78e-1   0.245  0.733  1.49     6 <chr [3]>          1
-## 2 hallmark_apoptosis      6.30e-2 1.78e-1   0.257  0.548  1.46    17 <chr [5]>          1
-## 3 hallmark_il6_jak_stat3… 6.46e-2 1.78e-1   0.245 -0.530 -1.44    24 <chr [13]>        -1
-## 4 hallmark_coagulation    5.19e-2 1.78e-1   0.282 -0.585 -1.46    16 <chr [4]>         -1
-## 5 hallmark_allograft_rej… 1.48e-2 6.82e-2   0.381 -0.474 -1.54    54 <chr [22]>        -1
-## 6 hallmark_interferon_al… 2.40e-3 1.38e-2   0.432 -0.736 -1.78    14 <chr [8]>         -1
-## 7 hallmark_inflammatory_… 1.16e-3 9.88e-3   0.455 -0.580 -1.82    43 <chr [20]>        -1
-## 8 hallmark_complement     1.29e-3 9.88e-3   0.455 -0.708 -1.86    20 <chr [9]>         -1
-## 9 hallmark_interferon_ga… 1.34e-5 3.08e-4   0.593 -0.700 -2.12    37 <chr [16]>        -1
+## 1 hallmark_apical_juncti… 5.46e-2 1.74e-1   0.266  0.733  1.46     6 <chr [3]>          1
+## 2 hallmark_apoptosis      6.04e-2 1.74e-1   0.262  0.548  1.46    17 <chr [5]>          1
+## 3 hallmark_il6_jak_stat3… 5.50e-2 1.74e-1   0.266 -0.530 -1.46    24 <chr [13]>        -1
+## 4 hallmark_allograft_rej… 1.49e-2 6.85e-2   0.381 -0.474 -1.55    54 <chr [22]>        -1
+## 5 hallmark_interferon_al… 3.75e-3 2.15e-2   0.432 -0.736 -1.75    14 <chr [8]>         -1
+## 6 hallmark_inflammatory_… 7.71e-4 8.06e-3   0.477 -0.580 -1.81    43 <chr [20]>        -1
+## 7 hallmark_complement     1.05e-3 8.06e-3   0.455 -0.708 -1.85    20 <chr [9]>         -1
+## 8 hallmark_interferon_ga… 1.20e-5 2.77e-4   0.593 -0.700 -2.14    37 <chr [16]>        -1
 ```
 
 ``` r
@@ -528,9 +527,6 @@ Out_GSEA |>
 ## $sh_EWS_vs_Ctrl$hallmark_il6_jak_stat3_signaling
 ##  [1] "IL1R1"  "STAT1"  "CSF1"   "CCL7"   "IL6"    "IRF1"   "CXCL1"  "STAT2"  "IL10RB"
 ## [10] "CCR1"   "TLR2"   "CXCL9"  "STAT3" 
-## 
-## $sh_EWS_vs_Ctrl$hallmark_coagulation
-## [1] "C1R" "C1S" "C3"  "CFD"
 ## 
 ## $sh_EWS_vs_Ctrl$hallmark_allograft_rejection
 ##  [1] "CCL2"    "STAT1"   "HIF1A"   "CSF1"    "CCL7"    "IL6"     "TLR6"    "IRF7"   

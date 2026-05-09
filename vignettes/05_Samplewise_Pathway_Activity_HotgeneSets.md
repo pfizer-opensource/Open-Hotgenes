@@ -9,6 +9,11 @@ This keeps pathway activity analysis separate from the Shiny workflow
 and makes it easy to reuse downstream plotting and DE utilities on
 pathway features.
 
+Unlike `fgsea_()`, which evaluates enrichment from ranked differential
+expression results for a contrast, `HotgeneSets()` computes pathway
+activity scores for each sample and returns a new Hotgenes object for
+downstream analysis.
+
 ``` r
 library(Hotgenes)
 

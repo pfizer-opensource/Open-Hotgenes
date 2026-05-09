@@ -447,4 +447,4 @@ see the companion vignettes:
 
 - **02 API and Methods** — accessor functions and DE reports
 - **03 Visualization and Exploration** — plots and heatmaps
-- **04 Interactive Exploration with Shiny** — the Shiny app
+- **04 Using Shiny to Prioritize Genes of Interest** — the Shiny app
