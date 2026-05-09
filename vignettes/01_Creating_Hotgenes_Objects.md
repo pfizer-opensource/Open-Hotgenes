@@ -226,10 +226,9 @@ Key parameters:
 ## 3. Creating a Hotgenes Object from limma
 
 `Hotgeneslimma()` accepts a limma `MArrayLM` fit object together with
-expression data and sample metadata. This example reproduces the
-Drug-Induced Liver Injury (DILI) proteomics analysis that is fully
-documented in the [DILI Discovery Proteomics
-vignette](DILI_Hotgenes.md).
+expression data and sample metadata. This example uses a Drug-Induced
+Liver Injury (DILI) proteomics dataset to demonstrate end-to-end object
+construction with limma.
 
 ``` r
 # Load the pre-parsed DILI proteomics snapshot
@@ -359,11 +358,6 @@ Key parameters for `Hotgeneslimma()`:
 | `Exps_list` | Optional named list of additional expression matrices |
 | `Mapper` | Optional feature alias table |
 | `contrasts` | Subset of contrasts to include (default: all) |
-
-For the complete DILI walkthrough with detailed commentary, see the
-companion vignette **DILI Discovery Proteomics with Hotgenes**.
-
-------------------------------------------------------------------------
 
 ## 4. Summary: Common Features of All Hotgenes Objects
 
