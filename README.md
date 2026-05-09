@@ -5,8 +5,9 @@
 
 <br>
 
-> For a guided introduction to the package, start with the **[vignette suite](#vignettes)** below.
-> The remainder of this README contains extended worked examples and required project information.
+> For a guided introduction to the package, start with the **[vignette
+> suite](#vignettes)** below. The remainder of this README contains
+> extended worked examples and required project information.
 
 ## Contents
 
@@ -16,10 +17,13 @@
 - [Background](#background)
 - [Why are Pfizer sharing this?](#why-are-pfizer-sharing-this)
 - [What is the benefit of this work?](#what-is-the-benefit-of-this-work)
-- [How should I submit questions, queries and enhancements?](#how-should-i-submit-questions-queries-and-enhancements)
+- [How should I submit questions, queries and
+  enhancements?](#how-should-i-submit-questions-queries-and-enhancements)
 - [How does Hotgenes work?](#how-does-hotgenes-work)
-- [What can you do with a Hotgenes object?](#what-can-you-do-with-a-hotgenes-object)
-- [All functionality is available in a shiny app!](#all-functionality-is-available-in-a-shiny-app)
+- [What can you do with a Hotgenes
+  object?](#what-can-you-do-with-a-hotgenes-object)
+- [All functionality is available in a shiny
+  app!](#all-functionality-is-available-in-a-shiny-app)
 - [Explore functions](#explore-functions)
 - [Code of Conduct](#code-of-conduct)
 
@@ -27,11 +31,15 @@
 
 The package documentation is organized into the following vignettes:
 
-- [01 Creating Hotgenes Objects](vignettes/01_Creating_Hotgenes_Objects.md)
+- [01 Creating Hotgenes
+  Objects](vignettes/01_Creating_Hotgenes_Objects.md)
 - [02 API and Methods](vignettes/02_API_and_Methods.md)
-- [03 Visualization, Exploration, and Enrichment](vignettes/03_Visualization_and_Exploration.md)
-- [04 Using Shiny to Prioritize Genes of Interest](vignettes/04_Interactive_Exploration_Shiny.md)
-- [05 Sample-wise Pathway Activity with HotgeneSets](vignettes/05_Samplewise_Pathway_Activity_HotgeneSets.md)
+- [03 Visualization, Exploration, and
+  Enrichment](vignettes/03_Visualization_and_Exploration.md)
+- [04 Using Shiny to Prioritize Genes of
+  Interest](vignettes/04_Interactive_Exploration_Shiny.md)
+- [05 Sample-wise Pathway Activity with
+  HotgeneSets](vignettes/05_Samplewise_Pathway_Activity_HotgeneSets.md)
 
 ## Installation requires R (\>= 4.2.0); however R (\>= 4.3.0) is recommended
 
