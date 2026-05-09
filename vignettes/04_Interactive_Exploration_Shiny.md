@@ -24,12 +24,6 @@ alt="Hotgenes Shiny app overview" />
 <figcaption aria-hidden="true">Hotgenes Shiny app overview</figcaption>
 </figure>
 
-> **Regenerating screenshots**
->
-> Screenshots were generated with
-> `data-raw/shiny_ui/shiny_shots_optimized.R`. Run that script, then
-> copy the PNGs from `tempdir()` into `vignettes/figures/`.
-
 ------------------------------------------------------------------------
 
 ## 1. Launching the App with a Single Object
