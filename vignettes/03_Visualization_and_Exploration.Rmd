@@ -1,10 +1,10 @@
 ---
-title: "Visualization and Exploration"
+title: "Visualization, Exploration, and Enrichment"
 output:
   github_document:
     html_preview: false
 vignette: >
-  %\VignetteIndexEntry{Visualization and Exploration}
+  %\VignetteIndexEntry{Visualization, Exploration, and Enrichment}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
