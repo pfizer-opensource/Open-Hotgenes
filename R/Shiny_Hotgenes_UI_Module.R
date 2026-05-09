@@ -209,7 +209,7 @@ return(UI_params)
 #' Mapper_ columns that should be used to map expression data
 #' to ontology gene identifiers. Default is names(Mapper_(Hotgenes)).
 #' A named vector may be used, as well.
-#' @param parallel.sz Number of threads of execution
+#' @param nproc Number of threads of execution
 #' to use when doing the calculations in parallel.
 #' @param remove_modal_spinner logical, if TRUE remove_modal_spinner will
 #' run at the end of initial server run.
@@ -225,7 +225,7 @@ session = NULL,
 Hotgenes = NULL,
 OntologyMethods = Hotgenes::OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
-parallel.sz = 1L,
+nproc = 1L,
 max_col_levels = Inf,
 selected_fillby = "",
 remove_modal_spinner = TRUE) {
@@ -355,7 +355,7 @@ BoxPlot_output$reactive_NormSlot()
 # # verifies that everything is loaded
 if (isTRUE(remove_modal_spinner)) {
 shiny::observeEvent(shiny::req(serverOut() %in% ExpressionSlots_(Hotgenes_out)), {
-cli::cli_inform("remove_modal_spinner")
+
 shinybusy::remove_modal_spinner(session = session)
 })
 }
@@ -396,7 +396,7 @@ Hotgenes = NULL,
 OntologyMethods = Hotgenes::OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
 theme = shinythemes::shinytheme("united"),
-parallel.sz = 1L,
+nproc = 1L,
 max_col_levels = Inf)
 UseMethod("Shiny_Hotgenes", Hotgenes)
 
@@ -409,7 +409,7 @@ Hotgenes = NULL,
 OntologyMethods = Hotgenes::OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
 theme = shinythemes::shinytheme("united"),
-parallel.sz = 1L,
+nproc = 1L,
 max_col_levels = Inf) {
 
 
@@ -457,7 +457,7 @@ Hotgenes = NULL,
 OntologyMethods = Hotgenes::OntologyMethods(),
 Mapper_choices = names(Mapper_(Hotgenes)),
 theme = shinythemes::shinytheme("united"),
-parallel.sz = 1L,
+nproc = 1L,
 max_col_levels = Inf) {
 
 cli::cli_inform("processing as list")
@@ -568,7 +568,7 @@ session = session,
 OntologyMethods = OntologyMethods,
 max_col_levels = max_col_levels,
 Hotgenes = Hotgenes_out() ,
-parallel.sz = parallel.sz,
+nproc = nproc,
 id = "Obj_A"
 )
 

@@ -1,0 +1,443 @@
+---
+title: "Visualization, Exploration, and Enrichment"
+output:
+  github_document:
+    html_preview: false
+vignette: >
+  %\VignetteIndexEntry{Visualization, Exploration, and Enrichment}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Overview
+
+This vignette demonstrates the visualization functions available in
+Hotgenes. All examples use `fit_Hotgenes`, the pre-built limma-based
+example object that ships with the package.
+
+For details on creating Hotgenes objects, see **01 Creating Hotgenes
+Objects**. For details on the API, see **02 API and Methods**.
+
+```{r set, eval=TRUE, include=FALSE}
+knitr::opts_chunk$set(
+  collapse  = TRUE,
+  fig.path  = "03_Visualization_and_Exploration_files/figure-",
+  fig.height = 4, fig.width = 6
+)
+```
+
+```{r load, message=FALSE}
+library(Hotgenes)
+
+fit_Hotgenes <- readRDS(
+  system.file("extdata", "fit_Hotgenes.RDS",
+              package = "Hotgenes",
+              mustWork = TRUE)
+)
+```
+
+---
+
+## 1. `DEPlot()` — Overview of All Contrasts
+
+`DEPlot()` gives a bird's-eye view of DE results across all contrasts
+in the object. Each bar shows the number of significant features for
+one contrast, split by direction (up / down).
+
+```{r dep_1}
+DEPlot(fit_Hotgenes, .log2FoldChange = 0, padj_cut = 0.1)
+```
+
+Pass a `hotList` to highlight specific features across contrasts:
+
+```{r dep_2}
+DEPlot(fit_Hotgenes,
+       hotList        = c("CSF1", "IL6"),
+       .log2FoldChange = 0,
+       padj_cut       = 0.1)
+```
+
+---
+
+## 2. `VPlot()` — Volcano Plots
+
+`VPlot()` renders a standard volcano plot for a single contrast. Points
+are coloured by significance and fold-change. Labels are added for the
+top hits (or for features in `hotList`).
+
+```{r vplot_1, fig.height=8, fig.width=8}
+VPlot(fit_Hotgenes,
+      contrasts       = "sh_EWS_vs_Ctrl",
+      .log2FoldChange = 1,
+      padj_cut        = 0.1)
+```
+
+Highlight a gene of interest with `hotList`:
+
+```{r vplot_2, fig.height=8, fig.width=8}
+VPlot(fit_Hotgenes,
+      contrasts       = "sh_EWS_vs_Ctrl",
+      .log2FoldChange = 1,
+      padj_cut        = 0.1,
+      point_label_size = 4,
+      hotList         = "CXCL6",
+      Hide_labels     = FALSE)
+```
+
+---
+
+## 3. `Venn_Report()` — Overlapping Hits Across Contrasts
+
+`Venn_Report()` identifies features that are significant in more than
+one contrast (or contrast direction). It returns both a Venn diagram
+and the underlying intersection tables.
+
+Use `Report = "Features"` to overlap by feature name (ignoring
+direction), or `Report = "contrast_dir"` to treat up- and down-regulated
+hits as separate sets (maximum two contrasts).
+
+```{r venn_features, fig.height=8, fig.width=8}
+# Overlapping features (ignoring direction) across three contrasts
+venn_out <- fit_Hotgenes |>
+  DE(
+    Report   = "Features",
+    contrasts = c("sh_EWS_vs_Ctrl", "Hrs_2_vs_0", "Hrs_6_vs_0"),
+    padj_cut = 0.1
+  ) |>
+  Venn_Report(set_name_size = 4, stroke_size = 0.5, text_size = 4)
+
+venn_out$vennD
+```
+
+```{r venn_dir, fig.height=8, fig.width=10}
+# Including directionality (up/down) for two contrasts
+venn_dir_out <- fit_Hotgenes |>
+  DE(
+    Report   = "contrast_dir",
+    contrasts = c("sh_EWS_vs_Ctrl", "Hrs_6_vs_0"),
+    padj_cut = 0.1
+  ) |>
+  Venn_Report(set_name_size = 4)
+
+venn_dir_out$vennD
+```
+
+Retrieve the names and gene lists from the intersections:
+
+```{r venn_results}
+# Names of features found in all intersecting sets
+venn_out$Names
+
+# All intersection sets as a named list
+venn_out$Intsect |> head()
+```
+
+---
+
+## 4. `DEphe()` — Heatmap of Top Hits
+
+`DEphe()` generates a pheatmap of the top `Topn` features for a
+selected contrast, annotated with sample metadata.
+
+```{r heatmap_1, fig.height=8, fig.width=8}
+DEphe(fit_Hotgenes,
+      contrasts         = "sh_EWS_vs_Ctrl",
+      Topn              = 5,
+      cellheight        = 10,
+      cellwidth         = 8,
+      annotation_colors = coldata_palettes(fit_Hotgenes),
+      annotations       = c("Hrs", "sh"))
+```
+
+Use `label_by` to replace the default Feature IDs with any alias
+column in the mapper:
+
+```{r heatmap_2, fig.height=8, fig.width=8}
+DEphe(fit_Hotgenes,
+      contrasts         = "sh_EWS_vs_Ctrl",
+      label_by          = "ensembl_id",
+      Topn              = 5,
+      cellheight        = 10,
+      cellwidth         = 8,
+      annotation_colors = coldata_palettes(fit_Hotgenes),
+      annotations       = c("Hrs", "sh"))
+```
+
+Subset samples on the fly with `SampleIDs`:
+
+```{r heatmap_3, fig.height=6, fig.width=6}
+selected_samples <- SampleIDs_(fit_Hotgenes)[1:8]
+
+DEphe(fit_Hotgenes,
+      contrasts         = "sh_EWS_vs_Ctrl",
+      Topn              = 5,
+      SampleIDs         = selected_samples,
+      cellheight        = 10,
+      cellwidth         = 8,
+      annotation_colors = coldata_palettes(fit_Hotgenes),
+      arrangeby         = c("Hrs", "sh"),
+      annotations       = c("Hrs", "sh"))
+```
+
+---
+
+## 5. `ExpsPlot()` — Individual Gene Expression Plots
+
+`ExpsPlot()` plots the expression trajectory for one or more features
+across samples, coloured and faceted by metadata variables. Expression
+data and coldata are joined automatically.
+
+```{r exps_1}
+ExpsPlot(fit_Hotgenes,
+         xVar    = "Hrs",
+         yVar    = c("CXCL6", "IL6"),
+         fill    = "Hrs",
+         boxplot = TRUE)
+```
+
+Filter samples on the fly with `filter_eval`:
+
+```{r exps_2}
+ExpsPlot(fit_Hotgenes,
+         xVar        = "Hrs",
+         yVar        = c("CXCL6", "IL6"),
+         fill        = "Hrs",
+         boxplot     = TRUE,
+         filter_eval = Hrs != 2)
+```
+
+Reorder factor levels using `named_levels`:
+
+```{r exps_3}
+ExpsPlot(fit_Hotgenes,
+         xVar         = "Hrs",
+         yVar         = c("CXCL6", "IL6"),
+         boxplot      = TRUE,
+         fill         = "Hrs",
+         named_levels = list(Feature = "IL6",
+                             Hrs     = c("6", "2", "0")))
+```
+
+---
+
+## 6. `BoxPlot()` — Sample-level QC Plot
+
+`BoxPlot()` renders a boxplot of expression values for each sample.
+It is most useful for QC: checking normalization and identifying
+outlier samples.
+
+```{r boxplot_1}
+BoxPlot(fit_Hotgenes)
+```
+
+Restrict to a subset of samples:
+
+```{r boxplot_2}
+BoxPlot(fit_Hotgenes,
+        SampleIDs = SampleIDs_(fit_Hotgenes)[1:6])
+```
+
+---
+
+## 7. `FactoWrapper()` — PCA and Hierarchical Clustering
+
+`FactoWrapper()` runs a full PCA via FactoMineR on the top features
+for a given contrast, then clusters samples using HCPC (Hierarchical
+Clustering on Principal Components).
+
+```{r pca_run, echo=TRUE, results='hide'}
+FactoOutput <- FactoWrapper(
+  fit_Hotgenes,
+  contrasts   = "sh_EWS_vs_Ctrl",
+  coldata_ids = c("Hrs", "sh"),
+  biplot      = FALSE
+)
+```
+
+```{r pca_plot, message=FALSE, warning=FALSE}
+FactoOutput$res_PPI_pa_1
+```
+
+Inspect cluster assignments and top contributing features:
+
+```{r pca_top}
+FactoOutput$TopTibble   # top features per cluster
+FactoOutput$TopGroups   # cluster membership per sample
+```
+
+---
+
+## 8. `coldata_palettes()` — Consistent Colour Schemes
+
+`coldata_palettes()` generates a named list of colour vectors for each
+factor in the coldata. This can be passed directly to `DEphe()` or used
+in custom ggplot2 themes.
+
+```{r palettes}
+coldata_palettes(fit_Hotgenes)
+```
+
+---
+
+## 9. Gene-set Enrichment with `msigdbr_wrapper()` and `fgsea_()`
+
+### Built-in `msigdbr` gene sets
+
+`msigdbr_wrapper()` returns a named list of gene sets sourced from
+MSigDB via the `msigdbr` package.
+
+```{r msigdbr, message=FALSE, warning=FALSE}
+H_paths <- msigdbr_wrapper(
+  species  = "human",
+  set      = c("H"),
+  gene_col = "gene_symbol"
+)
+
+length(H_paths)
+H_paths |> names() |> head(5)
+```
+
+### Running GSEA with `fgsea_()`
+
+`fgsea_()` accepts ranked vectors returned by
+`DE(..., Report = "Ranks")`.
+
+```{r gsea_ranks, message=FALSE}
+InputRanks <- fit_Hotgenes |>
+  DE(
+    Report    = "Ranks",
+    contrasts = "sh_EWS_vs_Ctrl",
+    Rank_name = "Feature",
+    padj_cut  = 1
+  )
+
+head(InputRanks)
+```
+
+```{r gsea_run, message=FALSE, warning=FALSE}
+Out_GSEA <- fgsea_(
+  Ranks    = InputRanks,
+  pathways = H_paths,
+  nproc    = 1,
+  minSize  = 5,
+  maxSize  = Inf
+)
+```
+
+### Inspecting GSEA results
+
+```{r gsea_results}
+Out_GSEA |>
+  fgsea_Results(
+    contrasts = "sh_EWS_vs_Ctrl",
+    padj_cut  = 0.2,
+    mode      = "D"
+  ) |> head()
+```
+
+```{r gsea_leading}
+Out_GSEA |>
+  fgsea_Results(
+    contrasts = "sh_EWS_vs_Ctrl",
+    padj_cut  = 0.2,
+    mode      = "leadingEdge"
+  ) |> head()
+```
+
+### Visualizing GSEA results
+
+```{r gsea_plots, fig.width=10, fig.height=4}
+Out_GSEA |>
+  GSEA_Plots(
+    contrasts = "sh_EWS_vs_Ctrl",
+    padj_cut  = 0.2,
+    Topn      = 3,
+    width     = 20
+  )
+```
+
+```{r gsea_enrich, fig.width=6, fig.height=4}
+sig_paths <- Out_GSEA |>
+  fgsea_Results(
+    contrasts = "sh_EWS_vs_Ctrl",
+    padj_cut  = 0.2,
+    mode      = "D"
+  )
+
+if (nrow(sig_paths$sh_EWS_vs_Ctrl) > 0) {
+  first_geneset_name <- sig_paths$sh_EWS_vs_Ctrl$pathway[1]
+
+  plotEnrichment_(
+    fgseaRes    = Out_GSEA,
+    contrast    = "sh_EWS_vs_Ctrl",
+    genesetName = first_geneset_name
+  )
+}
+```
+
+```{r gsea_leading_genes}
+if (nrow(sig_paths$sh_EWS_vs_Ctrl) > 0) {
+  first_geneset_name <- sig_paths$sh_EWS_vs_Ctrl$pathway[1]
+
+  leadingGenes(
+    fgseaRes    = Out_GSEA,
+    contrast    = "sh_EWS_vs_Ctrl",
+    genesetName = first_geneset_name
+  )
+}
+```
+
+---
+
+## 10. Custom Gene Set Configuration
+
+`OntologyMethods()` and `OntologyFunctions()` can define and retrieve
+custom gene-set sources.
+
+```{r custom_gsea, message=FALSE, warning=FALSE}
+Custom_db <- OntologyMethods(
+  Ontology_Function = list("msigdbr" = msigdbr_wrapper),
+  InputChoices = list("msigdbr" = c("CP:REACTOME", "CP:KEGG", "H")),
+  gene_col_choices = list("msigdbr" = c(
+    "gene_symbol", "entrez_gene", "ensembl_gene"
+  )),
+  species_choices = list("msigdbr" = c("human", "mouse", "rat")),
+  versions = list("msigdbr" = packageVersion("msigdbr"))
+)
+
+custom_paths <- OntologyFunctions(
+  Methods  = Custom_db,
+  db       = "msigdbr",
+  species  = "human",
+  set      = c("CP:REACTOME", "CP:KEGG"),
+  gene_col = "gene_symbol"
+)
+
+length(custom_paths)
+names(custom_paths)[1:5]
+```
+
+`custom_paths` can be passed directly to `fgsea_()` or `HotgeneSets()`
+in downstream enrichment and pathway activity workflows.
+
+---
+
+## Summary of Visualization Functions
+
+| Function | Purpose |
+|---|---|
+| `DEPlot()` | Bar chart of DE counts across all contrasts |
+| `VPlot()` | Volcano plot for a single contrast |
+| `Venn_Report()` | Venn diagram of overlapping features |
+| `DEphe()` | Heatmap of top hits for a contrast |
+| `ExpsPlot()` | Expression trajectory plots |
+| `BoxPlot()` | Sample-level expression boxplots (QC) |
+| `FactoWrapper()` | PCA + HCPC clustering |
+| `coldata_palettes()` | Colour palettes for metadata factors |
+| `msigdbr_wrapper()` | Retrieve MSigDB gene sets for enrichment |
+| `fgsea_()` | Run GSEA from ranked DE vectors |
+| `fgsea_Results()` | Extract enrichment tables or leading-edge genes |
+| `GSEA_Plots()` | Plot top enriched pathways |
+| `plotEnrichment_()` | Plot one pathway enrichment curve |
+| `leadingGenes()` | Return leading-edge genes for one pathway |
+| `OntologyMethods()` / `OntologyFunctions()` | Configure and retrieve custom gene-set sources |

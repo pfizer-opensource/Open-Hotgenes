@@ -113,17 +113,11 @@ dds_con <- DESeq2::DESeqDataSetFromMatrix(
   design = model
 )
 
-modeMatrix <- cleanModelMatrix(
-  model, # model matrix
-  coldata
-)
-
-dds_con <- DESeq2::DESeq(dds_con, full = modeMatrix)
-# DESeq2::resultsNames(dds_con) # lists the coefficients
-# DESeq2::plotDispEsts(dds_con)
+dds_con <- DESeq2::DESeq(dds_con)
 
 # Convert to Hotgenes Object
 htgs <- Hotgenes::HotgenesDEseq2(DEseq2_object = dds_con, 
+                                 lfcShrink_type = "apeglm",
                        Mapper = ensembl_Symbol)
 
 
@@ -190,8 +184,35 @@ if (FALSE) {
 d <- d0
 
 # make a cleanModelMatrix
-model_Matrix <- cleanModelMatrix( ~ sh * Hrs,
+formula_ <- ~ sh * Hrs
+model_Matrix <- model.matrix(formula_,
                               data = Design)
+
+# Get names
+modelMatrixNames <- colnames(model_Matrix)
+modelMatrixNames[modelMatrixNames == "(Intercept)"] <- "Intercept"
+modelMatrixNames <- make.names(modelMatrixNames)
+
+
+convertNames <- DESeq2:::renameModelMatrixColumns(data = Design,
+                                                  design = formula_)
+
+convertNames <- convertNames[convertNames$from %in%
+                               modelMatrixNames, , drop = FALSE]
+
+modelMatrixNames[match(convertNames$from, modelMatrixNames)] <- convertNames$to
+
+colnames(model_Matrix) <- modelMatrixNames
+
+# model_Matrix
+# 
+# new_model_Matrix_names <- DESeq2:::renameModelMatrixColumns(
+#   design =  ~ sh * Hrs, # model matrix
+#   data =  Design
+# )
+
+colnames(model_Matrix)
+
 # voom
 vm_exp <- limma::voom(d, model_Matrix, plot = TRUE)
 

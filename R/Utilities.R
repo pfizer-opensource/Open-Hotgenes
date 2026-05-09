@@ -173,10 +173,11 @@ DE <- function(
       purrr::set_names(levels(Output_DE[[dplyr::group_vars(Output_DE)]])) %>%
       purrr::map_int(function(x) {
         x %>%
-          head(n = Topn) %>%
+         
           dplyr::pull(.data$Feature) %>%
           # to bypass issue with multiple mappings due to mapFeatures = TRUE
           unique() %>%
+          head(n = Topn) %>%
           length()
       })
     return(ReportOut)
@@ -189,10 +190,11 @@ DE <- function(
       purrr::set_names(levels(Output_DE[[dplyr::group_vars(Output_DE)]])) %>%
       purrr::map(function(x) {
         x %>%
-          head(n = Topn) %>%
           dplyr::pull(.data$Feature) %>%
+          # to bypass issue with multiple mappings due to mapFeatures = TRUE
+          unique() %>%
+          head(n = Topn) 
           
-          unique()
       })
     return(ReportOut)
   }
@@ -202,10 +204,11 @@ DE <- function(
       
       plyr::dlply("contrast_dir", identity) %>% 
       purrr::map(function(x) {
-        x %>%
-          head(n = Topn) %>%
+        x  %>%
           dplyr::pull(.data$Feature) %>%
-          unique()
+          # to bypass issue with multiple mappings due to mapFeatures = TRUE
+          unique() %>%
+          head(n = Topn)
       })
     return(ReportOut)
   }
@@ -218,10 +221,8 @@ DE <- function(
       purrr::set_names(levels(Output_DE[[dplyr::group_vars(Output_DE)]])) %>%
       purrr::map(function(x) {
         x <- x %>%
-          head(n = Topn) %>%
-         
           dplyr::select(dplyr::all_of(c(Rank_name_Final, "stat"))) %>%
-          
+          dplyr::distinct() %>%
           dplyr::filter(
             dplyr::if_any(
               .cols = dplyr::any_of(Rank_name_Final),
@@ -233,7 +234,9 @@ DE <- function(
           dplyr::ungroup() %>%
           dplyr::arrange(dplyr::desc(.data$stat)) %>%
           unique() %>%
-          tibble::deframe()
+          head(n = Topn) %>%
+          tibble::deframe() 
+          
 
 
         
