@@ -673,6 +673,16 @@ help(package="Hotgenes")
 
 ```
 
+## Vignettes
+
+The package documentation is organized into the following vignettes:
+
+- [01 Creating Hotgenes Objects](vignettes/01_Creating_Hotgenes_Objects.md)
+- [02 API and Methods](vignettes/02_API_and_Methods.md)
+- [03 Visualization, Exploration, and Enrichment](vignettes/03_Visualization_and_Exploration.md)
+- [04 Using Shiny to Prioritize Genes of Interest](vignettes/04_Interactive_Exploration_Shiny.md)
+- [05 Sample-wise Pathway Activity with HotgeneSets](vignettes/05_Samplewise_Pathway_Activity_HotgeneSets.md)
+
 ## Code of Conduct
   
   Please note that the Hotgenes project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
