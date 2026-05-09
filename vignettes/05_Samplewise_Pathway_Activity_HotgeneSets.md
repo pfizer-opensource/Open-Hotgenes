@@ -96,8 +96,6 @@ DEphe(
 )
 ```
 
-![](05_Samplewise_Pathway_Activity_HotgeneSets_files/figure-pathway_heatmap-1.png)<!-- -->
-
 ------------------------------------------------------------------------
 
 ## 4. Retrieve Leading Pathway Names for Downstream Use
