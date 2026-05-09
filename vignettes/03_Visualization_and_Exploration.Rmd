@@ -389,10 +389,10 @@ if (nrow(sig_paths$sh_EWS_vs_Ctrl) > 0) {
 
 ---
 
-## 10. Custom Gene Set Configuration (Non-Shiny)
+## 10. Custom Gene Set Configuration
 
 `OntologyMethods()` and `OntologyFunctions()` can define and retrieve
-custom gene-set sources independently of the Shiny app.
+custom gene-set sources.
 
 ```{r custom_gsea, message=FALSE, warning=FALSE}
 Custom_db <- OntologyMethods(
