@@ -52,7 +52,7 @@ list_rmds <- file.path(getwd(), "vignettes") |>
 
 rendering_list_rmds <-list_rmds #[6]
 
-# file.edit(list_rmds[4])
+# file.edit(list_rmds[1])
 
 rendering_list_rmds|> 
   purrr::set_names(~basename(.x)) |> 
