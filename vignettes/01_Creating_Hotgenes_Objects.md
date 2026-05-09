@@ -445,6 +445,7 @@ htgs
 For details on how to use these objects for analysis and visualization,
 see the companion vignettes:
 
-- **02 API and Methods** — accessor functions and DE reports
-- **03 Visualization and Exploration** — plots and heatmaps
-- **04 Using Shiny to Prioritize Genes of Interest** — the Shiny app
+- [02 API and Methods](02_API_and_Methods.md) — accessor functions and DE reports
+- [03 Visualization and Exploration](03_Visualization_and_Exploration.md) — plots and heatmaps
+- [04 Using Shiny to Prioritize Genes of Interest](04_Interactive_Exploration_Shiny.md) — the Shiny app
+- [05 Sample-wise Pathway Activity with HotgeneSets](05_Samplewise_Pathway_Activity_HotgeneSets.md) — sample-wise pathway activity analysis
