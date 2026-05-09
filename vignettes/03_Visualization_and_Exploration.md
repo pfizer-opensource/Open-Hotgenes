@@ -174,8 +174,6 @@ DEphe(fit_Hotgenes,
       annotations       = c("Hrs", "sh"))
 ```
 
-![](03_Visualization_and_Exploration_files/figure-heatmap_1-1.png)<!-- -->
-
 Use `label_by` to replace the default Feature IDs with any alias column
 in the mapper:
 
@@ -189,8 +187,6 @@ DEphe(fit_Hotgenes,
       annotation_colors = coldata_palettes(fit_Hotgenes),
       annotations       = c("Hrs", "sh"))
 ```
-
-![](03_Visualization_and_Exploration_files/figure-heatmap_2-1.png)<!-- -->
 
 Subset samples on the fly with `SampleIDs`:
 
@@ -207,8 +203,6 @@ DEphe(fit_Hotgenes,
       arrangeby         = c("Hrs", "sh"),
       annotations       = c("Hrs", "sh"))
 ```
-
-![](03_Visualization_and_Exploration_files/figure-heatmap_3-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
