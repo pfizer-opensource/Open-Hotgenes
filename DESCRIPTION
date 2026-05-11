@@ -1,10 +1,14 @@
 Package: Hotgenes
 Type: Package
 Title: Tools to simplify Omics DE Analysis
-Version: 0.0.55
-Author: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
-Maintainer: Richard Virgen-Slane <Richard.Virgen-Slane@pfizer.com>
-Description: Converts outputs from DESeq2, limma, or a method of your
+Version: 0.0.56
+Authors@R: person(
+    given = "Richard",
+    family = "Virgen-Slane",
+    email = "Richard.Virgen-Slane@pfizer.com",
+    role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0002-0011-3844"))
+Description: Converts outputs from DESeq2, DRomics, limma, or a method of your
     choice into a Hotgenes object to simplify downstream analysis. 
     Recall all results, specific genes, or identify genes of interest with 
     hierarchical clustering on principal components.
