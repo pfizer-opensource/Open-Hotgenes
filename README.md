@@ -12,7 +12,6 @@
 [![R-CMD-check](https://github.com/pfizer-opensource/Open-Hotgenes/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/pfizer-opensource/Open-Hotgenes/actions/workflows/R-CMD-check.yml)
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/pfizer-opensource/Open-Hotgenes/blob/main/LICENSE)
 
-<br>
 
 > For a guided introduction to the package, start with the **[vignette
 > suite](#vignettes)** below. The remainder of this README contains
