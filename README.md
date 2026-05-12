@@ -5,6 +5,8 @@
 
 <br>
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20129460.svg)](https://doi.org/10.5281/zenodo.20129460)
+
 > For a guided introduction to the package, start with the **[vignette
 > suite](#vignettes)** below. The remainder of this README contains
 > extended worked examples and required project information.
