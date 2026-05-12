@@ -21,16 +21,14 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 
 
 
+
 # Hotgenes R package!
 
-<p align="right">
-  <img src="man/figures/logo.png" height="139" />
-</p>
+<p align="right"><img src="man/figures/logo.png" height="139" /></p>
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20129460.svg)](https://doi.org/10.5281/zenodo.20129460)
 [![R-CMD-check](https://github.com/pfizer-opensource/Open-Hotgenes/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/pfizer-opensource/Open-Hotgenes/actions/workflows/R-CMD-check.yml)
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/pfizer-opensource/Open-Hotgenes/blob/main/LICENSE)
-
 
 > For a guided introduction to the package, start with the **[vignette suite](#vignettes)** below.
 > The remainder of this README contains extended worked examples and required project information.
