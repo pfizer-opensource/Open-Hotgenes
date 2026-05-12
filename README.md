@@ -1,12 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Hotgenes R package!
-
-<p align="right">
-
-<img src="man/figures/logo.png" height="139" />
-</p>
+# Hotgenes R package! <img src="man/figures/logo.png" align="right" height="138" />
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20129460.svg)](https://doi.org/10.5281/zenodo.20129460)
 [![R-CMD-check](https://github.com/pfizer-opensource/Open-Hotgenes/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/pfizer-opensource/Open-Hotgenes/actions/workflows/R-CMD-check.yml)
