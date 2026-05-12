@@ -22,9 +22,8 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 
 
 
-# Hotgenes R package!
+# Hotgenes R package! <img src="man/figures/logo.png" align="right" height="138" />
 
-<p align="right"><img src="man/figures/logo.png" height="139" /></p>
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20129460.svg)](https://doi.org/10.5281/zenodo.20129460)
 [![R-CMD-check](https://github.com/pfizer-opensource/Open-Hotgenes/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/pfizer-opensource/Open-Hotgenes/actions/workflows/R-CMD-check.yml)
