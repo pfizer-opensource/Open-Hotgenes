@@ -11,8 +11,11 @@ permissions:
 
 jobs:
   build-macos-arm64:
-    name: Build R Binary (macOS ARM64)
+    name: Build R Binary (macOS ARM64, R ${{ matrix.r-version }})
     runs-on: macos-14  # Runner Apple Silicon M1 (ARM64 nativo)
+    strategy:
+      matrix:
+        r-version: ["4.3", "4.4", "4.5"]
 
     steps:
       - name: Checkout repository
@@ -21,7 +24,7 @@ jobs:
       - name: Set up R
         uses: r-lib/actions/setup-r@bd49c52ffe281809afa6f0fecbf37483c5dd0b93 # v2
         with:
-          r-version: "4.4"
+          r-version: ${{ matrix.r-version }}
 
       - name: Set up Bioconductor and install dependencies
         uses: r-lib/actions/setup-r-dependencies@bd49c52ffe281809afa6f0fecbf37483c5dd0b93 # v2
@@ -34,14 +37,40 @@ jobs:
         run: |
           # R CMD INSTALL --build compila y produce un binario .tgz
           R CMD INSTALL --build .
-          echo "BINARY=$(ls Hotgenes_*.tgz | head -n 1)" >> $GITHUB_ENV
-          echo "PKG_VERSION=$(grep '^Version:' DESCRIPTION | awk '{print $2}')" >> $GITHUB_ENV
+          BINARY_RAW=$(ls Hotgenes_*.tgz | head -n 1)
+          PKG_VERSION=$(grep '^Version:' DESCRIPTION | awk '{print $2}')
+          BINARY_RENAMED="Hotgenes_${PKG_VERSION}_R${{ matrix.r-version }}_macOS-arm64.tgz"
+          mv "$BINARY_RAW" "$BINARY_RENAMED"
+          echo "BINARY=$BINARY_RENAMED" >> $GITHUB_ENV
+          echo "PKG_VERSION=$PKG_VERSION" >> $GITHUB_ENV
 
-      - name: Create GitHub Release and upload binary
+      - name: Create GitHub Release
+        if: matrix.r-version == '4.4'
         env:
           GH_TOKEN: ${{ secrets.ACTION_TOKEN }}
         run: |
-          gh release create "v${{ env.PKG_VERSION }}" \
-            --title "v${{ env.PKG_VERSION }}" \
-            --generate-notes \
-            "${{ env.BINARY }}"
+          if ! gh release view "v${{ env.PKG_VERSION }}" >/dev/null 2>&1; then
+            gh release create "v${{ env.PKG_VERSION }}" \
+              --title "v${{ env.PKG_VERSION }}" \
+              --generate-notes
+          fi
+
+      - name: Wait for release to exist
+        if: matrix.r-version != '4.4'
+        env:
+          GH_TOKEN: ${{ secrets.ACTION_TOKEN }}
+        run: |
+          for i in {1..12}; do
+            if gh release view "v${{ env.PKG_VERSION }}" >/dev/null 2>&1; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Release v${{ env.PKG_VERSION }} was not created in time."
+          exit 1
+
+      - name: Upload binary to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.ACTION_TOKEN }}
+        run: |
+          gh release upload "v${{ env.PKG_VERSION }}" "${{ env.BINARY }}" --clobber
