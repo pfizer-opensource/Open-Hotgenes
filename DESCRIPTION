@@ -77,5 +77,4 @@ Suggests:
     rmarkdown,
     tximport,
     vsn
-VignetteBuilder: knitr
 Depends: R (>= 4.2.0)
