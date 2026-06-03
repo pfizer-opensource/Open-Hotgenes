@@ -53,3 +53,4 @@ jobs:
         with:
           upload-snapshots: true
           error-on: '"error"'
+          args: c("--no-manual", "--as-cran", "--no-build-vignettes")
