@@ -1,0 +1,12 @@
+bibentry(
+  bibtype  = "Article",
+  title    = "Hotgenes: an R package for reducing bottlenecks in bulk omics data exploration and collaboration",
+  author   = person("Richard", "Virgen-Slane",
+                    email   = "Richard.Virgen-Slane@pfizer.com",
+                    comment = c(ORCID = "0000-0002-0011-3844")),
+  journal  = "Bioinformatics",
+  year     = "2026",
+  pages    = "btag434",
+  doi      = "10.1093/bioinformatics/btag434",
+  url      = "https://doi.org/10.1093/bioinformatics/btag434"
+)
