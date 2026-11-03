@@ -1,4 +1,4 @@
----
+***
 title: "Visualization, Exploration, and Enrichment"
 output:
   github_document:
@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Visualization, Exploration, and Enrichment}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
+***
 
 ## Overview
 
@@ -36,7 +36,7 @@ fit_Hotgenes <- readRDS(
 )
 ```
 
----
+***
 
 ## 1. `DEPlot()` — Overview of All Contrasts
 
@@ -57,7 +57,7 @@ DEPlot(fit_Hotgenes,
        padj_cut       = 0.1)
 ```
 
----
+***
 
 ## 2. `VPlot()` — Volcano Plots
 
@@ -84,7 +84,7 @@ VPlot(fit_Hotgenes,
       Hide_labels     = FALSE)
 ```
 
----
+***
 
 ## 3. `Venn_Report()` — Overlapping Hits Across Contrasts
 
@@ -132,7 +132,7 @@ venn_out$Names
 venn_out$Intsect |> head()
 ```
 
----
+***
 
 ## 4. `DEphe()` — Heatmap of Top Hits
 
@@ -179,7 +179,7 @@ DEphe(fit_Hotgenes,
       annotations       = c("Hrs", "sh"))
 ```
 
----
+***
 
 ## 5. `ExpsPlot()` — Individual Gene Expression Plots
 
@@ -218,7 +218,7 @@ ExpsPlot(fit_Hotgenes,
                              Hrs     = c("6", "2", "0")))
 ```
 
----
+***
 
 ## 6. `BoxPlot()` — Sample-level QC Plot
 
@@ -237,7 +237,7 @@ BoxPlot(fit_Hotgenes,
         SampleIDs = SampleIDs_(fit_Hotgenes)[1:6])
 ```
 
----
+***
 
 ## 7. `FactoWrapper()` — PCA and Hierarchical Clustering
 
@@ -265,7 +265,7 @@ FactoOutput$TopTibble   # top features per cluster
 FactoOutput$TopGroups   # cluster membership per sample
 ```
 
----
+***
 
 ## 8. `coldata_palettes()` — Consistent Colour Schemes
 
@@ -277,7 +277,7 @@ in custom ggplot2 themes.
 coldata_palettes(fit_Hotgenes)
 ```
 
----
+***
 
 ## 9. Gene-set Enrichment with `msigdbr_wrapper()` and `fgsea_()`
 
@@ -387,7 +387,7 @@ if (nrow(sig_paths$sh_EWS_vs_Ctrl) > 0) {
 }
 ```
 
----
+***
 
 ## 10. Custom Gene Set Configuration
 
@@ -420,7 +420,7 @@ names(custom_paths)[1:5]
 `custom_paths` can be passed directly to `fgsea_()` or `HotgeneSets()`
 in downstream enrichment and pathway activity workflows.
 
----
+***
 
 ## Summary of Visualization Functions
 

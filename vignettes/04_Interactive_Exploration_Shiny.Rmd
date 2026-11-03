@@ -1,4 +1,4 @@
----
+***
 title: "Using Shiny to Prioritize Genes of Interest"
 output:
   github_document:
@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Using Shiny to Prioritize Genes of Interest}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
+***
 
 ## Overview
 
@@ -36,7 +36,7 @@ The image below shows the full Shiny interface across the main tabs.
 
 ![Hotgenes Shiny app overview](figures/shiny_composite_all_tabs.png)
 
----
+***
 
 ## 1. Launching the App with a Single Object
 
@@ -56,7 +56,7 @@ Shiny_Hotgenes(fit_Hotgenes)
 The app opens in your default browser (or the RStudio viewer pane).
 Stop it by pressing **Escape** or closing the browser tab.
 
----
+***
 
 ## 2. Start with DE Stats
 
@@ -85,7 +85,7 @@ DE statistics and subtab views captured from the interactive app.
 </tr>
 </table>
 
----
+***
 
 ## 3. Refine Candidates with PCA
 
@@ -116,7 +116,7 @@ The **PCA** tab provides sample-level principal component analysis.
 </tr>
 </table>
 
----
+***
 
 ## 4. Compare Key Contrasts with Venn Diagram
 
@@ -144,7 +144,7 @@ Overlap analysis across selected contrasts.
 </tr>
 </table>
 
----
+***
 
 ## 5. Link Genes to Biology with GSEA
 
@@ -170,7 +170,7 @@ GSEA tab for pathway-level interpretation and leading-edge exploration.
 </tr>
 </table>
 
----
+***
 
 ## 6. Visualize Selected Genes with Expression Plots
 
@@ -193,7 +193,7 @@ Expression trajectory plots for selected genes and contrasts.
 </tr>
 </table>
 
----
+***
 
 ## 7. Comparing Multiple Objects in the Same App
 
@@ -217,7 +217,7 @@ Hotgenes_list <- list(
 Shiny_Hotgenes(Hotgenes_list)
 ```
 
----
+***
 
 ## 8. Tips for Large Datasets
 
@@ -229,7 +229,7 @@ Shiny_Hotgenes(Hotgenes_list)
 | Set `padj_cut` and `.log2FoldChange` tightly | Speeds up Venn and heatmap calculations for large feature spaces |
 | Pre-compute GSEA results before launching the app | Reduces waiting time during pathway exploration |
 
----
+***
 
 ## Summary
 

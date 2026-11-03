@@ -15,10 +15,11 @@ Description: Converts outputs from DESeq2, DRomics, limma, or a method of your
 License: Apache License (>= 2) | file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.3.3
+VignetteBuilder: knitr
 URL: https://github.com/pfizer-opensource/Open-Hotgenes
 BugReports: https://github.com/pfizer-opensource/Open-Hotgenes/issues
 biocViews: Software, GeneExpression, DifferentialExpression, RNASeq,
-    Transcriptomics, PrincipalComponent, Clustering, Visualization, Shiny
+    Transcriptomics, PrincipalComponent, Clustering, Visualization, ShinyApps
 Imports: 
     cli,
     factoextra,

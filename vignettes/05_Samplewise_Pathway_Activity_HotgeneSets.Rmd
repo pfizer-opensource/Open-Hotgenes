@@ -1,4 +1,4 @@
----
+***
 title: "Sample-wise Pathway Activity with HotgeneSets"
 output:
   github_document:
@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Sample-wise Pathway Activity with HotgeneSets}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
+***
 
 ## Overview
 
@@ -40,7 +40,7 @@ fit_Hotgenes <- readRDS(
 )
 ```
 
----
+***
 
 ## 1. Retrieve Gene Sets
 
@@ -55,7 +55,7 @@ length(H_paths)
 names(H_paths)[1:5]
 ```
 
----
+***
 
 ## 2. Compute Sample-wise Pathway Activity
 
@@ -75,7 +75,7 @@ HotgeneSets_out
 The resulting object stores pathway scores in the expression slot and
 supports the same downstream functions used for gene-level analyses.
 
----
+***
 
 ## 3. Explore Pathway-level Differential Activity
 
@@ -93,7 +93,7 @@ DEphe(
 )
 ```
 
----
+***
 
 ## 4. Retrieve Leading Pathway Names for Downstream Use
 
