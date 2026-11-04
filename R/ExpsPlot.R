@@ -253,11 +253,13 @@ ExpsPlot <- function(
   return(gplot)
 }
 
-#' Converts ExpsPlot data to matrix format
+#' Convert ExpsPlot Data to Matrix Format
 #' @inheritParams ExpsPlot
 #' @importFrom tidyr pivot_longer pivot_wider
 #' @param ggplot_obj ggplot object
+#' @return A wide table of expression values grouped by feature and x variable.
 #' @export
+#' @example examples/Example_ExpsPlot_Table.R
 ExpsPlot_Table <- function(
     ggplot_obj = NULL,
     xVar = NULL,

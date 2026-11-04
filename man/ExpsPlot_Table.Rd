@@ -2,7 +2,7 @@
 % Please edit documentation in R/ExpsPlot.R
 \name{ExpsPlot_Table}
 \alias{ExpsPlot_Table}
-\title{Converts ExpsPlot data to matrix format}
+\title{Convert ExpsPlot Data to Matrix Format}
 \usage{
 ExpsPlot_Table(
   ggplot_obj = NULL,
@@ -32,6 +32,23 @@ default is "Feature". Options include columns in mapper slot.}
 \item{value_col}{string for naming column with expression
 values, default is "value".}
 }
+\value{
+A wide table of expression values grouped by feature and x variable.
+}
 \description{
-Converts ExpsPlot data to matrix format
+Convert ExpsPlot Data to Matrix Format
+}
+\examples{
+library(package = Hotgenes)
+
+expression_data <- data.frame(
+    Feature = rep(x = c("gene1", "gene2"), times = 2),
+    Condition = rep(x = c("control", "treated"), each = 2),
+    value = c(1, 2, 3, 4)
+)
+expression_plot <- ggplot2::ggplot(
+    data = expression_data,
+    mapping = ggplot2::aes(x = Condition, y = value)
+)
+ExpsPlot_Table(ggplot_obj = expression_plot, xVar = "Condition")
 }

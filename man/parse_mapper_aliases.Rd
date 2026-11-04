@@ -2,7 +2,7 @@
 % Please edit documentation in R/Feature_Alias_support.R
 \name{parse_mapper_aliases}
 \alias{parse_mapper_aliases}
-\title{Returns a named list showing where the aliases are found}
+\title{Locate Features in Mapper Alias Columns}
 \usage{
 parse_mapper_aliases(Hotgenes = NULL, features = NULL)
 }
@@ -11,6 +11,19 @@ parse_mapper_aliases(Hotgenes = NULL, features = NULL)
 
 \item{features}{strings to check}
 }
+\value{
+A named list of matching features for each mapper column.
+}
 \description{
-Returns a named list showing where the aliases are found
+Locate Features in Mapper Alias Columns
+}
+\examples{
+library(package = Hotgenes)
+
+hotgenes <- readRDS(file = system.file(
+    "extdata", "fit_Hotgenes.RDS",
+    package = "Hotgenes", mustWork = TRUE
+))
+features <- head(x = Mapper_(Hotgenes = hotgenes)$Feature, n = 2)
+parse_mapper_aliases(Hotgenes = hotgenes, features = features)
 }
