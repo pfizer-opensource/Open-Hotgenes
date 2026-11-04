@@ -1,3 +1,9 @@
+# version 0.99.1:
+    - Fixed Shiny 1.14 conditional plot panels remaining hidden after their
+      conditions became true.
+    - Set the PCA label-size default to 3 and added the
+      `selected_label_size` server option.
+
 # version 0.99.0:
     - Added software and article citation metadata.
     - Prepared DESCRIPTION metadata for Bioconductor submission.

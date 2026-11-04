@@ -530,7 +530,7 @@ min = 1, max = 10, step = 1
 ),
 shiny::sliderInput(
 inputId = "label_size" %>% ns(),
-label = "label size:", value = 0,
+label = "label size:", value = 3,
 min = 0, max = 10, step = 1
 ),
 
@@ -595,7 +595,6 @@ shiny::fluidRow(DE_pheUI(id = "C" %>% ns()))
 #' @inheritParams shiny::moduleServer
 #' @inheritParams DE_pheServer
 #' @inheritParams fgsea_
-#' @inheritParams Shiny_Hotgenes_Server
 #' @rdname Shiny_Tabs
 PCA_Server_module <- function(
 id = NULL,
@@ -2364,7 +2363,6 @@ label = "PDF"))
 shiny::conditionalPanel( 
 condition = glue::glue("input.yVar != '' "),
 ns = ns,
-style = "display: none;",
 UI_interactive_plot(id = "Int_ScatterPlots" %>% ns(),
 width = "100%", height = "700px") %>%
 shinycssloaders::withSpinner()),
@@ -2765,7 +2763,6 @@ UI_download_plot(id = "DL_Volcano" %>% ns()),
 shiny::conditionalPanel(
 condition = glue::glue("input.DE_Contrasts != '' "),
 ns = ns,
-style = "display: none;",
 UI_interactive_plot( id = "v_plot" %>% ns() ) %>%
 shinycssloaders::withSpinner()
 )
@@ -3300,7 +3297,6 @@ UI_download_plot(id = "DL_ScatterPlots" %>% ns()),
 shiny::conditionalPanel(
 condition = glue::glue("input.NormSlot !== '' "),
 ns = ns,
-style = "display: none;",
 shiny::plotOutput(outputId = "Tab1" %>% ns()) %>%
 shinycssloaders::withSpinner()
 ),

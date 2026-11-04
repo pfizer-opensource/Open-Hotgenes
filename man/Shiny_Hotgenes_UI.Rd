@@ -29,7 +29,8 @@ Shiny_Hotgenes_Server(
   nproc = 1L,
   max_col_levels = Inf,
   selected_fillby = "",
-  remove_modal_spinner = TRUE
+  remove_modal_spinner = TRUE,
+  selected_label_size = 3
 )
 
 Shiny_Hotgenes(
@@ -102,6 +103,9 @@ Default is NULL.}
 
 \item{remove_modal_spinner}{logical, if TRUE remove_modal_spinner will
 run at the end of initial server run.}
+
+\item{selected_label_size}{numeric initial PCA label size from 0 to 10.
+Defaults to 3; use 0 to hide labels.}
 
 \item{theme}{One of the following:
 \itemize{
