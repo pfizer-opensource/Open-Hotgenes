@@ -537,7 +537,7 @@ min = 0, max = 10, step = 1
 shiny::sliderInput(
   inputId = "legend_text_size" %>% ns(),
   label = "label text size:", 
-  value = 0,
+  value = 3,
   min = 0, max = 50, step = 1
 ),
 shiny::sliderInput(
