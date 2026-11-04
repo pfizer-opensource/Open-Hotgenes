@@ -82,9 +82,11 @@ setValidity("Hotgenes", function(object) {
 })
 
 
-#' update_object updates object class
+#' Update a Hotgenes Object to the Current Class
 #' @param Hotgenes Hotgenes object.
 #' @export
+#' @return A Hotgenes object reconstructed with the current class definition.
+#' @example examples/Example_update_object.R
 
 update_object <- function(Hotgenes = NULL){
   
@@ -1248,6 +1250,7 @@ NULL
 #' @export
 #' @rdname missingness_checks
 #' @md
+#' @example examples/Example_missingness_checks.R
 detected_missingness <- function(x = NULL) {
   
   # Handle NULL input - return single TRUE

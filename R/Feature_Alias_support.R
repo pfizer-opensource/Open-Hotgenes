@@ -36,10 +36,12 @@ parse_features <- function(Hotgenes = NULL,
 }
 
 
-#' Returns a named list showing where the aliases are found
+#' Locate Features in Mapper Alias Columns
 #' @export
 #' @inheritParams DE
 #' @param features strings to check
+#' @return A named list of matching features for each mapper column.
+#' @example examples/Example_parse_mapper_aliases.R
 
 parse_mapper_aliases <- function(Hotgenes = NULL,
                                  features = NULL){

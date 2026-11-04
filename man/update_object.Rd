@@ -2,13 +2,26 @@
 % Please edit documentation in R/MethodsHotgenes.R
 \name{update_object}
 \alias{update_object}
-\title{update_object updates object class}
+\title{Update a Hotgenes Object to the Current Class}
 \usage{
 update_object(Hotgenes = NULL)
 }
 \arguments{
 \item{Hotgenes}{Hotgenes object.}
 }
+\value{
+A Hotgenes object reconstructed with the current class definition.
+}
 \description{
-update_object updates object class
+Update a Hotgenes Object to the Current Class
+}
+\examples{
+library(package = Hotgenes)
+
+hotgenes <- readRDS(file = system.file(
+    "extdata", "fit_Hotgenes.RDS",
+    package = "Hotgenes", mustWork = TRUE
+))
+updated <- update_object(Hotgenes = hotgenes)
+methods::validObject(object = updated)
 }

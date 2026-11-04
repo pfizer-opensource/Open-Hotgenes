@@ -1,6 +1,7 @@
 ---
 title: "Creating Hotgenes Objects"
 output:
+  rmarkdown::html_vignette: default
   github_document:
     html_preview: false
 vignette: >
@@ -47,7 +48,7 @@ knitr::opts_chunk$set(
 )
 ```
 
----
+***
 
 ## 1. Creating a Hotgenes Object from DRomics
 
@@ -130,7 +131,7 @@ if (requireNamespace("org.Mm.eg.db", quietly = TRUE) &&
 }
 ```
 
----
+***
 
 ## 2. Creating a Hotgenes Object from DESeq2
 
@@ -211,7 +212,7 @@ Key parameters:
 | `ExpressionData` | Normalization: `"vsd"`, `"rld"`, or `"log2"` |
 | `Mapper` | Optional feature alias table |
 
----
+***
 
 ## 3. Creating a Hotgenes Object from limma
 

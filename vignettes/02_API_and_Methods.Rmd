@@ -1,6 +1,7 @@
 ---
 title: "Hotgenes API and Methods"
 output:
+  rmarkdown::html_vignette: default
   github_document:
     html_preview: false
 vignette: >
@@ -38,7 +39,7 @@ htgs <- readRDS(
 ) |> update_object()
 ```
 
----
+***
 
 ## 1. Object Summary
 
@@ -48,7 +49,7 @@ Calling a Hotgenes object prints a summary of its contents:
 htgs
 ```
 
----
+***
 
 ## 2. Accessing Slots
 
@@ -126,7 +127,7 @@ auxiliary_assays_(htgs) <- new_aux
 auxiliary_assays_(htgs)
 ```
 
----
+***
 
 ## 3. The `DE()` Function
 
@@ -217,7 +218,7 @@ DE(htgs,
    padj_cut  = 1) 
 ```
 
----
+***
 
 ## 4. `DExps()` — Expression Data Merged with Metadata
 
@@ -232,7 +233,7 @@ DExps(htgs,
       Query_set  = TRUE) |> head()
 ```
 
----
+***
 
 ## 5. `DECoefs()` — Per-Feature Coefficients
 
@@ -243,7 +244,7 @@ for a set of features of interest.
 DECoefs(htgs, hotList = c("CSF2", "IL6", "CCL2"))
 ```
 
----
+***
 
 ## 6. Updating the Mapper
 
@@ -261,7 +262,7 @@ Mapper_(htgs) <- updated_mapper
 Mapper_(htgs) |> head()
 ```
 
----
+***
 
 ## 7. Combining Multiple Hotgenes Objects
 
@@ -286,7 +287,7 @@ Hotgenes_list <- list(
 Hotgenes_list[["limma_experiment"]]
 ```
 
----
+***
 
 ## Summary of Key Accessors
 

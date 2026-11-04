@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated article."
+title: "Hotgenes"
+authors:
+  - family-names: Virgen-Slane
+    given-names: Richard
+    orcid: "https://orcid.org/0000-0002-0011-3844"
+    email: Richard.Virgen-Slane@pfizer.com
+type: software
+version: 0.99.0
+license: Apache-2.0
+repository-code: "https://github.com/pfizer-opensource/Open-Hotgenes"
+doi: 10.5281/zenodo.20129460
+preferred-citation:
+  type: article
+  title: "Hotgenes: an R package for reducing bottlenecks in bulk omics data exploration and collaboration"
+  authors:
+    - family-names: Virgen-Slane
+      given-names: Richard
+      orcid: "https://orcid.org/0000-0002-0011-3844"
+  journal: "Bioinformatics"
+  year: 2026
+  pages: btag434
+  doi: 10.1093/bioinformatics/btag434
+  url: "https://doi.org/10.1093/bioinformatics/btag434"

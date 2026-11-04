@@ -1,3 +1,11 @@
+# version 0.99.0:
+    - Added software and article citation metadata.
+    - Prepared DESCRIPTION metadata for Bioconductor submission.
+    - Enabled HTML package vignettes while retaining GitHub Markdown output.
+    - Fixed vignette YAML headers and Linux CI dependency installation.
+    - Added a non-blocking Bioconductor release CI job with BiocCheck findings.
+    - Added runnable helper examples to meet BiocCheck documentation coverage.
+
 # version 0.0.56:
     - Update author details in DESCRIPTION file.
 
@@ -152,4 +160,3 @@
     - Cleaned up readme and converted to .Rmd format
     - Added pkgdown website
     - ran usethis::use_apl2_license()
-

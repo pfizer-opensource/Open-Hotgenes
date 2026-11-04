@@ -45,8 +45,22 @@ jobs:
           BiocManager::install(version = BiocManager::version(), ask = FALSE, update = FALSE)
         shell: Rscript {0}
 
+      - name: Install pak in user library on Linux
+        if: runner.os == 'Linux'
+        run: |
+          lib <- Sys.getenv("R_LIBS_USER")
+          dir.create(lib, recursive = TRUE, showWarnings = FALSE)
+          install.packages("pak", lib = lib, repos = sprintf(
+            "https://r-lib.github.io/p/pak/stable/%s/%s/%s",
+            .Platform$pkgType, R.Version()$os, R.Version()$arch
+          ))
+          cat(sprintf("R_LIB_FOR_PAK=%s\n", lib),
+              file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+        shell: Rscript {0}
+
       - uses: r-lib/actions/setup-r-dependencies@6f6e5bc62fba3a704f74e7ad7ef7676c5c6a2590 # v2.11.4
         with:
+          pak-version: ${{ runner.os == 'Linux' && 'none' || 'stable' }}
           extra-packages: any::rcmdcheck, any::BiocManager
           needs: check
 
@@ -54,3 +68,69 @@ jobs:
         with:
           upload-snapshots: true
           error-on: '"error"'
+
+  BiocCheck:
+    name: BiocCheck (Bioconductor release, non-blocking)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - uses: r-lib/actions/setup-pandoc@6f6e5bc62fba3a704f74e7ad7ef7676c5c6a2590 # v2.11.4
+
+      - uses: r-lib/actions/setup-r@6f6e5bc62fba3a704f74e7ad7ef7676c5c6a2590 # v2.11.4
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - name: Set up Bioconductor repos
+        run: |
+          install.packages("BiocManager")
+          BiocManager::install(version = BiocManager::version(), ask = FALSE, update = FALSE)
+        shell: Rscript {0}
+
+      - name: Install pak in user library
+        run: |
+          lib <- Sys.getenv("R_LIBS_USER")
+          dir.create(lib, recursive = TRUE, showWarnings = FALSE)
+          install.packages("pak", lib = lib, repos = sprintf(
+            "https://r-lib.github.io/p/pak/stable/%s/%s/%s",
+            .Platform$pkgType, R.Version()$os, R.Version()$arch
+          ))
+          cat(sprintf("R_LIB_FOR_PAK=%s\n", lib),
+              file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+        shell: Rscript {0}
+
+      - uses: r-lib/actions/setup-r-dependencies@6f6e5bc62fba3a704f74e7ad7ef7676c5c6a2590 # v2.11.4
+        with:
+          pak-version: none
+          extra-packages: bioc::BiocCheck, any::BiocManager
+          needs: check
+
+      - name: Build source package
+        working-directory: ${{ runner.temp }}
+        run: |
+          mkdir -p bioccheck
+          cd bioccheck
+          R CMD build --no-manual "$GITHUB_WORKSPACE"
+        shell: bash
+
+      - name: Run BiocCheck
+        working-directory: ${{ runner.temp }}
+        run: |
+          package <- list.files("bioccheck", "^Hotgenes_.*[.]tar[.]gz$", full.names = TRUE)
+          stopifnot(length(package) == 1L)
+          BiocCheck::BiocCheck(package, checkDir = "bioccheck", `quit-with-status` = TRUE)
+        shell: Rscript {0}
+
+      - name: Upload BiocCheck findings
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: BiocCheck-findings
+          path: ${{ runner.temp }}/bioccheck/Hotgenes.BiocCheck
+          if-no-files-found: warn
