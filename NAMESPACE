@@ -114,190 +114,240 @@ export(wrap_fixed_names)
 exportMethods("Mapper_<-")
 exportMethods("auxiliary_assays_<-")
 exportMethods("coldata_<-")
-importFrom(DESeq2,lfcShrink)
-importFrom(DESeq2,normTransform)
-importFrom(DESeq2,resultsNames)
-importFrom(DESeq2,rlog)
-importFrom(DESeq2,varianceStabilizingTransformation)
-importFrom(DRomics,RNAseqdata)
-importFrom(DRomics,bmdcalc)
-importFrom(DRomics,continuousomicdata)
-importFrom(DRomics,drcfit)
-importFrom(DRomics,itemselect)
-importFrom(FactoMineR,HCPC)
-importFrom(FactoMineR,PCA)
-importFrom(FactoMineR,summary.PCA)
+importFrom(DESeq2,
+  lfcShrink,
+  normTransform,
+  resultsNames,
+  rlog,
+  varianceStabilizingTransformation
+)
+importFrom(DRomics,
+  RNAseqdata,
+  bmdcalc,
+  continuousomicdata,
+  drcfit,
+  itemselect
+)
+importFrom(FactoMineR,
+  HCPC,
+  PCA,
+  summary.PCA
+)
 importFrom(GSVA,gsva)
 importFrom(RColorBrewer,brewer.pal)
-importFrom(SummarizedExperiment,assay)
-importFrom(SummarizedExperiment,colData)
-importFrom(cli,cli_abort)
-importFrom(cli,cli_alert_warning)
-importFrom(cli,cli_inform)
-importFrom(cli,cli_warn)
-importFrom(dplyr,"%>%")
-importFrom(dplyr,across)
-importFrom(dplyr,all_of)
-importFrom(dplyr,any_of)
-importFrom(dplyr,arrange)
-importFrom(dplyr,arrange_at)
-importFrom(dplyr,case_when)
-importFrom(dplyr,desc)
-importFrom(dplyr,everything)
-importFrom(dplyr,filter)
-importFrom(dplyr,filter_at)
-importFrom(dplyr,full_join)
-importFrom(dplyr,group_by)
-importFrom(dplyr,group_by_at)
-importFrom(dplyr,group_keys)
-importFrom(dplyr,group_map)
-importFrom(dplyr,group_split)
-importFrom(dplyr,group_vars)
-importFrom(dplyr,if_any)
-importFrom(dplyr,left_join)
-importFrom(dplyr,matches)
-importFrom(dplyr,mutate)
-importFrom(dplyr,mutate_all)
-importFrom(dplyr,mutate_at)
-importFrom(dplyr,n)
-importFrom(dplyr,n_distinct)
-importFrom(dplyr,pull)
-importFrom(dplyr,relocate)
-importFrom(dplyr,rename)
-importFrom(dplyr,rename_at)
-importFrom(dplyr,row_number)
-importFrom(dplyr,select)
-importFrom(dplyr,select_if)
-importFrom(dplyr,slice)
-importFrom(dplyr,summarise)
-importFrom(dplyr,summarise_all)
-importFrom(dplyr,where)
-importFrom(factoextra,fviz_pca_biplot)
-importFrom(factoextra,fviz_pca_ind)
+importFrom(SummarizedExperiment,
+  assay,
+  colData
+)
+importFrom(cli,
+  cli_abort,
+  cli_alert_warning,
+  cli_inform,
+  cli_warn
+)
+importFrom(dplyr,
+  "%>%",
+  across,
+  all_of,
+  any_of,
+  arrange,
+  arrange_at,
+  case_when,
+  desc,
+  everything,
+  filter,
+  filter_at,
+  full_join,
+  group_by,
+  group_by_at,
+  group_keys,
+  group_map,
+  group_split,
+  group_vars,
+  if_any,
+  left_join,
+  matches,
+  mutate,
+  mutate_all,
+  mutate_at,
+  n,
+  n_distinct,
+  pull,
+  relocate,
+  rename,
+  rename_at,
+  row_number,
+  select,
+  select_if,
+  slice,
+  summarise,
+  summarise_all,
+  where
+)
+importFrom(factoextra,
+  fviz_pca_biplot,
+  fviz_pca_ind
+)
 importFrom(fgsea,fgsea)
-importFrom(forcats,fct_relevel)
-importFrom(forcats,fct_rev)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,coord_fixed)
-importFrom(ggplot2,element_text)
-importFrom(ggplot2,geom_boxplot)
-importFrom(ggplot2,geom_hline)
-importFrom(ggplot2,geom_line)
-importFrom(ggplot2,geom_point)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,guide_legend)
-importFrom(ggplot2,guides)
-importFrom(ggplot2,label_both)
-importFrom(ggplot2,labs)
-importFrom(ggplot2,scale_color_brewer)
-importFrom(ggplot2,scale_color_manual)
-importFrom(ggplot2,scale_fill_manual)
-importFrom(ggplot2,scale_shape)
-importFrom(ggplot2,stat_ellipse)
-importFrom(ggplot2,theme)
-importFrom(ggplot2,theme_classic)
-importFrom(ggplot2,unit)
+importFrom(forcats,
+  fct_relevel,
+  fct_rev
+)
+importFrom(ggplot2,
+  aes,
+  coord_fixed,
+  element_text,
+  geom_boxplot,
+  geom_hline,
+  geom_line,
+  geom_point,
+  ggplot,
+  guide_legend,
+  guides,
+  label_both,
+  labs,
+  scale_color_brewer,
+  scale_color_manual,
+  scale_fill_manual,
+  scale_shape,
+  stat_ellipse,
+  theme,
+  theme_classic,
+  unit
+)
 importFrom(ggrepel,geom_text_repel)
 importFrom(ggvenn,ggvenn)
 importFrom(glue,glue)
-importFrom(grDevices,boxplot.stats)
-importFrom(grDevices,colorRampPalette)
-importFrom(grDevices,dev.list)
-importFrom(grDevices,dev.off)
-importFrom(grDevices,graphics.off)
-importFrom(grDevices,pdfFonts)
-importFrom(grDevices,recordPlot)
+importFrom(grDevices,
+  boxplot.stats,
+  colorRampPalette,
+  dev.list,
+  dev.off,
+  graphics.off,
+  pdfFonts,
+  recordPlot
+)
 importFrom(grid,grid.draw)
 importFrom(janitor,remove_empty)
-importFrom(limma,makeContrasts)
-importFrom(limma,topTable)
-importFrom(methods,is)
-importFrom(methods,new)
-importFrom(methods,validObject)
-importFrom(msigdbr,msigdbr)
-importFrom(msigdbr,msigdbr_collections)
+importFrom(limma,
+  makeContrasts,
+  topTable
+)
+importFrom(methods,
+  is,
+  new,
+  validObject
+)
+importFrom(msigdbr,
+  msigdbr,
+  msigdbr_collections
+)
 importFrom(openxlsx,write.xlsx)
 importFrom(pheatmap,pheatmap)
-importFrom(plyr,dlply)
-importFrom(plyr,ldply)
-importFrom(purrr,chuck)
-importFrom(purrr,imap)
-importFrom(purrr,imap_chr)
-importFrom(purrr,imap_dfc)
-importFrom(purrr,list_rbind)
-importFrom(purrr,map)
-importFrom(purrr,map_chr)
-importFrom(purrr,map_dfr)
-importFrom(purrr,reduce)
-importFrom(purrr,set_names)
+importFrom(plyr,
+  dlply,
+  ldply
+)
+importFrom(purrr,
+  chuck,
+  imap,
+  imap_chr,
+  imap_dfc,
+  list_rbind,
+  map,
+  map_chr,
+  map_dfr,
+  reduce,
+  set_names
+)
 importFrom(rclipboard,rclipboardSetup)
-importFrom(readr,cols)
-importFrom(readr,read_csv)
-importFrom(rlang,"!!!")
-importFrom(rlang,":=")
-importFrom(rlang,.data)
-importFrom(rlang,.env)
-importFrom(rlang,enquos)
-importFrom(rlang,is_empty)
-importFrom(shiny,HTML)
-importFrom(shiny,NS)
-importFrom(shiny,actionButton)
-importFrom(shiny,bindCache)
-importFrom(shiny,bindEvent)
-importFrom(shiny,checkboxInput)
-importFrom(shiny,column)
-importFrom(shiny,conditionalPanel)
-importFrom(shiny,eventReactive)
-importFrom(shiny,fileInput)
-importFrom(shiny,fluidRow)
-importFrom(shiny,h3)
-importFrom(shiny,h4)
-importFrom(shiny,h5)
-importFrom(shiny,icon)
-importFrom(shiny,isTruthy)
-importFrom(shiny,moduleServer)
-importFrom(shiny,numericInput)
-importFrom(shiny,observe)
-importFrom(shiny,observeEvent)
-importFrom(shiny,radioButtons)
-importFrom(shiny,reactive)
-importFrom(shiny,renderPlot)
-importFrom(shiny,renderText)
-importFrom(shiny,req)
-importFrom(shiny,selectInput)
-importFrom(shiny,selectizeInput)
-importFrom(shiny,sidebarPanel)
-importFrom(shiny,tabPanel)
-importFrom(shiny,tabsetPanel)
-importFrom(shiny,tagList)
-importFrom(shiny,tags)
-importFrom(shiny,textOutput)
-importFrom(shiny,updateRadioButtons)
-importFrom(shiny,updateSelectInput)
-importFrom(shiny,updateSelectizeInput)
-importFrom(shiny,verbatimTextOutput)
+importFrom(readr,
+  cols,
+  read_csv
+)
+importFrom(rlang,
+  "!!!",
+  ":=",
+  .data,
+  .env,
+  enquos,
+  is_empty
+)
+importFrom(shiny,
+  HTML,
+  NS,
+  actionButton,
+  bindCache,
+  bindEvent,
+  checkboxInput,
+  column,
+  conditionalPanel,
+  eventReactive,
+  fileInput,
+  fluidRow,
+  h3,
+  h4,
+  h5,
+  icon,
+  isTruthy,
+  moduleServer,
+  numericInput,
+  observe,
+  observeEvent,
+  radioButtons,
+  reactive,
+  renderPlot,
+  renderText,
+  req,
+  selectInput,
+  selectizeInput,
+  sidebarPanel,
+  tabPanel,
+  tabsetPanel,
+  tagList,
+  tags,
+  textOutput,
+  updateRadioButtons,
+  updateSelectInput,
+  updateSelectizeInput,
+  verbatimTextOutput
+)
 importFrom(shinyWidgets,pickerInput)
-importFrom(shinybusy,remove_modal_spinner)
-importFrom(shinybusy,show_modal_spinner)
+importFrom(shinybusy,
+  remove_modal_spinner,
+  show_modal_spinner
+)
 importFrom(shinycssloaders,withSpinner)
-importFrom(shinyjs,disable)
-importFrom(shinyjs,enable)
-importFrom(shinyjs,useShinyjs)
+importFrom(shinyjs,
+  disable,
+  enable,
+  useShinyjs
+)
 importFrom(shinythemes,shinytheme)
-importFrom(stats,complete.cases)
-importFrom(stats,model.matrix)
-importFrom(stats,na.omit)
-importFrom(stats,reorder)
-importFrom(stringr,str_detect)
-importFrom(stringr,str_replace_all)
-importFrom(stringr,str_replace_na)
-importFrom(stringr,str_wrap)
-importFrom(tibble,as_tibble)
-importFrom(tibble,column_to_rownames)
-importFrom(tibble,deframe)
-importFrom(tibble,enframe)
-importFrom(tibble,has_rownames)
-importFrom(tidyr,pivot_longer)
-importFrom(tidyr,pivot_wider)
-importFrom(utils,head)
-importFrom(utils,packageVersion)
+importFrom(stats,
+  complete.cases,
+  model.matrix,
+  na.omit,
+  reorder
+)
+importFrom(stringr,
+  str_detect,
+  str_replace_all,
+  str_replace_na,
+  str_wrap
+)
+importFrom(tibble,
+  as_tibble,
+  column_to_rownames,
+  deframe,
+  enframe,
+  has_rownames
+)
+importFrom(tidyr,
+  pivot_longer,
+  pivot_wider
+)
+importFrom(utils,
+  head,
+  packageVersion
+)

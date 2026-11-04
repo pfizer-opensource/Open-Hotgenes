@@ -193,7 +193,6 @@ UI_params <-shiny::sidebarLayout(
 return(UI_params)
 }
 
-
 #' @importFrom shinybusy show_modal_spinner remove_modal_spinner
 #' @importFrom shinyjs enable disable useShinyjs
 #' @param input shiny server input parameter
@@ -213,6 +212,8 @@ return(UI_params)
 #' to use when doing the calculations in parallel.
 #' @param remove_modal_spinner logical, if TRUE remove_modal_spinner will
 #' run at the end of initial server run.
+#' @param selected_label_size numeric initial PCA label size from 0 to 10.
+#' Defaults to 3; use 0 to hide labels.
 #' @export
 #' @example examples/Shiny_Hotgenes_Example.R
 #' @rdname Shiny_Hotgenes_UI
@@ -228,7 +229,8 @@ Mapper_choices = names(Mapper_(Hotgenes)),
 nproc = 1L,
 max_col_levels = Inf,
 selected_fillby = "",
-remove_modal_spinner = TRUE) {
+remove_modal_spinner = TRUE,
+selected_label_size = 3) {
 shiny::moduleServer(
 id = id,
 function(input, output, session) {
@@ -238,6 +240,13 @@ grDevices::graphics.off()
 }
 
   logo_news(input = input, session = session)
+
+shiny::updateSliderInput(
+  session = session,
+  inputId = "PCA-label_size",
+  value = selected_label_size
+)
+
 # AuxAssays_server --------------------------------------------------------
 
 
@@ -374,12 +383,12 @@ shinybusy::remove_modal_spinner(session = session)
 # Generic shiny hotgenes methods ----------------------------------------------
 #' R shiny app for visualizing DE analysis
 #' @importFrom shiny renderText isTruthy updateSelectInput selectInput
-#' updateSelectizeInput selectizeInput numericInput h5 bindEvent
-#' observe reactive tabPanel fileInput conditionalPanel HTML
-#' req actionButton tags textOutput tagList NS tagList checkboxInput
-#' moduleServer verbatimTextOutput fluidRow column icon eventReactive
-#' bindCache h3 h4 observeEvent radioButtons renderPlot tabsetPanel
-#' updateRadioButtons
+#'   updateSelectizeInput selectizeInput numericInput h5 bindEvent
+#'   observe reactive tabPanel fileInput conditionalPanel HTML
+#'   req actionButton tags textOutput tagList NS tagList checkboxInput
+#'   moduleServer verbatimTextOutput fluidRow column icon eventReactive
+#'   bindCache h3 h4 observeEvent radioButtons renderPlot tabsetPanel
+#'   updateRadioButtons
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom plyr ldply
 #' @importFrom grDevices graphics.off dev.list

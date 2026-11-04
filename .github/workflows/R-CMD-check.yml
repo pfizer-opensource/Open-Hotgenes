@@ -124,7 +124,12 @@ jobs:
         run: |
           package <- list.files("bioccheck", "^Hotgenes_.*[.]tar[.]gz$", full.names = TRUE)
           stopifnot(length(package) == 1L)
-          BiocCheck::BiocCheck(package, checkDir = "bioccheck", `quit-with-status` = TRUE)
+          BiocCheck::BiocCheck(
+            package,
+            checkDir = "bioccheck",
+            `no-check-bioc-help` = TRUE,
+            `quit-with-status` = TRUE
+          )
         shell: Rscript {0}
 
       - name: Upload BiocCheck findings

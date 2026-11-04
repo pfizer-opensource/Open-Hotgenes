@@ -2,8 +2,8 @@
 #' @inheritParams DExps
 #' @inheritParams ggplot2::facet_wrap
 #' @importFrom ggplot2 element_text geom_boxplot geom_hline
-#' geom_line geom_point ggplot labs scale_color_manual scale_fill_manual theme
-#' theme_classic unit aes coord_fixed
+#'   geom_line geom_point ggplot labs scale_color_manual scale_fill_manual theme
+#'   theme_classic unit aes coord_fixed
 #' @param group String indicating the grouping variable.
 #' @param xVar String indicating the x variable. If NULL (default),
 #' the first column name reported by coldata_ function will be used.

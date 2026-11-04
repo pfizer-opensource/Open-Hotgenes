@@ -465,7 +465,7 @@ FactoWrapper_DFs <- function(df = NULL,
 #' factoExtra_DFs a factoextra wrapper for FactoWrapper_DFs
 #' @md
 #' @importFrom ggplot2 theme_classic geom_point aes stat_ellipse
-#' scale_color_brewer scale_shape guides guide_legend
+#'   scale_color_brewer scale_shape guides guide_legend
 #' @importFrom factoextra fviz_pca_ind
 #' @param PCA_obj output of [FactoWrapper_DFs()]
 #' @param ellipse.alpha 0 to 1 numeric value to control

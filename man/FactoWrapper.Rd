@@ -153,8 +153,8 @@ to use for individual shapes. Default is "clust".}
 
 \item{legend_text_size}{numeric value. Default is 12.}
 
-\item{...}{additional parameter to pass to \code{\link[factoextra:fviz_pca]{factoextra::fviz_pca_ind()}}
-or \code{\link[factoextra:fviz_pca]{factoextra::fviz_pca_biplot()}}}
+\item{...}{additional parameter to pass to \code{\link[factoextra:fviz_pca_ind]{factoextra::fviz_pca_ind()}}
+or \code{\link[factoextra:fviz_pca_biplot]{factoextra::fviz_pca_biplot()}}}
 }
 \value{
 FactoMiner plot showing HCPC of genes, samples, and conditions
