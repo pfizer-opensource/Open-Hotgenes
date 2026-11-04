@@ -51,43 +51,11 @@ test_that(
 )
 
 test_that(
-  desc = "PCA label size has a readable default and validates configuration",
+  desc = "PCA label size has a readable default",
   code = {
     expect_identical(
       object = formals(fun = Shiny_Hotgenes_Server)$selected_label_size,
       expected = 3
     )
-    expect_identical(
-      object = Hotgenes:::validate_selected_label_size(
-        selected_label_size = 3
-      ),
-      expected = 3
-    )
-    expect_identical(
-      object = Hotgenes:::validate_selected_label_size(
-        selected_label_size = 0
-      ),
-      expected = 0
-    )
-
-    invalid_sizes <- list(
-      NULL,
-      "3",
-      numeric(),
-      c(2, 3),
-      NA_real_,
-      Inf,
-      -1,
-      11
-    )
-
-    for (invalid_size in invalid_sizes) {
-      expect_error(
-        object = Hotgenes:::validate_selected_label_size(
-          selected_label_size = invalid_size
-        ),
-        regexp = "selected_label_size"
-      )
-    }
   }
 )

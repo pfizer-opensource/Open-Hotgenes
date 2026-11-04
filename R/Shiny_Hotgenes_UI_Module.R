@@ -193,29 +193,6 @@ UI_params <-shiny::sidebarLayout(
 return(UI_params)
 }
 
-#' Validate a PCA label size
-#'
-#' @param selected_label_size Initial label size.
-#' @return The validated label size.
-#' @noRd
-validate_selected_label_size <- function(selected_label_size = NULL) {
-  valid_size <- is.numeric(x = selected_label_size) &&
-    length(x = selected_label_size) == 1L &&
-    is.finite(x = selected_label_size) &&
-    selected_label_size >= 0 &&
-    selected_label_size <= 10
-
-  if (!valid_size) {
-    cli::cli_abort(
-      message = "{.arg selected_label_size} must be a single finite number from 0 to 10.",
-      call = rlang::caller_env()
-    )
-  }
-
-  output <- selected_label_size
-  return(output)
-}
-
 #' @importFrom shinybusy show_modal_spinner remove_modal_spinner
 #' @importFrom shinyjs enable disable useShinyjs
 #' @param input shiny server input parameter
@@ -254,9 +231,6 @@ max_col_levels = Inf,
 selected_fillby = "",
 remove_modal_spinner = TRUE,
 selected_label_size = 3) {
-selected_label_size <- validate_selected_label_size(
-  selected_label_size = selected_label_size
-)
 shiny::moduleServer(
 id = id,
 function(input, output, session) {
