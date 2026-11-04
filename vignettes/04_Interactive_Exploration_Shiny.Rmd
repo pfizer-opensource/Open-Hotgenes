@@ -1,13 +1,14 @@
-***
+---
 title: "Using Shiny to Prioritize Genes of Interest"
 output:
+  rmarkdown::html_vignette: default
   github_document:
     html_preview: false
 vignette: >
   %\VignetteIndexEntry{Using Shiny to Prioritize Genes of Interest}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-***
+---
 
 ## Overview
 

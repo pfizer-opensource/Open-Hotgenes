@@ -1,13 +1,14 @@
-***
+---
 title: "Visualization, Exploration, and Enrichment"
 output:
+  rmarkdown::html_vignette: default
   github_document:
     html_preview: false
 vignette: >
   %\VignetteIndexEntry{Visualization, Exploration, and Enrichment}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-***
+---
 
 ## Overview
 

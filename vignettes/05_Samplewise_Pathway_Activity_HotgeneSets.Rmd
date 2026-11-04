@@ -1,13 +1,14 @@
-***
+---
 title: "Sample-wise Pathway Activity with HotgeneSets"
 output:
+  rmarkdown::html_vignette: default
   github_document:
     html_preview: false
 vignette: >
   %\VignetteIndexEntry{Sample-wise Pathway Activity with HotgeneSets}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-***
+---
 
 ## Overview
 

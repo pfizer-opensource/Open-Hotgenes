@@ -1,6 +1,7 @@
 ---
 title: "Creating Hotgenes Objects"
 output:
+  rmarkdown::html_vignette: default
   github_document:
     html_preview: false
 vignette: >
