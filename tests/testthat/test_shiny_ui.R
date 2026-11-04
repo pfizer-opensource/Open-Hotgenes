@@ -59,3 +59,36 @@ test_that(
     )
   }
 )
+
+test_that(
+  desc = "the app logo resolves to a served image",
+  code = {
+    logo_file <- Hotgenes_logo_path()
+    logo_name <- basename(logo_file)
+    on.exit(shiny::removeResourcePath(logo_name), add = TRUE)
+
+    expect_true(file.exists(logo_file))
+    logo <- embed_Hotgenes_logo()
+    expect_identical(
+      object = shiny::resourcePaths()[[logo_name]],
+      expected = normalizePath(dirname(logo_file), winslash = "/")
+    )
+    expect_identical(
+      object = logo$children[[1]]$attribs$src,
+      expected = paste(logo_name, logo_name, sep = "/")
+    )
+  }
+)
+
+test_that(
+  desc = "the app can be constructed with bundled data",
+  code = {
+    logo_name <- basename(Hotgenes_logo_path())
+    on.exit(shiny::removeResourcePath(logo_name), add = TRUE)
+
+    expect_s3_class(
+      object = Shiny_Hotgenes(fit_Hotgenes),
+      class = "shiny.appobj"
+    )
+  }
+)

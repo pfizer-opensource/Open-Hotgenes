@@ -3,6 +3,9 @@
       conditions became true.
     - Set the PCA label-size default to 3 and added the
       `selected_label_size` server option.
+    - Fixed logo resource lookup and image serving when launching the Shiny
+      app from a development checkout.
+    - Fixed multiline imports for documentation generation with roxygen2 8.
 
 # version 0.99.0:
     - Added software and article citation metadata.

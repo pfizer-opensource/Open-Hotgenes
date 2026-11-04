@@ -8,10 +8,10 @@ NULL
 #' @example examples/Hotgenes_logo_Example.R
 Hotgenes_logo_path <-function(){
   
-  logo_file_path <- internal_system.file(
+  logo_file_path <- system.file(
   file.path("logo",
   "HotgenesLogo_hexSticker.png"),
-  package = "Hotgenes")
+  package = "Hotgenes", mustWork = TRUE)
   
   return(logo_file_path)
 }
@@ -24,7 +24,7 @@ Hotgenes_logo_path <-function(){
 #' and a clickable version number that opens the changelog modal.
 #' Use in combination with \code{\link{logo_news}} in the server function.
 #'
-#' @param logo_dir Character. Path to the logo directory.
+#' @param logo_dir Character. Path to the logo image file.
 #'   Defaults to \code{\link{Hotgenes_logo_path}()}.
 #' @param align Character. Horizontal alignment of the logo.
 #'   One of \code{"center"}, \code{"left"}, \code{"right"}. Default is \code{"center"}.
@@ -54,12 +54,12 @@ embed_Hotgenes_logo <- function (
   height = "100px", 
   style = "text-align: center;margin-bottom:10px;") {
   
-  finaL <- logo_dir %>% basename()
-  shiny::addResourcePath(finaL, logo_dir)
+  logo_name <- basename(logo_dir)
+  shiny::addResourcePath(logo_name, dirname(logo_dir))
   
   em_logo <- shiny::tags$div(
     shiny::img(
-      src = finaL,
+      src = paste(logo_name, logo_name, sep = "/"),
       align = align, 
       height = height
     ),
@@ -73,73 +73,6 @@ embed_Hotgenes_logo <- function (
   
   
   return(em_logo)
-}
-
-#' Internal helper to locate package files during development and installation
-#'
-#' @description A wrapper around \code{base::system.file} that supports
-#' locating files in both installed packages and packages loaded via
-#' \code{devtools::load_all()}. When a package is loaded with
-#' \code{devtools::load_all()}, files may reside under \code{inst/} rather
-#' than at the top level, and this function checks both locations.
-#'
-#' @param ... Character vectors of path components passed to
-#'   \code{base::system.file}.
-#' @param package Character. The name of the package to search. Default is
-#'   \code{"base"}.
-#' @param lib.loc Character vector or \code{NULL}. Location of the package
-#'   library. Passed to \code{base::system.file}. Default is \code{NULL}.
-#' @param mustWork Logical. If \code{TRUE}, an error is thrown if the file
-#'   cannot be found. Default is \code{FALSE}.
-#'
-#' @return A character string of the normalized file path if found, or
-#'   \code{""} if not found and \code{mustWork = FALSE}.
-#'
-#' @examples
-#' \dontrun{
-#' internal_system.file("logo", "logo.png", package = "Hotgenes")
-#' }
-#'
-#' @importFrom cli cli_abort
-#'
-#' @noRd
-internal_system.file <- function (..., 
-                                  package = "base", 
-                                  lib.loc = NULL, 
-                                  mustWork = FALSE) {
-  
-  if (any(!requireNamespace("devtools", quietly = TRUE))) {
-    return(base::system.file(..., package = package, lib.loc = lib.loc, 
-                             mustWork = mustWork))
-  } 
-  
-  if (!(package %in% devtools::dev_packages())) {
-    return(base::system.file(..., package = package, lib.loc = lib.loc, 
-                             mustWork = mustWork))
-  }
-  
-  if (rlang::dots_n(...) && rlang::is_string(..1)) {
-    if (rlang::is_string("inst", ..1) || grepl("^inst/", ..1)) {
-      cli::cli_abort(c("Paths can't start with `inst`", 
-                       i = "Files in `inst` are installed at top-level."))
-    }
-  }
-  pkg_path <- find.package(package)
-  files_inst <- file.path(pkg_path, "inst", ...)
-  present_inst <- file.exists(files_inst)
-  files_top <- file.path(pkg_path, ...)
-  present_top <- file.exists(files_top)
-  files <- files_top
-  files[present_inst] <- files_inst[present_inst]
-  files <- files[present_inst | present_top]
-  if (length(files) > 0) {
-    normalizePath(files, winslash = "/")
-  } else {
-    if (mustWork) {
-      cli::cli_abort("Can't find package file.", call = NULL)
-    }
-    ""
-  }
 }
 
 #' Server-side handler for the Hotgenes changelog modal
@@ -184,7 +117,7 @@ logo_news <- function(input,
   
   shiny::observeEvent(input$show_news, {
     
-    news_path <- internal_system.file(news_file, package = "Hotgenes")
+    news_path <- system.file(news_file, package = "Hotgenes")
     
     news_content <- if (!nzchar(news_path)) {
       shiny::p("No changelog found.")

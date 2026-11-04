@@ -383,12 +383,12 @@ shinybusy::remove_modal_spinner(session = session)
 # Generic shiny hotgenes methods ----------------------------------------------
 #' R shiny app for visualizing DE analysis
 #' @importFrom shiny renderText isTruthy updateSelectInput selectInput
-#' updateSelectizeInput selectizeInput numericInput h5 bindEvent
-#' observe reactive tabPanel fileInput conditionalPanel HTML
-#' req actionButton tags textOutput tagList NS tagList checkboxInput
-#' moduleServer verbatimTextOutput fluidRow column icon eventReactive
-#' bindCache h3 h4 observeEvent radioButtons renderPlot tabsetPanel
-#' updateRadioButtons
+#'   updateSelectizeInput selectizeInput numericInput h5 bindEvent
+#'   observe reactive tabPanel fileInput conditionalPanel HTML
+#'   req actionButton tags textOutput tagList NS tagList checkboxInput
+#'   moduleServer verbatimTextOutput fluidRow column icon eventReactive
+#'   bindCache h3 h4 observeEvent radioButtons renderPlot tabsetPanel
+#'   updateRadioButtons
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom plyr ldply
 #' @importFrom grDevices graphics.off dev.list

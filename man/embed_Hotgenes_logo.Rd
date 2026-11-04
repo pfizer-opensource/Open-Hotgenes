@@ -13,7 +13,7 @@ embed_Hotgenes_logo(
 )
 }
 \arguments{
-\item{logo_dir}{Character. Path to the logo directory.
+\item{logo_dir}{Character. Path to the logo image file.
 Defaults to \code{\link{Hotgenes_logo_path}()}.}
 
 \item{id}{string passed to actionLink()}

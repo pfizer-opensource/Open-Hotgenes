@@ -14,7 +14,6 @@ Description: Converts outputs from DESeq2, DRomics, limma, or a method of your
     hierarchical clustering on principal components.
 License: Apache License (>= 2) | file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 URL: https://github.com/pfizer-opensource/Open-Hotgenes
 BugReports: https://github.com/pfizer-opensource/Open-Hotgenes/issues
@@ -82,3 +81,4 @@ Suggests:
     tximport,
     vsn
 Depends: R (>= 4.2.0)
+Config/roxygen2/version: 8.1.0

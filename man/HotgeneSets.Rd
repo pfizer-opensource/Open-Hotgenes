@@ -29,7 +29,7 @@ will be used.
 See HotgenesObj.}
 
 \item{geneSets}{The gene sets.  Must be one of the classes supported by
-\code{\linkS4class{GsvaGeneSets}}.  For a list of these classes, see its help page using
+\code{\link[GSVA:GsvaGeneSets-class]{GsvaGeneSets}}.  For a list of these classes, see its help page using
 \code{help(GsvaGeneSets)}.}
 
 \item{method}{string for method to use for GSVA package. Options
